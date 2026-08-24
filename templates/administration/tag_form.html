@@ -1,0 +1,35 @@
+{% extends 'administration/base.html' %}
+{% load static %}
+
+{% block title %}Edit Tag — {{ tag.name }}{% endblock %}
+{% block page_title %}Edit Tag{% endblock %}
+
+{% block admin_content %}
+<div style="max-width: 600px; margin: 0 auto;">
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6);">
+    <div>
+      <h2 style="font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 4px;">Edit Tag</h2>
+      <p style="color: var(--color-text-secondary); font-size: 14px;">Update tag name for "{{ tag.name }}"</p>
+    </div>
+    <a href="{% url 'admin_tags' %}" class="btn btn-outline btn-sm" style="border-color: rgba(255,255,255,0.2); color: #fff;">← Back to Tags</a>
+  </div>
+
+  <div class="admin-card" style="padding: var(--space-6);">
+    <form method="post">
+      {% csrf_token %}
+      <div style="margin-bottom: 24px;">
+        <label style="display: block; font-weight: 700; color: #fff; margin-bottom: 8px;">Tag Name <span style="color: var(--color-danger);">*</span></label>
+        <input type="text" name="name" value="{{ tag.name }}" required class="form-control" style="width: 100%; padding: 12px 16px; border-radius: var(--radius-md); background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--color-border); font-size: 16px;">
+        <small style="color: var(--color-text-muted); display: block; margin-top: 6px;">Slug will be updated automatically to match the new name.</small>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: flex-end;">
+        <a href="{% url 'admin_tags' %}" class="btn btn-ghost" style="color: var(--color-text-muted);">Cancel</a>
+        <button type="submit" class="btn btn-primary" style="padding: 12px 28px; font-weight: 700;">Save Tag Changes</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

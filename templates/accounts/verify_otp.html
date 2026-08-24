@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Verify Account{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <a href="{% url 'home' %}">
+          <img src="{% static 'images/logo.svg' %}" alt="EgyStory" height="40">
+        </a>
+      </div>
+
+      <h1 class="auth-heading">Verify your email</h1>
+      <p class="auth-subheading">We sent a 6-digit verification code to <strong>{{ email }}</strong>. Please enter it below.</p>
+
+      <form method="post" action="{% url 'verify_otp' %}">
+        {% csrf_token %}
+
+        <div class="form-group" style="margin-top: 24px;">
+          <label for="otp" class="form-label">Verification Code <span class="required">*</span></label>
+          <input type="text" name="otp" id="otp"
+            class="form-control"
+            placeholder="e.g. 123456" 
+            pattern="[0-9]{6}"
+            maxlength="6"
+            autocomplete="one-time-code" required
+            style="font-size: 24px; letter-spacing: 8px; text-align: center; font-weight: bold;">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg">
+          Verify Account
+        </button>
+      </form>
+
+      <div style="margin-top: 24px; text-align: center;">
+        <p class="auth-footer-text" style="margin-bottom: 8px;">
+          Didn't receive the code?
+        </p>
+        <a href="{% url 'resend_otp' %}" class="btn btn-outline btn-sm">Resend Code</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

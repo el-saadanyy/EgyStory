@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+*.pyc
+
+# Environment & Secrets
+.env
+.env.local
+*.env
+
+# Django Database & Media
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Operating System
+.DS_Store
+Thumbs.db

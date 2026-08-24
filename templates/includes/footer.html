@@ -1,0 +1,51 @@
+{% load static %}
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+
+      <!-- Brand column -->
+      <div>
+        <a href="{% url 'home' %}" aria-label="EgyStory home" style="display: flex; align-items: center; text-decoration: none; margin-bottom: var(--space-4);">
+          <img src="{% static 'images/logo.svg' %}" alt="EgyStory" class="footer-logo">
+          <span style="font-weight: 800; font-size: 20px; color: var(--color-white); margin-left: var(--space-2);">Egy<span style="color: var(--color-primary);">Story</span></span>
+        </a>
+        <p class="footer-brand-text">
+          EgyStory is Egypt's crowdfunding platform — connecting generous hearts
+          with real people who need real help. Every story matters.
+        </p>
+      </div>
+
+      <!-- Platform links -->
+      <div>
+        <div class="footer-heading">Platform</div>
+        <ul class="footer-links">
+          <li><a href="{% url 'home' %}" class="footer-link">Home</a></li>
+          <li><a href="{% url 'campaigns:case_list' %}" class="footer-link">Browse Campaigns</a></li>
+          <li><a href="{% url 'campaigns:case_create' %}" class="footer-link">Start a Campaign</a></li>
+          <li><a href="{% if request.resolver_match.url_name == 'home' %}#about{% else %}{% url 'home' %}#about{% endif %}" class="footer-link">About EgyStory</a></li>
+        </ul>
+      </div>
+
+      <!-- Account links -->
+      <div>
+        <div class="footer-heading">Account</div>
+        <ul class="footer-links">
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'profile' %}" class="footer-link">My Profile</a></li>
+            <li><a href="{% url 'profile_edit' %}" class="footer-link">Edit Profile</a></li>
+          {% else %}
+            <li><a href="{% url 'register' %}" class="footer-link">Create Account</a></li>
+            <li><a href="{% url 'login' %}" class="footer-link">Login</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="footer-bottom">
+      <span>&copy; {% now "Y" %} EgyStory. Made with ❤️ in Egypt.</span>
+      <span>For Egyptians, by Egyptians.</span>
+    </div>
+  </div>
+</footer>

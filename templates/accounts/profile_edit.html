@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-edit-page">
+  <div class="container">
+    <div class="profile-edit-container">
+
+      <!-- Page heading -->
+      <div style="margin-bottom:32px;">
+        <a href="{% url 'profile' %}" class="text-secondary text-sm" style="display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Back to Profile
+        </a>
+        <h1 class="page-title">Edit Profile</h1>
+        <p class="page-subtitle">Update your personal information below.</p>
+      </div>
+
+      <div class="card">
+        <form method="post" enctype="multipart/form-data" novalidate id="profile-edit-form">
+          {% csrf_token %}
+
+          <!-- Avatar row -->
+          <div class="card-body" style="border-bottom:1px solid var(--color-border);padding-bottom:24px;">
+            <div class="profile-edit-avatar-row">
+              {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" class="profile-edit-avatar" id="avatar-preview" alt="Current avatar">
+              {% else %}
+                <img src="{% static 'images/default-avatar.svg' %}" class="profile-edit-avatar" id="avatar-preview" alt="Default avatar">
+              {% endif %}
+              <div>
+                <div class="form-label" style="margin-bottom:8px;">Profile Picture</div>
+                <div class="avatar-upload-area" id="avatar-upload-area" style="padding:12px 16px;" role="button" tabindex="0" aria-label="Upload new profile picture">
+                  <div class="avatar-upload-label">Click to change photo</div>
+                  <div class="avatar-upload-hint">JPEG, PNG, WebP — max 5MB</div>
+                </div>
+                {{ form.profile_picture }}
+                {% for error in form.profile_picture.errors %}
+                  <span class="form-error" role="alert">{{ error }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+
+            <!-- Email (read-only) -->
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-control" value="{{ user.email }}" readonly aria-describedby="email-notice">
+              <div class="email-readonly-notice" id="email-notice">
+                📧 Your email address cannot be changed for security reasons.
+              </div>
+            </div>
+
+            <!-- Name row -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name <span class="required">*</span></label>
+                <input type="text" name="{{ form.first_name.html_name }}" id="{{ form.first_name.id_for_label }}"
+                  class="form-control {% if form.first_name.errors %}is-invalid{% endif %}"
+                  value="{{ form.first_name.value|default_if_none:'' }}" required>
+                {% for error in form.first_name.errors %}
+                  <span class="form-error" role="alert">{{ error }}</span>
+                {% endfor %}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name <span class="required">*</span></label>
+                <input type="text" name="{{ form.last_name.html_name }}" id="{{ form.last_name.id_for_label }}"
+                  class="form-control {% if form.last_name.errors %}is-invalid{% endif %}"
+                  value="{{ form.last_name.value|default_if_none:'' }}" required>
+                {% for error in form.last_name.errors %}
+                  <span class="form-error" role="alert">{{ error }}</span>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+              <label for="{{ form.phone.id_for_label }}" class="form-label">Egyptian Mobile Number <span class="required">*</span></label>
+              <input type="tel" name="{{ form.phone.html_name }}" id="{{ form.phone.id_for_label }}"
+                class="form-control {% if form.phone.errors %}is-invalid{% endif %}"
+                value="{{ form.phone.value|default_if_none:'' }}"
+                pattern="01[0125][0-9]{8}" placeholder="01012345678" required>
+              <span class="form-hint">Format: 01XXXXXXXXX</span>
+              {% for error in form.phone.errors %}
+                <span class="form-error" role="alert">{{ error }}</span>
+              {% endfor %}
+            </div>
+
+            <!-- Birthdate & Country row -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label for="{{ form.birthdate.id_for_label }}" class="form-label">Birthdate <span style="color:var(--color-text-muted);font-weight:400;">(optional)</span></label>
+                <input type="date" name="{{ form.birthdate.html_name }}" id="{{ form.birthdate.id_for_label }}"
+                  class="form-control {% if form.birthdate.errors %}is-invalid{% endif %}"
+                  value="{{ form.birthdate.value|date:'Y-m-d'|default:'' }}">
+                {% for error in form.birthdate.errors %}
+                  <span class="form-error" role="alert">{{ error }}</span>
+                {% endfor %}
+              </div>
+              <div class="form-group">
+                <label for="{{ form.country.id_for_label }}" class="form-label">Country <span style="color:var(--color-text-muted);font-weight:400;">(optional)</span></label>
+                <input type="text" name="{{ form.country.html_name }}" id="{{ form.country.id_for_label }}"
+                  class="form-control {% if form.country.errors %}is-invalid{% endif %}"
+                  placeholder="e.g. Egypt" value="{{ form.country.value|default_if_none:'' }}">
+                {% for error in form.country.errors %}
+                  <span class="form-error" role="alert">{{ error }}</span>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Facebook -->
+            <div class="form-group">
+              <label for="{{ form.facebook.id_for_label }}" class="form-label">Facebook Profile <span style="color:var(--color-text-muted);font-weight:400;">(optional)</span></label>
+              <input type="url" name="{{ form.facebook.html_name }}" id="{{ form.facebook.id_for_label }}"
+                class="form-control {% if form.facebook.errors %}is-invalid{% endif %}"
+                placeholder="https://facebook.com/yourprofile" value="{{ form.facebook.value|default_if_none:'' }}">
+              <span class="form-hint">Enter your Facebook profile URL</span>
+              {% for error in form.facebook.errors %}
+                <span class="form-error" role="alert">{{ error }}</span>
+              {% endfor %}
+            </div>
+
+            <!-- Buttons -->
+            <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
+              <a href="{% url 'profile' %}" class="btn btn-ghost" id="cancel-edit">Cancel</a>
+              <button type="submit" class="btn btn-primary" id="save-profile-btn">Save Changes</button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  (function(){
+    var field = document.getElementById('id_profile_picture');
+    if(field){ field.id = 'avatar-input'; field.className = 'avatar-input'; }
+  })();
+</script>
+<script src="{% static 'js/auth.js' %}"></script>
+{% endblock %}

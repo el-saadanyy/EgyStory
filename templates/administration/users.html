@@ -1,0 +1,57 @@
+{% extends 'administration/base.html' %}
+{% load static %}
+
+{% block title %}User Management{% endblock %}
+{% block page_title %}User Management{% endblock %}
+
+{% block admin_content %}
+<div class="section-title" style="margin-bottom: var(--space-4);">All Users</div>
+
+<div class="admin-card" style="padding: 0;">
+  {% if users %}
+    <div class="admin-users-table-wrapper">
+      <table class="admin-users-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Date Joined</th>
+            <th class="actions-col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+            <tr>
+              <td>
+                <strong>{{ user.get_full_name|default:"Unnamed User" }}</strong>
+              </td>
+              <td style="color: #9ca3af;">{{ user.email }}</td>
+              <td>
+                {% if user.is_active %}
+                  <span class="badge" style="background: rgba(22, 163, 74, 0.2); color: #86efac; border: 1px solid rgba(22, 163, 74, 0.3);">Active</span>
+                {% else %}
+                  <span class="badge" style="background: rgba(217, 119, 6, 0.2); color: #fcd34d; border: 1px solid rgba(217, 119, 6, 0.3);">Pending</span>
+                {% endif %}
+              </td>
+              <td style="font-size: var(--font-size-sm); color: #9ca3af;">{{ user.date_joined|date:"M d, Y" }}</td>
+              <td class="actions-col">
+                <form method="post" action="{% url 'admin_delete_user' user.id %}" class="admin-table-action" style="display: inline-block;" onsubmit="return confirm('WARNING: Deleting this user is permanent and will cascade-delete all of their Campaigns, Campaign Updates, and Donations. \n\nAre you sure you want to proceed?');">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-danger-outline" style="min-width: 80px;">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="admin-users-empty">
+      <div class="admin-users-empty-icon">👥</div>
+      <div class="admin-users-empty-title">No users found</div>
+      <div style="font-size: var(--font-size-sm);">There are currently no normal users registered in the system.</div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

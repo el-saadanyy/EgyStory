@@ -1,0 +1,71 @@
+{% extends 'administration/base.html' %}
+{% load static %}
+
+{% block title %}Admin Management{% endblock %}
+{% block page_title %}Admin Management{% endblock %}
+
+{% block admin_content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+  <div class="section-title">Staff & Superusers</div>
+  <a href="{% url 'admin_create' %}" class="btn btn-primary btn-sm">+ New Admin</a>
+</div>
+
+<div class="admin-card" style="padding: 0;">
+  {% if admins %}
+    <div class="admin-users-table-wrapper">
+      <table class="admin-users-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th class="actions-col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for admin_obj in admins %}
+            <tr>
+              <td>
+                <strong>{{ admin_obj.get_full_name|default:"Unnamed Admin" }}</strong>
+                {% if admin_obj == request.user %} <span style="font-size: 11px; color: var(--color-primary);">(You)</span> {% endif %}
+              </td>
+              <td style="color: #9ca3af;">{{ admin_obj.email }}</td>
+              <td>
+                {% if admin_obj.is_superuser %}
+                  <span class="badge" style="background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.3);">Superuser</span>
+                {% else %}
+                  <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3);">Staff</span>
+                {% endif %}
+              </td>
+              <td>
+                <form method="post" action="{% url 'admin_toggle_status' admin_obj.id %}" style="display:inline;">
+                  {% csrf_token %}
+                  {% if admin_obj.is_active %}
+                    <button type="submit" class="badge" style="background: rgba(22, 163, 74, 0.2); color: #86efac; border: 1px solid rgba(22, 163, 74, 0.3); cursor: pointer;" {% if admin_obj == request.user %}disabled{% endif %}>Active (Toggle)</button>
+                  {% else %}
+                    <button type="submit" class="badge" style="background: rgba(217, 119, 6, 0.2); color: #fcd34d; border: 1px solid rgba(217, 119, 6, 0.3); cursor: pointer;" {% if admin_obj == request.user %}disabled{% endif %}>Inactive (Toggle)</button>
+                  {% endif %}
+                </form>
+              </td>
+              <td class="actions-col">
+                <a href="{% url 'admin_edit' admin_obj.id %}" class="btn btn-sm btn-outline" style="border-color: rgba(255,255,255,0.2); color: #fff; margin-right: 4px;">Edit</a>
+                <a href="{% url 'admin_reset_password' admin_obj.id %}" class="btn btn-sm btn-outline" style="border-color: rgba(255,255,255,0.2); color: #fff; margin-right: 4px;">Reset Pwd</a>
+                <form method="post" action="{% url 'admin_delete' admin_obj.id %}" class="admin-table-action" style="display: inline-block;" onsubmit="return confirm('WARNING: Are you sure you want to delete this Admin?');">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-danger-outline" style="min-width: 80px;" {% if admin_obj == request.user %}disabled{% endif %}>Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="admin-users-empty">
+      <div class="admin-users-empty-icon">🛡️</div>
+      <div class="admin-users-empty-title">No admins found</div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

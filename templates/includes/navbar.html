@@ -1,0 +1,104 @@
+{% load static %}
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="container">
+    <div class="navbar-inner">
+
+      <!-- Brand -->
+      <a href="{% url 'home' %}" class="navbar-brand" aria-label="EgyStory home" style="display: flex; align-items: center;">
+        <img src="{% static 'images/logo.svg' %}" alt="EgyStory" height="40">
+      </a>
+
+      <!-- Desktop nav links -->
+      <ul class="navbar-nav" role="list">
+        <li><a href="{% url 'home' %}" class="nav-link nav-link-home {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
+        <li><a href="{% url 'campaigns:case_list' %}" class="nav-link {% if 'cases' in request.path and 'donate' not in request.path %}active{% endif %}">Cases</a></li>
+        <li><a href="{% if request.resolver_match.url_name == 'home' %}#about{% else %}{% url 'home' %}#about{% endif %}" class="nav-link nav-link-about">About</a></li>
+        <li><a href="{% url 'campaigns:case_list' %}?q=" class="nav-link" aria-label="Search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </a></li>
+      </ul>
+
+      <!-- Desktop actions -->
+      <div class="navbar-actions">
+        {% if user.is_authenticated %}
+          <a href="{% url 'campaigns:donate_general' %}" class="btn btn-outline btn-sm" style="margin-right: var(--space-3);">Donate</a>
+          <a href="{% url 'campaigns:case_create' %}" class="btn btn-primary btn-sm" style="margin-right: var(--space-4);">Start a Story</a>
+          <div class="user-menu" id="user-menu">
+            <button class="user-menu-trigger" id="user-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="user-menu-dropdown" style="display: flex; align-items: center; gap: 8px; background: transparent; border: none; cursor: pointer; font-family: inherit; font-weight: 600;">
+              {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" class="avatar avatar-sm" alt="{{ user.get_full_name }}" style="border: 2px solid var(--color-border);">
+              {% else %}
+                <img src="{% static 'images/default-avatar.svg' %}" class="avatar avatar-sm" alt="Avatar" style="border: 2px solid var(--color-border);">
+              {% endif %}
+              <span style="color: var(--color-text-primary);">{{ user.first_name }}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-secondary)" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+
+            <div class="user-menu-dropdown" id="user-menu-dropdown" role="menu">
+              <div class="user-menu-header">
+                <div class="user-menu-name">{{ user.get_full_name }}</div>
+                <div class="user-menu-email" style="font-size: 13px; color: var(--color-text-muted);">{{ user.email }}</div>
+              </div>
+              <a href="{% url 'profile' %}" class="dropdown-item" role="menuitem">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                My Profile
+              </a>
+              <a href="{% url 'profile_edit' %}" class="dropdown-item" role="menuitem">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Edit Profile
+              </a>
+              {% if user.is_staff %}
+              <div class="dropdown-divider"></div>
+              <a href="{% url 'admin_dashboard' %}" class="dropdown-item" role="menuitem">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Admin Dashboard
+              </a>
+              {% endif %}
+              <div class="dropdown-divider"></div>
+              <form method="post" action="{% url 'logout' %}" style="width: 100%;">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item danger" role="menuitem" style="width: 100%; border: none; background: transparent; cursor: pointer; text-align: left;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  Sign Out
+                </button>
+              </form>
+            </div>
+          </div>
+        {% else %}
+          <a href="{% url 'campaigns:donate_general' %}" class="btn btn-outline btn-sm" style="margin-right: var(--space-3);">Donate</a>
+          <a href="{% url 'login' %}" class="btn btn-ghost btn-sm" style="margin-right: var(--space-2);">Login</a>
+          <a href="{% url 'register' %}?next={% url 'campaigns:case_create' %}" class="btn btn-primary btn-sm">Start a Story</a>
+        {% endif %}
+      </div>
+
+      <!-- Mobile toggle -->
+      <button class="navbar-toggle" id="navbar-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Mobile nav -->
+  <div class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Mobile navigation">
+    <a href="{% url 'home' %}" class="nav-link nav-link-home {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+    <a href="{% url 'campaigns:case_list' %}" class="nav-link {% if 'cases' in request.path and 'donate' not in request.path %}active{% endif %}">Cases</a>
+    <a href="{% if request.resolver_match.url_name == 'home' %}#about{% else %}{% url 'home' %}#about{% endif %}" class="nav-link nav-link-about">About</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'campaigns:donate_general' %}" class="nav-link" style="font-weight: bold;">Donate</a>
+      <a href="{% url 'campaigns:case_create' %}" class="nav-link" style="font-weight: bold;">Start a Story</a>
+      <a href="{% url 'profile' %}" class="nav-link">My Profile</a>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-ghost btn-sm" style="width:100%; justify-content:flex-start; color: var(--color-danger); padding-left: 20px;">Sign Out</button>
+      </form>
+    {% else %}
+      <a href="{% url 'campaigns:donate_general' %}" class="nav-link" style="font-weight: bold;">Donate</a>
+      <a href="{% url 'login' %}" class="nav-link">Login</a>
+      <a href="{% url 'register' %}?next={% url 'campaigns:case_create' %}" class="nav-link" style="font-weight: bold;">Start a Story</a>
+    {% endif %}
+  </div>
+</nav>
+

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 44" width="180" height="44">
+  <!-- Pyramid icon -->
+  <polygon points="22,4 40,36 4,36" fill="none" stroke="#C62828" stroke-width="2.5" stroke-linejoin="round"/>
+  <line x1="22" y1="4" x2="22" y2="36" stroke="#C62828" stroke-width="1.5" stroke-opacity="0.5"/>
+  <line x1="13" y1="20" x2="31" y2="20" stroke="#C62828" stroke-width="1.5" stroke-opacity="0.5"/>
+  <!-- Brand name -->
+  <text x="50" y="27" font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="20" fill="#F9FAFB" letter-spacing="-0.5">Egy</text>
+  <text x="86" y="27" font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="20" fill="#C62828" letter-spacing="-0.5">Story</text>
+</svg>

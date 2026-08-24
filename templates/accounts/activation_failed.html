@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Activation Failed{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="activation-page">
+  <div class="activation-card card card-body">
+    <div class="activation-icon error" aria-hidden="true">❌</div>
+    <h1 class="activation-title" style="color:var(--color-danger);">Activation Failed</h1>
+    <p class="activation-text">{{ reason }}</p>
+    <a href="{% url 'register' %}" class="btn btn-primary btn-lg" id="try-again-btn">Register Again</a>
+    <p style="margin-top:16px;"><a href="{% url 'home' %}" class="text-secondary text-sm">← Back to home</a></p>
+  </div>
+</div>
+{% endblock %}

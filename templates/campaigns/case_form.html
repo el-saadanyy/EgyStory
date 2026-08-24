@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Start a Story - EgyStory{% endblock %}
+
+{% block content %}
+<main style="background-color: var(--color-bg); padding: 60px 0; min-height: calc(100vh - var(--navbar-height));">
+  <div class="container" style="max-width: 800px;">
+    
+    <div style="background: var(--color-surface); border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); overflow: hidden; border: 1px solid var(--color-border);">
+      
+      <!-- Header Area -->
+      <div style="background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%); color: white; padding: 40px; text-align: center;">
+        <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 12px;">Start Your Story</h1>
+        <p style="color: rgba(255,255,255,0.8); font-size: 16px; max-width: 500px; margin: 0 auto;">
+          Create a campaign to get support. All campaigns are reviewed by our team to ensure trust and transparency before going live.
+        </p>
+      </div>
+
+      <!-- Form Area -->
+      <div style="padding: 40px;">
+        <form method="post" enctype="multipart/form-data" id="campaign-form">
+          {% csrf_token %}
+          
+          {% if form.non_field_errors %}
+            <div style="background: var(--color-danger-light); color: var(--color-danger); padding: 16px; border-radius: var(--radius-md); margin-bottom: 24px; font-weight: 500;">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          <!-- Section 1 -->
+          <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 24px; color: var(--color-text-primary); display: flex; align-items: center; gap: 12px;">
+            <span style="background: var(--color-primary); color: white; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 14px;">1</span>
+            Basic Information
+          </h3>
+
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label class="form-label" for="{{ form.title.id_for_label }}">Campaign Title <span style="color: var(--color-danger);">*</span></label>
+            {{ form.title }}
+            {% for error in form.title.errors %}
+              <div style="color: var(--color-danger); font-size: 14px; margin-top: 8px;">{{ error }}</div>
+            {% endfor %}
+            <small style="color: var(--color-text-muted); display: block; margin-top: 6px;">Write a clear, brief title (e.g. "Medical Treatment for Ahmed")</small>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 32px;">
+            <label class="form-label" for="{{ form.story.id_for_label }}">The Story <span style="color: var(--color-danger);">*</span></label>
+            {{ form.story }}
+            {% for error in form.story.errors %}
+              <div style="color: var(--color-danger); font-size: 14px; margin-top: 8px;">{{ error }}</div>
+            {% endfor %}
+            <small style="color: var(--color-text-muted); display: block; margin-top: 6px;">Describe the situation clearly. Be honest, detailed, and explain exactly how the funds will be used.</small>
+          </div>
+
+          <!-- Section 2 -->
+          <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 24px; color: var(--color-text-primary); display: flex; align-items: center; gap: 12px; padding-top: 24px; border-top: 1px solid var(--color-border);">
+            <span style="background: var(--color-primary); color: white; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 14px;">2</span>
+            Funding & Categorization
+          </h3>
+
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 24px;">
+            <div class="form-group">
+              <label class="form-label" for="{{ form.target_amount.id_for_label }}">Target Amount (EGP) <span style="color: var(--color-danger);">*</span></label>
+              {{ form.target_amount }}
+              {% for error in form.target_amount.errors %}
+                <div style="color: var(--color-danger); font-size: 14px; margin-top: 8px;">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="{{ form.initial_raised_amount.id_for_label }}">Amount Raised So Far (EGP)</label>
+              {{ form.initial_raised_amount }}
+              {% for error in form.initial_raised_amount.errors %}
+                <div style="color: var(--color-danger); font-size: 14px; margin-top: 8px;">{{ error }}</div>
+              {% endfor %}
+              <small style="color: var(--color-text-muted); display: block; margin-top: 6px;">Funds already collected before adding to EgyStory.</small>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="{{ form.case_type.id_for_label }}">Case Type <span style="color: var(--color-danger);">*</span></label>
+              {{ form.case_type }}
+              {% for error in form.case_type.errors %}
+                <div style="color: var(--color-danger); font-size: 14px; margin-top: 8px;">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="{{ form.category.id_for_label }}">Category</label>
+              {{ form.category }}
+              {% for error in form.category.errors %}
+                <div style="color: var(--color-danger); font-size: 14px; margin-top: 8px;">{{ error }}</div>
+              {% endfor %}
+              <small style="color: var(--color-text-muted); display: block; margin-top: 6px;">Select a category for your campaign (optional).</small>
+            </div>
+
+            <div class="form-group" style="grid-column: span 2;">
+              <label class="form-label" for="{{ form.tags.id_for_label }}">Tags</label>
+              {{ form.tags }}
+              {% for error in form.tags.errors %}
+                <div style="color: var(--color-danger); font-size: 14px; margin-top: 8px;">{{ error }}</div>
+              {% endfor %}
+              <small style="color: var(--color-text-muted); display: block; margin-top: 6px;">Select multiple tags for your campaign (hold Ctrl/Cmd to select multiple, optional).</small>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 32px;" id="deadline-container">
+            <label class="form-label" for="{{ form.deadline.id_for_label }}">Deadline</label>
+            {{ form.deadline }}
+            {% for error in form.deadline.errors %}
+              <div style="color: var(--color-danger); font-size: 14px; margin-top: 8px;">{{ error }}</div>
+            {% endfor %}
+            <small style="color: var(--color-text-muted); display: block; margin-top: 6px;">Required for Rare/Ultra-Rare cases.</small>
+          </div>
+
+          <!-- Section 3 -->
+          <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 24px; color: var(--color-text-primary); display: flex; align-items: center; gap: 12px; padding-top: 24px; border-top: 1px solid var(--color-border);">
+            <span style="background: var(--color-primary); color: white; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 14px;">3</span>
+            Media & Documentation
+          </h3>
+
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label class="form-label" for="{{ form.campaign_image.id_for_label }}">Campaign Main Image</label>
+            <div style="border: 2px dashed var(--color-border); padding: 24px; border-radius: var(--radius-lg); text-align: center; background: var(--color-bg);">
+              {{ form.campaign_image }}
+            </div>
+            {% for error in form.campaign_image.errors %}
+              <div style="color: var(--color-danger); font-size: 14px; margin-top: 8px;">{{ error }}</div>
+            {% endfor %}
+            <small style="color: var(--color-text-muted); display: block; margin-top: 6px;">A clear, high-quality image helps people connect with your story.</small>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label class="form-label" for="id_images">Additional Project Pictures</label>
+            <div style="border: 2px dashed var(--color-border); padding: 24px; border-radius: var(--radius-lg); text-align: center; background: var(--color-bg);">
+              <input type="file" name="images" id="id_images" multiple accept="image/*" class="form-input">
+            </div>
+            <small style="color: var(--color-text-muted); display: block; margin-top: 6px;">Upload additional photos to show more details about your story.</small>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 40px;">
+            <label class="form-label" for="{{ form.supporting_document.id_for_label }}">Supporting Document</label>
+            <div style="border: 2px dashed var(--color-border); padding: 24px; border-radius: var(--radius-lg); text-align: center; background: var(--color-bg);">
+              {{ form.supporting_document }}
+            </div>
+            {% for error in form.supporting_document.errors %}
+              <div style="color: var(--color-danger); font-size: 14px; margin-top: 8px;">{{ error }}</div>
+            {% endfor %}
+            <small style="color: var(--color-text-muted); display: block; margin-top: 6px; font-weight: 600; color: #9333ea;">Required for Rare / High-Cost cases (Medical reports, official quotes, etc.)</small>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 18px; font-size: 18px; font-weight: 700; border-radius: var(--radius-lg); box-shadow: 0 4px 14px rgba(198, 40, 40, 0.3);">
+            Submit for Review
+          </button>
+          
+          <div style="text-align: center; margin-top: 24px; color: var(--color-text-muted); font-size: 14px;">
+            By submitting, you agree to our Terms of Service and acknowledge that your campaign will be reviewed by administrators.
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<style>
+  /* Base styles for the form widgets that django renders */
+  #campaign-form input[type="text"],
+  #campaign-form input[type="number"],
+  #campaign-form input[type="date"],
+  #campaign-form select,
+  #campaign-form textarea {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+    font-family: inherit;
+    background-color: rgba(255,255,255,0.05);
+    color: var(--color-text-primary);
+  }
+  #campaign-form input:focus,
+  #campaign-form select:focus,
+  #campaign-form textarea:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.1);
+    background-color: rgba(255,255,255,0.08);
+  }
+  #campaign-form textarea {
+    min-height: 150px;
+    resize: vertical;
+  }
+  #campaign-form input[type="file"] {
+    width: 100%;
+    padding: 8px;
+  }
+</style>
+
+<script>
+  // Simple logic to highlight required deadline/document when Rare is selected
+  document.addEventListener('DOMContentLoaded', function() {
+    const caseTypeSelect = document.getElementById('id_case_type');
+    const deadlineLabel = document.querySelector('label[for="id_deadline"]');
+    const docLabel = document.querySelector('label[for="id_supporting_document"]');
+    
+    function updateRequiredStates() {
+      if(caseTypeSelect && caseTypeSelect.value === 'Rare / Ultra-Rare & High-Cost') {
+        if(deadlineLabel && !deadlineLabel.innerHTML.includes('*')) deadlineLabel.innerHTML += ' <span style="color: var(--color-danger);">*</span>';
+        if(docLabel && !docLabel.innerHTML.includes('*')) docLabel.innerHTML += ' <span style="color: var(--color-danger);">*</span>';
+      } else {
+        if(deadlineLabel) deadlineLabel.innerHTML = deadlineLabel.innerHTML.replace(' <span style="color: var(--color-danger);">*</span>', '');
+        if(docLabel) docLabel.innerHTML = docLabel.innerHTML.replace(' <span style="color: var(--color-danger);">*</span>', '');
+      }
+    }
+    
+    if(caseTypeSelect) {
+      caseTypeSelect.addEventListener('change', updateRequiredStates);
+      updateRequiredStates();
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,226 @@
+{% extends 'administration/base.html' %}
+{% load static humanize %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Admin Dashboard{% endblock %}
+
+{% block admin_content %}
+
+<!-- Users Stats -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+  <div class="section-title">User Statistics</div>
+  <a href="{% url 'admin_users' %}" class="btn btn-outline btn-sm" style="border-color: rgba(255,255,255,0.2); color: #fff;">Manage Users</a>
+</div>
+<div class="admin-stats-grid">
+  <div class="admin-stat-card">
+    <div class="admin-stat-icon users" aria-hidden="true">👥</div>
+    <div>
+      <div class="admin-stat-value">{{ stats.total_users|intcomma }}</div>
+      <div class="admin-stat-label">Total Users</div>
+    </div>
+  </div>
+  <div class="admin-stat-card">
+    <div class="admin-stat-icon active" aria-hidden="true">✅</div>
+    <div>
+      <div class="admin-stat-value">{{ stats.active_users|intcomma }}</div>
+      <div class="admin-stat-label">Active Users</div>
+    </div>
+  </div>
+  <div class="admin-stat-card">
+    <div class="admin-stat-icon pending" aria-hidden="true">⏳</div>
+    <div>
+      <div class="admin-stat-value">{{ stats.pending_users|intcomma }}</div>
+      <div class="admin-stat-label">Pending Activation</div>
+    </div>
+  </div>
+</div>
+
+<!-- Campaigns Stats -->
+<div class="section-title" style="margin-top: var(--space-8); margin-bottom: var(--space-4);">Campaign Statistics</div>
+<div class="admin-stats-grid">
+  <div class="admin-stat-card">
+    <div class="admin-stat-icon pending" aria-hidden="true">📝</div>
+    <div>
+      <div class="admin-stat-value">{{ stats.pending_campaigns|intcomma }}</div>
+      <div class="admin-stat-label">Pending Review</div>
+    </div>
+  </div>
+  <div class="admin-stat-card">
+    <div class="admin-stat-icon active" aria-hidden="true">📢</div>
+    <div>
+      <div class="admin-stat-value">{{ stats.active_campaigns|intcomma }}</div>
+      <div class="admin-stat-label">Active Campaigns</div>
+    </div>
+  </div>
+  <div class="admin-stat-card">
+    <div class="admin-stat-icon users" aria-hidden="true">🏆</div>
+    <div>
+      <div class="admin-stat-value">{{ stats.completed_campaigns|intcomma }}</div>
+      <div class="admin-stat-label">Completed</div>
+    </div>
+  </div>
+  <div class="admin-stat-card">
+    <div class="admin-stat-icon active" aria-hidden="true">💰</div>
+    <div>
+      <div class="admin-stat-value" title="{{ stats.total_raised|intcomma }} EGP">
+        {{ stats.total_raised|intcomma }} <span style="font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-muted);">EGP</span>
+      </div>
+      <div class="admin-stat-label">Total Raised</div>
+    </div>
+  </div>
+  <a href="{% url 'admin_tags' %}" class="admin-stat-card" style="text-decoration: none;">
+    <div class="admin-stat-icon pending" aria-hidden="true">🏷️</div>
+    <div>
+      <div class="admin-stat-value">{{ stats.total_tags|intcomma }}</div>
+      <div class="admin-stat-label">Total Tags</div>
+    </div>
+  </a>
+</div>
+
+<!-- Pending Campaigns Moderation -->
+<div class="section-title" style="margin-top: var(--space-8); margin-bottom: var(--space-4);">Pending Campaigns Review</div>
+<div class="admin-card" style="padding: 0;">
+  {% if pending_campaigns %}
+    <table class="table" style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr style="background: var(--color-bg-secondary); border-bottom: 1px solid var(--color-border); text-align: left;">
+          <th style="padding: var(--space-4);">Campaign</th>
+          <th style="padding: var(--space-4);">Owner</th>
+          <th style="padding: var(--space-4);">Type</th>
+          <th style="padding: var(--space-4);">Goal</th>
+          <th style="padding: var(--space-4);">Submitted</th>
+          <th style="padding: var(--space-4);">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for campaign in pending_campaigns %}
+          <tr style="border-bottom: 1px solid var(--color-border);">
+            <td style="padding: var(--space-4);">
+              <strong>{{ campaign.title }}</strong><br>
+              <a href="{% url 'campaigns:case_detail' campaign.id %}" target="_blank" style="font-size: var(--font-size-sm); color: var(--color-primary);">Preview</a>
+            </td>
+            <td style="padding: var(--space-4);">{{ campaign.owner.get_full_name }}</td>
+            <td style="padding: var(--space-4);">
+              {% if campaign.case_type == 'Rare / Ultra-Rare & High-Cost' %}
+                <span class="badge badge-rare">Rare</span>
+                {% if campaign.supporting_document %}
+                  <br><a href="{{ campaign.supporting_document.url }}" target="_blank" style="font-size: var(--font-size-xs);">View Doc</a>
+                {% endif %}
+              {% else %}
+                <span class="badge">Standard</span>
+              {% endif %}
+            </td>
+            <td style="padding: var(--space-4);">{{ campaign.target_amount }} EGP</td>
+            <td style="padding: var(--space-4);">{{ campaign.created_at|date }}</td>
+            <td style="padding: var(--space-4);">
+              <div style="display: flex; gap: var(--space-2);">
+                <a href="{% url 'admin_campaign_edit' campaign.id %}" class="btn btn-outline btn-sm" style="border-color: rgba(255,255,255,0.2); color: #fff;">Edit / Tags</a>
+                <a href="{% url 'admin_campaign_action' campaign.id 'approve' %}" class="btn btn-primary btn-sm">Approve</a>
+                <button type="button" class="btn btn-danger btn-sm btn-reject-campaign" data-campaign-id="{{ campaign.id }}" data-campaign-title="{{ campaign.title }}" data-action-url="{% url 'admin_campaign_action' campaign.id 'reject' %}">Reject</button>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div style="padding: var(--space-8); text-align: center; color: var(--color-text-secondary);">
+      No pending campaigns to review.
+    </div>
+  {% endif %}
+</div>
+
+<!-- Active Campaigns & Critical Classification -->
+<div class="section-title" style="margin-top: var(--space-8); margin-bottom: var(--space-4);">Active Campaigns &amp; Critical Classification</div>
+<div class="admin-card" style="padding: 0;">
+  {% if active_campaigns %}
+    <table class="table" style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr style="background: var(--color-bg-secondary); border-bottom: 1px solid var(--color-border); text-align: left;">
+          <th style="padding: var(--space-4);">Campaign</th>
+          <th style="padding: var(--space-4);">Type</th>
+          <th style="padding: var(--space-4);">Urgency Score</th>
+          <th style="padding: var(--space-4);">Critical Status</th>
+          <th style="padding: var(--space-4);">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for campaign in active_campaigns %}
+          <tr style="border-bottom: 1px solid var(--color-border);">
+            <td style="padding: var(--space-4);">
+              <strong>{{ campaign.title }}</strong><br>
+              <a href="{% url 'campaigns:case_detail' campaign.id %}" target="_blank" style="font-size: var(--font-size-sm); color: var(--color-primary);">View Page</a>
+            </td>
+            <td style="padding: var(--space-4);">
+              {% if campaign.case_type == 'Rare / Ultra-Rare & High-Cost' %}
+                <span class="badge badge-rare">Rare</span>
+              {% else %}
+                <span class="badge">Standard</span>
+              {% endif %}
+            </td>
+            <td style="padding: var(--space-4);">
+              <strong>{{ campaign.get_urgency_score }}/100</strong>
+            </td>
+            <td style="padding: var(--space-4);">
+              {% if campaign.is_manual_critical %}
+                <span class="badge" style="background: rgba(147, 51, 234, 0.2); color: #c084fc; border: 1px solid rgba(147, 51, 234, 0.4);">⚙️ Manual Critical</span>
+              {% elif campaign.is_auto_critical %}
+                <span class="badge badge-danger">⚡ Auto Critical</span>
+              {% else %}
+                <span class="badge badge-gray">Standard</span>
+              {% endif %}
+            </td>
+            <td style="padding: var(--space-4);">
+              <div style="display: flex; gap: var(--space-2); align-items: center;">
+                <a href="{% url 'admin_campaign_edit' campaign.id %}" class="btn btn-outline btn-sm" style="border-color: rgba(255,255,255,0.2); color: #fff;">Edit / Tags</a>
+                {% if request.user.is_superuser %}
+                  <form method="post" action="{% url 'admin_toggle_manual_critical' campaign.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    {% if campaign.is_manual_critical %}
+                      <button type="submit" class="btn btn-outline btn-sm" style="border-color: rgba(255,255,255,0.2); color: var(--color-text-muted);">Remove Manual Critical</button>
+                    {% else %}
+                      <button type="submit" class="btn btn-primary btn-sm" style="background-color: #9333ea; border-color: #9333ea;">Mark Critical (Manual)</button>
+                    {% endif %}
+                  </form>
+                {% else %}
+                  <span style="font-size: var(--font-size-xs); color: var(--color-text-muted);">View Only</span>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div style="padding: var(--space-8); text-align: center; color: var(--color-text-secondary);">
+      No active campaigns found.
+    </div>
+  {% endif %}
+</div>
+
+<!-- Reject Campaign Confirmation Modal -->
+<div id="reject-modal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-labelledby="reject-modal-title">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 id="reject-modal-title" class="modal-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        Reject Campaign?
+      </h3>
+      <button type="button" class="modal-close" id="reject-modal-close" aria-label="Close modal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p id="reject-modal-message">Are you sure you want to reject this campaign? This action will mark the campaign as rejected/cancelled.</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-ghost" id="reject-modal-cancel">Cancel</button>
+      <form id="reject-modal-form" method="post" action="" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Reject Campaign</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

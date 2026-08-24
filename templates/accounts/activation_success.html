@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Account Activated{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="activation-page">
+  <div class="activation-card card card-body">
+    <div class="activation-icon success" aria-hidden="true">✅</div>
+    <h1 class="activation-title" style="color:var(--color-success);">Account Activated!</h1>
+    <p class="activation-text">
+      Welcome to EgyStory, <strong>{{ user.first_name }}</strong>!<br>
+      Your account has been successfully activated.
+      You can now sign in and start making a difference.
+    </p>
+    <a href="{% url 'login' %}" class="btn btn-primary btn-lg" id="go-to-login">Sign In to EgyStory</a>
+    <p style="margin-top:16px;"><a href="{% url 'home' %}" class="text-secondary text-sm">← Back to home</a></p>
+  </div>
+</div>
+{% endblock %}

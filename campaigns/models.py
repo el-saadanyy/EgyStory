@@ -1,0 +1,219 @@
+# pyrefly: ignore [missing-import]
+from django.db import models
+# pyrefly: ignore [missing-import]
+from django.conf import settings
+# pyrefly: ignore [missing-import]
+from django.utils import timezone
+from decimal import Decimal
+
+class CampaignStatus(models.TextChoices):
+    PENDING = 'Pending Review', 'Pending Review'
+    ACTIVE = 'Active', 'Active'
+    COMPLETED = 'Completed', 'Completed'
+    EXPIRED = 'Expired', 'Expired'
+    CANCELLED = 'Cancelled', 'Cancelled'
+
+class CaseType(models.TextChoices):
+    NORMAL = 'Normal', 'Normal'
+    RARE = 'Rare / Ultra-Rare & High-Cost', 'Rare / Ultra-Rare & High-Cost'
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Categories'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=50, unique=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Tag'
+        verbose_name_plural = 'Tags'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+class Campaign(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='campaigns')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='campaigns')
+    tags = models.ManyToManyField(Tag, blank=True, related_name='campaigns')
+    title = models.CharField(max_length=255)
+    story = models.TextField()
+    target_amount = models.DecimalField(max_digits=12, decimal_places=2)
+    initial_raised_amount = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'), verbose_name='Amount Raised So Far', null=True, blank=True)
+    raised_amount = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    campaign_image = models.ImageField(upload_to='campaigns/')
+    case_type = models.CharField(max_length=50, choices=CaseType.choices, default=CaseType.NORMAL)
+    status = models.CharField(max_length=50, choices=CampaignStatus.choices, default=CampaignStatus.PENDING)
+    deadline = models.DateField(null=True, blank=True)
+    supporting_document = models.FileField(upload_to='campaigns/documents/', null=True, blank=True)
+    is_manual_critical = models.BooleanField(default=False, verbose_name="Manually Marked Critical")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+    def get_progress_percentage(self):
+        if self.target_amount <= 0:
+            return 100
+        initial = self.initial_raised_amount or Decimal('0.00')
+        total_raised = self.raised_amount + initial
+        progress = (total_raised / self.target_amount) * 100
+        
+        if progress >= 100:
+            return 100
+        elif progress == 0:
+            return 0
+        elif progress < 1:
+            return round(float(progress), 3)
+        else:
+            if progress % 1 == 0:
+                return int(progress)
+            return round(float(progress), 1)
+    
+    def get_total_raised(self):
+        initial = self.initial_raised_amount or Decimal('0.00')
+        return self.raised_amount + initial
+    
+    def get_remaining_amount(self):
+        initial = self.initial_raised_amount or Decimal('0.00')
+        total_raised = self.raised_amount + initial
+        remaining = self.target_amount - total_raised
+        return max(remaining, Decimal('0.00'))
+    
+    def get_days_remaining(self):
+        if not self.deadline:
+            return None
+        delta = self.deadline - timezone.now().date()
+        return max(delta.days, 0)
+
+    def is_expired(self):
+        if self.deadline and self.deadline < timezone.now().date():
+            return True
+        return False
+
+    def get_urgency_score(self):
+        """
+        Urgency Score Calculation (0-100)
+        Factor 1: Deadline Proximity (max 40 pts) - closer deadline = higher score. Max impact at <= 7 days.
+        Factor 2: Remaining Amount Ratio (max 30 pts) - closer to 0 remaining means higher urgency to finish.
+        Factor 3: Required Daily Funding Rate (max 30 pts) - only active in final 30 days. Higher rate = higher score.
+        """
+        score = 0
+        
+        # Factor 1: Deadline Proximity
+        days_remaining = self.get_days_remaining()
+        if days_remaining is not None:
+            if days_remaining <= 7:
+                score += 40
+            elif days_remaining <= 30:
+                score += 30
+            elif days_remaining <= 60:
+                score += 20
+            elif days_remaining <= 120:
+                score += 10
+            else:
+                score += 5
+        
+        # Factor 2: Remaining Amount Ratio
+        progress = self.get_progress_percentage()
+        if progress >= 90:
+            score += 30
+        elif progress >= 75:
+            score += 25
+        elif progress >= 50:
+            score += 15
+        elif progress >= 25:
+            score += 10
+        else:
+            score += 5
+
+        # Factor 3: Required Daily Funding Rate (only in final 30 days)
+        if days_remaining is not None and days_remaining <= 30:
+            remaining_amount = self.get_remaining_amount()
+            days_for_rate = max(days_remaining, 1)
+            daily_rate = remaining_amount / Decimal(days_for_rate)
+            
+            if self.target_amount > 0:
+                rate_percentage = (daily_rate / self.target_amount) * 100
+                if rate_percentage >= 5:
+                    score += 30
+                elif rate_percentage >= 2:
+                    score += 20
+                elif rate_percentage >= 1:
+                    score += 10
+                else:
+                    score += 5
+        
+        return min(score, 100)
+
+    def is_auto_critical(self):
+        """Check if campaign reaches automatic critical urgency threshold."""
+        return self.get_urgency_score() >= 70
+
+    def is_critical(self):
+        """Campaign is Critical if manually overridden OR automatically urgent."""
+        return self.is_manual_critical or self.is_auto_critical()
+
+class Donation(models.Model):
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='donations')
+    donor_name = models.CharField(max_length=255)
+    donor_email = models.EmailField()
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    is_anonymous = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.amount} to {self.campaign.title}"
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new:
+            # Update Campaign safely
+            campaign = self.campaign
+            campaign.raised_amount += self.amount
+            if campaign.raised_amount >= campaign.target_amount and campaign.status == CampaignStatus.ACTIVE:
+                campaign.status = CampaignStatus.COMPLETED
+            campaign.save(update_fields=['raised_amount', 'status'])
+
+class CampaignUpdate(models.Model):
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='updates')
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+class CampaignImage(models.Model):
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='campaigns/gallery/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"Image for {self.campaign.title}"
+

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin{% endblock %} — EgyStory Admin</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <!-- ── Sidebar ───────────────────────────────────────── -->
+  <aside class="admin-sidebar" aria-label="Admin navigation">
+    <div class="admin-sidebar-brand">
+      <img src="{% static 'images/logo.svg' %}" alt="EgyStory" class="admin-brand-logo" height="24">
+      <span class="admin-brand-badge">Admin</span>
+    </div>
+
+    <nav class="admin-nav" aria-label="Admin menu">
+      <div class="admin-nav-section">Dashboard</div>
+      <a href="{% url 'admin_dashboard' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+        <span class="admin-nav-icon" aria-hidden="true">📊</span> Dashboard
+      </a>
+
+      <div class="admin-nav-section" style="margin-top:12px;">User Management</div>
+      <a href="{% url 'admin_users' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_users' %}active{% endif %}">
+        <span class="admin-nav-icon" aria-hidden="true">👥</span> All Users
+      </a>
+      {% if request.user.is_superuser %}
+      <a href="{% url 'admin_management' %}" class="admin-nav-item {% if 'admin_management' in request.resolver_match.url_name or 'admin_create' in request.resolver_match.url_name or 'admin_edit' in request.resolver_match.url_name %}active{% endif %}">
+        <span class="admin-nav-icon" aria-hidden="true">🛡️</span> Admin Management
+      </a>
+      {% endif %}
+
+      <div class="admin-nav-section" style="margin-top:12px;">Taxonomy & Tags</div>
+      <a href="{% url 'admin_tags' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_tags' %}active{% endif %}">
+        <span class="admin-nav-icon" aria-hidden="true">🏷️</span> Tags Management
+      </a>
+
+      <div class="admin-nav-section" style="margin-top:12px;">Campaigns (Phase 2)</div>
+      <span class="admin-nav-item" style="cursor:default;opacity:0.4;">
+        <span class="admin-nav-icon" aria-hidden="true">📋</span> Campaign Moderation
+        <span class="admin-nav-soon">Phase 2</span>
+      </span>
+      <span class="admin-nav-item" style="cursor:default;opacity:0.4;">
+        <span class="admin-nav-icon" aria-hidden="true">⭐</span> Featured Campaigns
+        <span class="admin-nav-soon">Phase 2</span>
+      </span>
+      <span class="admin-nav-item" style="cursor:default;opacity:0.4;">
+        <span class="admin-nav-icon" aria-hidden="true">🚨</span> Urgency Review
+        <span class="admin-nav-soon">Phase 2</span>
+      </span>
+      <span class="admin-nav-item" style="cursor:default;opacity:0.4;">
+        <span class="admin-nav-icon" aria-hidden="true">🏷️</span> Categories
+        <span class="admin-nav-soon">Phase 2</span>
+      </span>
+
+      <div class="admin-nav-section" style="margin-top:12px;">Moderation (Phase 2)</div>
+      <span class="admin-nav-item" style="cursor:default;opacity:0.4;">
+        <span class="admin-nav-icon" aria-hidden="true">🚩</span> Reports
+        <span class="admin-nav-soon">Phase 2</span>
+      </span>
+      <span class="admin-nav-item" style="cursor:default;opacity:0.4;">
+        <span class="admin-nav-icon" aria-hidden="true">📖</span> Success Stories
+        <span class="admin-nav-soon">Phase 2</span>
+      </span>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+      <div class="admin-user-chip">
+        {% if request.user.profile_picture %}
+          <img src="{{ request.user.profile_picture.url }}" class="avatar avatar-sm" alt="Avatar">
+        {% else %}
+          <img src="{% static 'images/default-avatar.svg' %}" class="avatar avatar-sm" alt="Avatar">
+        {% endif %}
+        <div>
+          <div class="admin-user-name">{{ request.user.first_name }}</div>
+          <div class="admin-user-role">Administrator</div>
+        </div>
+      </div>
+      <form method="post" action="{% url 'admin_logout' %}" style="margin-top:8px;">
+        {% csrf_token %}
+        <button type="submit" class="admin-nav-item" style="border-radius:6px;color:rgba(255,255,255,0.4);">
+          <span class="admin-nav-icon" aria-hidden="true">🚪</span> Sign Out
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- ── Main ────────────────────────────────────────────── -->
+  <div class="admin-main">
+
+    <!-- Top bar -->
+    <header class="admin-topbar">
+      <div class="admin-topbar-title">{% block page_title %}Dashboard{% endblock %}</div>
+      <div class="admin-topbar-actions">
+        <a href="{% url 'home' %}" class="btn btn-ghost btn-sm" target="_blank">← View Site</a>
+      </div>
+    </header>
+
+    <!-- Messages -->
+    {% include 'includes/messages.html' %}
+
+    <!-- Content -->
+    <div class="admin-content">
+      {% block admin_content %}{% endblock %}
+    </div>
+
+  </div>
+
+</div>
+
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

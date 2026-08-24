@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cases - EgyStory{% endblock %}
+
+{% block content %}
+<main style="background-color: var(--color-bg); padding-bottom: 64px; min-height: calc(100vh - var(--navbar-height));">
+  <!-- Header -->
+  <div style="background-color: var(--color-surface); border-bottom: 1px solid var(--color-border); padding: 48px 0; margin-bottom: 32px; text-align: center;">
+    <div class="container">
+      <h1 style="font-size: 36px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 12px; letter-spacing: -0.5px;">Browse Campaigns</h1>
+      <p style="color: var(--color-text-secondary); font-size: 16px; max-width: 600px; margin: 0 auto;">Discover real stories from real people across Egypt. Find a campaign that touches your heart and help them reach their goal.</p>
+    </div>
+  </div>
+
+  <section class="container">
+    <!-- Filters and Sort -->
+    <div style="background: var(--color-surface); padding: 24px; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); margin-bottom: 32px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between;">
+      
+      <!-- Search -->
+      <form method="get" style="display: flex; gap: 8px; flex: 1; min-width: 250px;">
+        <div style="position: relative; flex: 1;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" name="q" placeholder="Search campaigns by title, story, or tag..." value="{{ query|default:'' }}" class="form-control" style="padding-left: 40px; border-radius: var(--radius-full);">
+        </div>
+        <input type="hidden" name="filter" value="{{ current_filter }}">
+        <input type="hidden" name="sort" value="{{ current_sort }}">
+        <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-full); padding-left: 20px; padding-right: 20px;">Search</button>
+      </form>
+
+      <!-- Sort -->
+      <form method="get" style="display: flex; align-items: center; gap: 12px;">
+        <input type="hidden" name="filter" value="{{ current_filter }}">
+        <input type="hidden" name="q" value="{{ query|default:'' }}">
+        <label style="font-size: 14px; font-weight: 600; color: var(--color-text-secondary); white-space: nowrap;">Sort by:</label>
+        <select name="sort" class="form-control" onchange="this.form.submit()" style="border-radius: var(--radius-full); padding-top: 8px; padding-bottom: 8px; font-size: 14px; min-width: 160px;">
+          <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Newest First</option>
+          <option value="most_urgent" {% if current_sort == 'most_urgent' %}selected{% endif %}>Most Urgent</option>
+          <option value="almost_funded" {% if current_sort == 'almost_funded' %}selected{% endif %}>Almost Funded</option>
+          <option value="recently_completed" {% if current_sort == 'recently_completed' %}selected{% endif %}>Recently Completed</option>
+        </select>
+      </form>
+    </div>
+
+    <!-- Filter Pills -->
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; justify-content: center;">
+      <a href="?filter=all&sort={{ current_sort }}&q={{ query|default:'' }}" class="badge {% if current_filter == 'all' and not selected_category and not selected_tag %}badge-primary{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none;">All Campaigns</a>
+      <a href="?filter=critical&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="badge {% if current_filter == 'critical' %}badge-danger{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none;">Critical</a>
+      <a href="?filter=rare&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="badge {% if current_filter != 'rare' %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none; {% if current_filter == 'rare' %}background: rgba(147, 51, 234, 0.1); color: rgb(147, 51, 234);{% endif %}">Rare Cases</a>
+      <a href="?filter=active&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="badge {% if current_filter == 'active' %}badge-primary{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none;">Active</a>
+      <a href="?filter=almost_funded&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="badge {% if current_filter == 'almost_funded' %}badge-warning{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none;">Almost Funded</a>
+      <a href="?filter=completed&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="badge {% if current_filter == 'completed' %}badge-success{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none;">Completed</a>
+      
+      {% if categories %}
+        {% for cat in categories %}
+          <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&category={{ cat.slug }}" class="badge {% if selected_category == cat.slug %}badge-info{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none; {% if selected_category == cat.slug %}background: rgba(37, 99, 235, 0.9); color: white;{% endif %}">📁 {{ cat.name }}</a>
+        {% endfor %}
+      {% endif %}
+      {% if tags %}
+        {% for tag in tags %}
+          <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&tag={{ tag.slug }}" class="badge {% if selected_tag == tag.slug %}badge-info{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none; {% if selected_tag == tag.slug %}background: rgba(16, 185, 129, 0.9); color: white;{% endif %}">🏷️ {{ tag.name }}</a>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <!-- Cases Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px;">
+      {% for campaign in campaigns %}
+        {% include 'includes/campaign_card.html' %}
+      {% empty %}
+        <div class="empty-state" style="grid-column: 1 / -1; background: var(--color-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px dashed var(--color-border); padding: 64px 24px;">
+          <div class="empty-state-icon" style="font-size: 32px; width: 64px; height: 64px; margin: 0 auto 16px;">🔍</div>
+          <h2 class="empty-state-title" style="margin-bottom: 8px;">No campaigns found</h2>
+          <p class="empty-state-text" style="color: var(--color-text-secondary); margin-bottom: 24px;">We couldn't find any campaigns matching your current filters and search query.</p>
+          <a href="{% url 'campaigns:case_list' %}" class="btn btn-outline">Clear all filters</a>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+{% endblock %}

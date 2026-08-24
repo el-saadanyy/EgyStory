@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
+{% block meta_description %}Your EgyStory profile.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Profile Header -->
+<div class="profile-header">
+  <div class="container">
+    <div class="profile-header-inner">
+      <div class="profile-avatar-wrap">
+        {% if user.profile_picture %}
+          <img src="{{ user.profile_picture.url }}" alt="{{ user.get_full_name }}" class="profile-avatar">
+        {% else %}
+          <img src="{% static 'images/default-avatar.svg' %}" alt="Default avatar" class="profile-avatar">
+        {% endif %}
+        {% if user.is_active %}
+          <div class="profile-avatar-badge" title="Active account" aria-label="Active"></div>
+        {% endif %}
+      </div>
+
+      <div class="profile-info-header">
+        <h1 class="profile-name">{{ user.get_full_name }}</h1>
+        <div class="profile-email">{{ user.email }}</div>
+        <div class="profile-meta">
+          <span class="profile-meta-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 15z"/></svg>
+            {{ user.phone }}
+          </span>
+          <span class="profile-meta-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Member since {{ user.date_joined|date:"F Y" }}
+          </span>
+        </div>
+      </div>
+
+      <div class="profile-header-actions">
+        <a href="{% url 'profile_edit' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,0.3);color:#fff;" id="edit-profile-btn">
+          Edit Profile
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Profile Body -->
+<div class="profile-page">
+  <div class="container">
+    <div class="profile-body">
+      <div class="profile-grid">
+
+        <!-- Sidebar: Personal Info -->
+        <div>
+          <div class="profile-sidebar-card">
+            <div class="profile-sidebar-section" style="padding:16px 24px 12px;">
+              <div class="profile-info-label">Account Status</div>
+              {% if user.is_active %}
+                <span class="badge badge-success">✓ Activated</span>
+              {% else %}
+                <span class="badge badge-warning">⏳ Pending Activation</span>
+              {% endif %}
+            </div>
+            <div class="profile-sidebar-section">
+              <div class="profile-info-label">Email</div>
+              <div class="profile-info-value">{{ user.email }}</div>
+            </div>
+            <div class="profile-sidebar-section">
+              <div class="profile-info-label">Mobile Phone</div>
+              <div class="profile-info-value">{{ user.phone }}</div>
+            </div>
+            {% if user.birthdate %}
+            <div class="profile-sidebar-section">
+              <div class="profile-info-label">Birthdate</div>
+              <div class="profile-info-value">{{ user.birthdate|date:"d M Y" }}</div>
+            </div>
+            {% endif %}
+            {% if user.country %}
+            <div class="profile-sidebar-section">
+              <div class="profile-info-label">Country</div>
+              <div class="profile-info-value">{{ user.country }}</div>
+            </div>
+            {% endif %}
+            {% if user.facebook %}
+            <div class="profile-sidebar-section">
+              <div class="profile-info-label">Facebook</div>
+              <div class="profile-info-value">
+                <a href="{{ user.facebook }}" target="_blank" rel="noopener noreferrer" style="color:var(--color-primary);text-decoration:underline;">Facebook Profile</a>
+              </div>
+            </div>
+            {% endif %}
+            <div class="profile-sidebar-section">
+              <div class="profile-info-label">Member Since</div>
+              <div class="profile-info-value">{{ user.date_joined|date:"d M Y" }}</div>
+            </div>
+            <div class="profile-sidebar-section" style="border-bottom:none;">
+              <a href="{% url 'delete_account' %}" class="btn btn-ghost btn-sm" style="color:var(--color-danger);padding-left:0;" id="delete-account-link">
+                Delete Account
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main: Placeholder sections -->
+        <div>
+          <!-- My Campaigns -->
+          <div class="profile-content-card">
+            <div class="profile-content-header">
+              <div class="profile-content-title">My Campaigns</div>
+            </div>
+            <div class="profile-content-body" style="padding: var(--space-4);">
+              {% if user_campaigns %}
+                <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+                  {% for campaign in user_campaigns %}
+                    <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-4); display: flex; justify-content: space-between; align-items: center;">
+                      <div>
+                        <h4 style="margin-bottom: var(--space-1);">{{ campaign.title }}</h4>
+                        <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">
+                          Status: <strong>{{ campaign.status }}</strong> | 
+                          Raised: {{ campaign.get_total_raised }} / {{ campaign.target_amount }} EGP ({{ campaign.get_progress_percentage }}%)
+                        </div>
+                      </div>
+                      <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline btn-sm">View Story</a>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <div class="coming-soon-placeholder">
+                  <div class="coming-soon-icon" aria-hidden="true">📋</div>
+                  <div class="coming-soon-text">
+                    You haven't created any campaigns yet.
+                  </div>
+                  <a href="{% url 'campaigns:case_create' %}" class="btn btn-primary" style="margin-top: var(--space-4);">Start a Story</a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Donation History -->
+          <div class="profile-content-card">
+            <div class="profile-content-header">
+              <div class="profile-content-title">My Donations</div>
+            </div>
+            <div class="profile-content-body" style="padding: var(--space-4);">
+              {% if user_donations %}
+                <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                  {% for donation in user_donations %}
+                    <div style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">
+                      <div>
+                        <div><strong>{{ donation.amount }} EGP</strong> to {{ donation.campaign.title }}</div>
+                        <small style="color: var(--color-text-secondary);">{{ donation.created_at|date }}</small>
+                      </div>
+                      <a href="{% url 'campaigns:case_detail' donation.campaign.id %}" class="btn btn-ghost btn-sm">View Campaign</a>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <div class="coming-soon-placeholder">
+                  <div class="coming-soon-icon" aria-hidden="true">💳</div>
+                  <div class="coming-soon-text">
+                    You haven't made any donations yet.
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

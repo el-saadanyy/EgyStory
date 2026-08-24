@@ -1,0 +1,308 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+{% block meta_description %}EgyStory — Egypt's crowdfunding platform. Help real people, fund real stories that matter.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero ──────────────────────────────────────────────────── -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero-inner">
+    
+    <!-- Hero Text -->
+    <div>
+      <div class="hero-eyebrow">
+        🇪🇬 Egypt's Crowdfunding Platform
+      </div>
+      <h1 id="hero-title" class="hero-title">
+        Fund Real<br><span class="accent">Egyptian Stories</span>
+      </h1>
+      <p class="hero-description">
+        EgyStory connects generous hearts with real people who need real help. 
+        Every campaign is a story — transparent, verified, and made in Egypt.
+      </p>
+      <div class="hero-actions">
+        <a href="{% url 'campaigns:case_create' %}" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(198, 40, 40, 0.4);">Start a Story</a>
+        <a href="#how-it-works" class="btn btn-outline btn-lg" style="border-color: rgba(255,255,255,0.2); color: white;">How It Works</a>
+      </div>
+
+      <form action="{% url 'campaigns:case_list' %}" method="get" style="margin-top: 24px; display: flex; gap: 8px; max-width: 500px;">
+        <input type="text" name="q" placeholder="Search campaigns by title or tag..." class="form-control" style="border-radius: var(--radius-full); padding: 12px 20px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); font-size: 15px;">
+        <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-full); padding: 0 24px; font-weight: 600;">Search</button>
+      </form>
+      
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-value">100%</div>
+          <div class="hero-stat-label">Secure &amp; Verified</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">Egyptian</div>
+          <div class="hero-stat-label">Payment Methods</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">Real</div>
+          <div class="hero-stat-label">People. Real Impact.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Slider -->
+    <div class="hero-visual" aria-hidden="true">
+      {% if slider_campaigns %}
+        <div class="hero-slider" style="width: 100%; max-width: 500px; position: relative; height: 560px;">
+          {% for campaign in slider_campaigns %}
+            <div class="slider-item {% if forloop.first %}active{% endif %}">
+              <div class="slider-image-area">
+                {% if campaign.campaign_image %}
+                  <img src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}">
+                {% else %}
+                  <img src="{% static 'images/placeholder-campaign.jpg' %}" alt="{{ campaign.title }}">
+                {% endif %}
+                <div style="position: absolute; top: 16px; left: 16px; display: flex; gap: 8px; flex-wrap: wrap;">
+                  {% if campaign.category %}
+                    <span class="badge" style="background: rgba(37, 99, 235, 0.9); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; backdrop-filter: blur(4px);">{{ campaign.category.name }}</span>
+                  {% endif %}
+                  {% if campaign.case_type == 'Rare / Ultra-Rare & High-Cost' %}
+                    <span class="badge badge-rare" style="backdrop-filter: blur(4px);">Rare</span>
+                  {% elif campaign.is_critical %}
+                    <span class="badge badge-critical" style="backdrop-filter: blur(4px);">Critical</span>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="slider-content-area">
+                <div>
+                  <h3 class="slider-title">{{ campaign.title }}</h3>
+                  <p class="slider-desc">{{ campaign.story|truncatewords:18 }}</p>
+                </div>
+                
+                <div style="margin-bottom: 24px;">
+                  <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; font-weight: 700;">
+                    <span style="color: var(--color-primary);">{{ campaign.get_total_raised }} EGP raised</span>
+                    <span style="color: rgba(255,255,255,0.4);">of {{ campaign.target_amount }}</span>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.1); border-radius: 99px; height: 8px; width: 100%; overflow: hidden; margin-bottom: 8px;">
+                    <div style="background: var(--color-primary); height: 100%; width: calc({{ campaign.get_progress_percentage }} * 1%); border-radius: 99px;"></div>
+                  </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: auto;">
+                  <a href="{% url 'campaigns:donate' campaign.id %}" class="btn btn-primary" style="flex: 1; padding: 14px; font-size: 16px;">Donate</a>
+                  <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline" style="flex: 1; padding: 14px; font-size: 16px; border-color: rgba(255,255,255,0.2); color: white;">View Story</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+          {% if slider_campaigns|length > 1 %}
+            <div style="text-align: center; margin-top: 16px; color: rgba(255,255,255,0.4); font-size: 14px;">
+              <em>Showing featured campaigns</em>
+            </div>
+          {% endif %}
+        </div>
+      {% else %}
+        <div class="hero-placeholder-card">
+          <div class="hero-placeholder-label">Campaign Spot</div>
+          <div class="hero-placeholder-content">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line medium"></div>
+            <div class="skeleton-line short"></div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Critical Cases ──────────────────────────────────────────── -->
+{% if critical_cases %}
+<section style="padding: 80px 0; background-color: var(--color-bg);">
+  <div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 8px; color: var(--color-danger); font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">
+          <span style="width: 8px; height: 8px; background: var(--color-danger); border-radius: 50%; display: inline-block; animation: pulse 2s infinite;"></span> Urgent Priority
+        </div>
+        <h2 style="font-size: 32px; font-weight: 800; color: var(--color-text-primary);">Critical Campaigns</h2>
+      </div>
+      <a href="{% url 'campaigns:case_list' %}?filter=critical" class="btn btn-outline" style="border-radius: var(--radius-full); padding: 10px 24px;">See More</a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px;">
+      {% for campaign in critical_cases %}
+        {% include 'includes/campaign_card.html' %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ── Rare Cases ──────────────────────────────────────────── -->
+{% if rare_cases %}
+<section style="padding: 80px 0; background-color: var(--color-surface);">
+  <div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 8px; color: #9333ea; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">
+          💎 Exceptional Need
+        </div>
+        <h2 style="font-size: 32px; font-weight: 800; color: var(--color-text-primary);">Rare Cases</h2>
+      </div>
+      <a href="{% url 'campaigns:case_list' %}?filter=rare" class="btn btn-outline" style="border-radius: var(--radius-full); padding: 10px 24px;">See More</a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px;">
+      {% for campaign in rare_cases %}
+        {% include 'includes/campaign_card.html' %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ── Normal Cases ──────────────────────────────────────────── -->
+{% if normal_cases %}
+<section style="padding: 80px 0; background-color: var(--color-bg);">
+  <div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 8px; color: var(--color-primary); font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">
+          🤝 Community Support
+        </div>
+        <h2 style="font-size: 32px; font-weight: 800; color: var(--color-text-primary);">Normal Cases</h2>
+      </div>
+      <a href="{% url 'campaigns:case_list' %}?filter=active" class="btn btn-outline" style="border-radius: var(--radius-full); padding: 10px 24px;">See More</a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px;">
+      {% for campaign in normal_cases %}
+        {% include 'includes/campaign_card.html' %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ── Success Stories ──────────────────────────────────────────── -->
+{% if success_stories %}
+<section style="padding: 80px 0; background-color: var(--color-surface);">
+  <div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 8px; color: #16a34a; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">
+          🎉 Fully Funded
+        </div>
+        <h2 style="font-size: 32px; font-weight: 800; color: var(--color-text-primary);">Success Stories</h2>
+      </div>
+      <a href="{% url 'campaigns:case_list' %}?filter=completed" class="btn btn-outline" style="border-radius: var(--radius-full); padding: 10px 24px;">See More</a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px;">
+      {% for campaign in success_stories %}
+        {% include 'includes/campaign_card.html' %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ── How It Works ───────────────────────────────────────────── -->
+<section id="how-it-works" style="padding: 80px 0; background-color: var(--color-bg);">
+  <div class="container">
+    <div style="text-align: center; max-width: 600px; margin: 0 auto 64px;">
+      <h2 style="font-size: 36px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 16px;">How EgyStory Works</h2>
+      <p style="font-size: 18px; color: var(--color-text-secondary); line-height: 1.6;">Simple, transparent, and built to make a real difference in the lives of Egyptians.</p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 32px; text-align: center;">
+      <div style="background: var(--color-bg); padding: 40px 32px; border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
+        <div style="width: 64px; height: 64px; background: rgba(198, 40, 40, 0.1); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 0 auto 24px;">1</div>
+        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">A Story Is Submitted</h3>
+        <p style="color: var(--color-text-secondary); line-height: 1.6;">Register securely and share your campaign details with the community.</p>
+      </div>
+      
+      <div style="background: var(--color-bg); padding: 40px 32px; border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
+        <div style="width: 64px; height: 64px; background: rgba(198, 40, 40, 0.1); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 0 auto 24px;">2</div>
+        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">Admin Reviews It</h3>
+        <p style="color: var(--color-text-secondary); line-height: 1.6;">Our team verifies the campaign to ensure trust and transparency.</p>
+      </div>
+      
+      <div style="background: var(--color-bg); padding: 40px 32px; border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
+        <div style="width: 64px; height: 64px; background: rgba(198, 40, 40, 0.1); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 0 auto 24px;">3</div>
+        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">People Support It</h3>
+        <p style="color: var(--color-text-secondary); line-height: 1.6;">The Egyptian community donates securely to help you reach your target.</p>
+      </div>
+
+      <div style="background: var(--color-bg); padding: 40px 32px; border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
+        <div style="width: 64px; height: 64px; background: rgba(22, 163, 74, 0.1); color: rgb(22, 163, 74); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 0 auto 24px;">4</div>
+        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">Goal Reached</h3>
+        <p style="color: var(--color-text-secondary); line-height: 1.6;">Funds reach the people who need them. Real impact achieved.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 100px 0; background: linear-gradient(135deg, #1A1A1A 0%, #2D1515 100%); color: var(--color-white); text-align: center;">
+  <div class="container" style="max-width: 800px;">
+    <h2 style="font-size: 40px; font-weight: 900; margin-bottom: 24px; line-height: 1.2;">Ready to make a difference?</h2>
+    <p style="font-size: 20px; color: rgba(255,255,255,0.7); margin-bottom: 48px; line-height: 1.6;">
+      Whether you need help or want to help others, EgyStory is here for you. Join our community today.
+    </p>
+    <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+      <a href="{% url 'campaigns:donate_general' %}" class="btn btn-primary" style="padding: 18px 40px; font-size: 18px; border-radius: var(--radius-full);">Donate Now</a>
+      <a href="{% url 'campaigns:case_create' %}" class="btn" style="padding: 18px 40px; font-size: 18px; border-radius: var(--radius-full); background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Start a Story</a>
+    </div>
+  </div>
+</section>
+
+<section id="about" style="padding: 80px 0; background-color: var(--color-bg);">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 48px; align-items: center;">
+      <div>
+        <h2 style="font-size: 32px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 24px;">Transparency You Can Trust</h2>
+        <p style="font-size: 18px; color: var(--color-text-secondary); line-height: 1.7; margin-bottom: 32px;">
+          EgyStory is dedicated to providing a safe, verified platform. Every campaign is reviewed by our administrators before going live. We provide continuous updates so you know exactly where your support is going.
+        </p>
+        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px;">
+          <li style="display: flex; align-items: center; gap: 12px; font-weight: 600; color: var(--color-text-primary);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            100% Secure Donations
+          </li>
+          <li style="display: flex; align-items: center; gap: 12px; font-weight: 600; color: var(--color-text-primary);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Verified Egyptian Cases
+          </li>
+          <li style="display: flex; align-items: center; gap: 12px; font-weight: 600; color: var(--color-text-primary);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Transparent Progress Tracking
+          </li>
+        </ul>
+      </div>
+      <div style="background: var(--color-surface); border-radius: var(--radius-2xl); padding: 48px; text-align: center; border: 1px solid var(--color-border);">
+        <img src="{% static 'images/logo.svg' %}" alt="EgyStory" style="width: 120px; height: auto; margin-bottom: 24px; opacity: 1;">
+        <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 12px;">Made in Egypt</h3>
+        <p style="color: var(--color-text-secondary); line-height: 1.6;">Built by Egyptians, for Egyptians. Together we can change lives.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+  }
+  @media (max-width: 768px) {
+    .hero > .container > div {
+      grid-template-columns: 1fr !important;
+      text-align: center;
+    }
+    .hero h1 { font-size: 40px !important; }
+    .hero-visual { display: none; }
+  }
+</style>
+
+{% endblock %}
+

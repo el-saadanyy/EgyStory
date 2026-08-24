@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Donate - EgyStory{% endblock %}
+
+{% block content %}
+<main style="background-color: var(--color-bg); padding: 60px 0; min-height: calc(100vh - var(--navbar-height));">
+  <div class="container" style="max-width: 600px;">
+    
+    <div style="background: var(--color-surface); border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); overflow: hidden; border: 1px solid var(--color-border);">
+      
+      <!-- Header Area -->
+      <div style="background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%); color: white; padding: 40px; text-align: center;">
+        <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 12px;">Make a General Donation</h1>
+        <p style="color: rgba(255,255,255,0.8); font-size: 16px;">Select an active campaign to support from the list below.</p>
+      </div>
+
+      <!-- Form Area -->
+      <div style="padding: 40px;">
+        <form method="post">
+          {% csrf_token %}
+          
+          <div class="form-group" style="margin-bottom: 32px;">
+            <label class="form-label" for="campaign_id" style="font-size: 16px; font-weight: 600; margin-bottom: 12px; display: block;">Select a Campaign <span style="color: var(--color-danger);">*</span></label>
+            <div style="position: relative;">
+              <select name="campaign_id" id="campaign_id" class="form-control" style="width: 100%; padding: 16px; font-size: 16px; border: 2px solid var(--color-border); border-radius: var(--radius-lg); appearance: none; background: rgba(255,255,255,0.05); color: var(--color-text-primary); cursor: pointer;" required>
+                <option value="" disabled selected>-- Click to choose a campaign --</option>
+                {% for campaign in active_campaigns %}
+                  <option value="{{ campaign.id }}">{{ campaign.title }} (Goal: {{ campaign.target_amount }} EGP)</option>
+                {% endfor %}
+              </select>
+              <div style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--color-text-muted);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 18px; font-size: 18px; font-weight: 700; border-radius: var(--radius-lg); box-shadow: 0 4px 14px rgba(198, 40, 40, 0.3);">
+            Continue to Donate
+          </button>
+          
+          <div style="text-align: center; margin-top: 24px;">
+            <a href="{% url 'campaigns:case_list' %}" style="color: var(--color-primary); font-weight: 600; text-decoration: none;">Browse all campaigns instead</a>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</main>
+{% endblock %}

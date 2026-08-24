@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Account{% endblock %}
+{% block meta_description %}Join EgyStory — Create your free account and start making a difference in Egypt.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="auth-container auth-container-wide">
+
+    <div class="auth-card">
+      <!-- Logo -->
+      <div class="auth-logo">
+        <a href="{% url 'home' %}">
+          <img src="{% static 'images/logo.svg' %}" alt="EgyStory" height="40">
+        </a>
+      </div>
+
+      <h1 class="auth-heading">Create your account</h1>
+      <p class="auth-subheading">Join EgyStory and be part of Egypt's giving community.</p>
+
+      <form method="post" enctype="multipart/form-data" novalidate id="register-form">
+        {% csrf_token %}
+
+        <!-- Non-field errors -->
+        {% if form.non_field_errors %}
+          {% for error in form.non_field_errors %}
+            <div class="alert alert-error" role="alert">{{ error }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <!-- Profile Picture -->
+        <div class="form-group">
+          <label class="form-label">Profile Picture <span style="color:var(--color-text-muted);font-weight:400;">(optional)</span></label>
+          <div class="avatar-upload-area" id="avatar-upload-area" role="button" tabindex="0" aria-label="Upload profile picture">
+            <img src="{% static 'images/default-avatar.svg' %}" alt="Avatar preview" class="avatar-preview" id="avatar-preview">
+            <div class="avatar-upload-label">Click to upload photo</div>
+            <div class="avatar-upload-hint">JPEG, PNG, WebP — max 5MB</div>
+          </div>
+          {{ form.profile_picture }}
+          {% for error in form.profile_picture.errors %}
+            <span class="form-error" role="alert">{{ error }}</span>
+          {% endfor %}
+        </div>
+
+        <!-- Name row -->
+        <div class="auth-form-row">
+          <div class="form-group">
+            <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name <span class="required">*</span></label>
+            <input type="text" name="{{ form.first_name.html_name }}" id="{{ form.first_name.id_for_label }}"
+              class="form-control {% if form.first_name.errors %}is-invalid{% endif %}"
+              placeholder="First name" value="{{ form.first_name.value|default_if_none:'' }}"
+              autocomplete="given-name" required>
+            {% for error in form.first_name.errors %}
+              <span class="form-error" role="alert">{{ error }}</span>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name <span class="required">*</span></label>
+            <input type="text" name="{{ form.last_name.html_name }}" id="{{ form.last_name.id_for_label }}"
+              class="form-control {% if form.last_name.errors %}is-invalid{% endif %}"
+              placeholder="Last name" value="{{ form.last_name.value|default_if_none:'' }}"
+              autocomplete="family-name" required>
+            {% for error in form.last_name.errors %}
+              <span class="form-error" role="alert">{{ error }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="{{ form.email.id_for_label }}" class="form-label">Email Address <span class="required">*</span></label>
+          <input type="email" name="{{ form.email.html_name }}" id="{{ form.email.id_for_label }}"
+            class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+            placeholder="your@email.com" value="{{ form.email.value|default_if_none:'' }}"
+            autocomplete="email" required>
+          {% for error in form.email.errors %}
+            <span class="form-error" role="alert">{{ error }}</span>
+          {% endfor %}
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label for="{{ form.phone.id_for_label }}" class="form-label">Egyptian Mobile Number <span class="required">*</span></label>
+          <input type="tel" name="{{ form.phone.html_name }}" id="{{ form.phone.id_for_label }}"
+            class="form-control {% if form.phone.errors %}is-invalid{% endif %}"
+            placeholder="01012345678" value="{{ form.phone.value|default_if_none:'' }}"
+            autocomplete="tel" pattern="01[0125][0-9]{8}" required>
+          <span class="form-hint">Format: 01XXXXXXXXX (Vodafone, Orange, Etisalat, WE)</span>
+          {% for error in form.phone.errors %}
+            <span class="form-error" role="alert">{{ error }}</span>
+          {% endfor %}
+        </div>
+
+        <!-- Birthdate & Country row (optional) -->
+        <div class="auth-form-row">
+          <div class="form-group">
+            <label for="{{ form.birthdate.id_for_label }}" class="form-label">Birthdate <span style="color:var(--color-text-muted);font-weight:400;">(optional)</span></label>
+            <input type="date" name="{{ form.birthdate.html_name }}" id="{{ form.birthdate.id_for_label }}"
+              class="form-control {% if form.birthdate.errors %}is-invalid{% endif %}"
+              value="{{ form.birthdate.value|date:'Y-m-d'|default:'' }}">
+            {% for error in form.birthdate.errors %}
+              <span class="form-error" role="alert">{{ error }}</span>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.country.id_for_label }}" class="form-label">Country <span style="color:var(--color-text-muted);font-weight:400;">(optional)</span></label>
+            <input type="text" name="{{ form.country.html_name }}" id="{{ form.country.id_for_label }}"
+              class="form-control {% if form.country.errors %}is-invalid{% endif %}"
+              placeholder="Country" value="{{ form.country.value|default_if_none:'' }}">
+            {% for error in form.country.errors %}
+              <span class="form-error" role="alert">{{ error }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Facebook Profile (optional) -->
+        <div class="form-group">
+          <label for="{{ form.facebook.id_for_label }}" class="form-label">Facebook Profile <span style="color:var(--color-text-muted);font-weight:400;">(optional)</span></label>
+          <input type="url" name="{{ form.facebook.html_name }}" id="{{ form.facebook.id_for_label }}"
+            class="form-control {% if form.facebook.errors %}is-invalid{% endif %}"
+            placeholder="https://facebook.com/yourprofile" value="{{ form.facebook.value|default_if_none:'' }}">
+          {% for error in form.facebook.errors %}
+            <span class="form-error" role="alert">{{ error }}</span>
+          {% endfor %}
+        </div>
+
+        <!-- Password row -->
+        <div class="auth-form-row">
+          <div class="form-group">
+            <label for="{{ form.password.id_for_label }}" class="form-label">Password <span class="required">*</span></label>
+            <div class="password-field">
+              <input type="password" name="{{ form.password.html_name }}" id="{{ form.password.id_for_label }}"
+                class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+                placeholder="Min 8 characters" autocomplete="new-password" required>
+              <button type="button" class="password-toggle" aria-label="Show password">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            {% for error in form.password.errors %}
+              <span class="form-error" role="alert">{{ error }}</span>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.confirm_password.id_for_label }}" class="form-label">Confirm Password <span class="required">*</span></label>
+            <div class="password-field">
+              <input type="password" name="{{ form.confirm_password.html_name }}" id="{{ form.confirm_password.id_for_label }}"
+                class="form-control {% if form.confirm_password.errors %}is-invalid{% endif %}"
+                placeholder="Repeat password" autocomplete="new-password" required>
+              <button type="button" class="password-toggle" aria-label="Show password">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            {% for error in form.confirm_password.errors %}
+              <span class="form-error" role="alert">{{ error }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="register-btn">
+          Create Account
+        </button>
+      </form>
+
+      <p class="auth-footer-text">
+        Already have an account? <a href="{% url 'login' %}">Sign in</a>
+      </p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Wire up avatar input ID for auth.js
+  (function(){
+    var field = document.getElementById('id_profile_picture');
+    if(field){ field.id = 'avatar-input'; field.className = 'avatar-input'; }
+  })();
+</script>
+<script src="{% static 'js/auth.js' %}"></script>
+{% endblock %}

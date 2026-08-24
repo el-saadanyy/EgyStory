@@ -1,0 +1,87 @@
+{% extends 'administration/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<div class="admin-card" style="max-width: 600px;">
+  <form method="post">
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger" style="margin-bottom: 16px;">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <div class="form-group" style="margin-bottom: var(--space-4);">
+      <label class="form-label">Email Address</label>
+      {{ form.email }}
+      {% if form.email.errors %}
+        <div style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ form.email.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
+      <div class="form-group">
+        <label class="form-label">First Name</label>
+        {{ form.first_name }}
+        {% if form.first_name.errors %}
+          <div style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ form.first_name.errors }}</div>
+        {% endif %}
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Name</label>
+        {{ form.last_name }}
+        {% if form.last_name.errors %}
+          <div style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ form.last_name.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom: var(--space-4);">
+      <label class="form-label">Phone Number</label>
+      {{ form.phone }}
+      {% if form.phone.errors %}
+        <div style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ form.phone.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div style="display: flex; gap: var(--space-6); margin-bottom: var(--space-4);">
+      <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #d1d5db;">
+        {{ form.is_active }} Active Account
+      </label>
+      <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #d1d5db;">
+        {{ form.is_superuser }} Superuser Permissions
+      </label>
+    </div>
+
+    <hr style="border-color: var(--color-border); margin: var(--space-6) 0;">
+
+    <div class="form-group" style="margin-bottom: var(--space-4);">
+      <label class="form-label">Password</label>
+      {{ form.password }}
+      {% if form.password.help_text %}
+        <div style="color: #9ca3af; font-size: 12px; margin-top: 4px;">{{ form.password.help_text }}</div>
+      {% endif %}
+      {% if form.password.errors %}
+        <div style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ form.password.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group" style="margin-bottom: var(--space-6);">
+      <label class="form-label">Confirm Password</label>
+      {{ form.confirm_password }}
+      {% if form.confirm_password.errors %}
+        <div style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ form.confirm_password.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div style="display: flex; gap: var(--space-3);">
+      <button type="submit" class="btn btn-primary">Save Admin</button>
+      <a href="{% url 'admin_management' %}" class="btn btn-outline" style="border-color: rgba(255,255,255,0.2); color: #fff;">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

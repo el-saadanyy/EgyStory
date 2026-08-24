@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Account{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="delete-page">
+  <div class="delete-container">
+    <div class="delete-card">
+
+      <div class="delete-warning-icon" aria-hidden="true">⚠️</div>
+
+      <h1 class="page-title text-center" style="color:var(--color-danger);margin-bottom:12px;">Delete Account</h1>
+      <p style="text-align:center;color:var(--color-text-secondary);font-size:15px;line-height:1.7;margin-bottom:24px;">
+        This action is <strong>permanent and cannot be undone</strong>.
+        Your account, profile data, and all associated information will be
+        permanently removed from EgyStory.
+      </p>
+
+      <div class="alert alert-error" role="alert">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>You are about to delete the account for <strong>{{ user.email }}</strong>.</span>
+      </div>
+
+      <form method="post" novalidate id="delete-account-form">
+        {% csrf_token %}
+
+        <!-- Confirmation checkbox -->
+        <div class="form-group" style="margin-bottom:28px;">
+          <div class="form-check">
+            <input type="checkbox" name="{{ form.confirm.html_name }}" id="{{ form.confirm.id_for_label }}"
+              class="form-check-input" required>
+            <label for="{{ form.confirm.id_for_label }}" class="form-check-label">
+              {{ form.confirm.label }}
+            </label>
+          </div>
+          {% for error in form.confirm.errors %}
+            <span class="form-error" role="alert">{{ error }}</span>
+          {% endfor %}
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <button type="submit" class="btn btn-danger btn-full btn-lg" id="confirm-delete-btn">
+            Yes, Delete My Account Permanently
+          </button>
+          <a href="{% url 'profile' %}" class="btn btn-ghost btn-full" id="cancel-delete-btn">
+            Cancel — Keep My Account
+          </a>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
