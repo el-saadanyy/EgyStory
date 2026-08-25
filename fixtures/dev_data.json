@@ -1,0 +1,4317 @@
+[
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$QMdDhDfqaZtSlI1jUbaETT$GrNLa2KG4Y0ldBqz9PGNwdWMxfu9C1I9gSkT76Qw/2E=",
+    "last_login": "2026-08-25T13:43:58.469Z",
+    "is_superuser": true,
+    "email": "egyhelp5@gmail.com",
+    "first_name": "mohamed",
+    "last_name": "elsaadany",
+    "phone": "01550468570",
+    "profile_picture": "",
+    "birthdate": "2005-10-11",
+    "facebook": null,
+    "country": "EGYPT",
+    "is_active": true,
+    "is_staff": true,
+    "date_joined": "2026-08-22T21:39:30.050Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$FcJ2zqSw31MVJcdwFZKXMd$FBjDFUPQycdXdpkqOClexCTc43tmK6PhpsEZ6onLCeY=",
+    "last_login": "2026-08-25T13:36:40.148Z",
+    "is_superuser": false,
+    "email": "aynourhossamelshaer@gmail.com",
+    "first_name": "Aynour",
+    "last_name": "Hossam",
+    "phone": "01000000001",
+    "profile_picture": "",
+    "birthdate": null,
+    "facebook": null,
+    "country": null,
+    "is_active": true,
+    "is_staff": false,
+    "date_joined": "2026-08-23T01:48:07.755Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$9OyLWj0cfHwxyxZo8VQA7D$Asrfk6kRzX700Zby5aw/i//6OrhmoBI8ecCBU5oY4Xo=",
+    "last_login": null,
+    "is_superuser": false,
+    "email": "Aynourhossamelshaer@gmail.com",
+    "first_name": "Aynour",
+    "last_name": "Hossam",
+    "phone": "01111000001",
+    "profile_picture": "",
+    "birthdate": null,
+    "facebook": null,
+    "country": null,
+    "is_active": true,
+    "is_staff": true,
+    "date_joined": "2026-08-23T01:57:26.759Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$lmu85uW5qSuQHg4x2kzYPv$q9o+Yhq6XmhQPmOKZmxdltanHPXcW7+BbhaWU/mq0Rw=",
+    "last_login": "2026-08-25T15:44:56.630Z",
+    "is_superuser": false,
+    "email": "shirefbarg@gmail.com",
+    "first_name": "shifo",
+    "last_name": "bar",
+    "phone": "01111000003",
+    "profile_picture": "",
+    "birthdate": null,
+    "facebook": null,
+    "country": null,
+    "is_active": true,
+    "is_staff": false,
+    "date_joined": "2026-08-23T02:49:50.077Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$9CTzk8U9iabQumfc8UWcv6$2XHi3xdwY+sazGYLIDnHlp83OSPcTbg1rEy3OfJJms0=",
+    "last_login": "2026-08-25T13:33:43.276Z",
+    "is_superuser": false,
+    "email": "anasabed123z4@gmail.com",
+    "first_name": "anas",
+    "last_name": "abed",
+    "phone": "01123721263",
+    "profile_picture": "",
+    "birthdate": "2004-10-27",
+    "facebook": null,
+    "country": "EGYPT",
+    "is_active": true,
+    "is_staff": false,
+    "date_joined": "2026-08-24T09:14:34.979Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$1chxOk8ZRmRRpDdzdTbknl$1F5mk8Ko0MT9D9gtq850YKBTwRLuWD1Wy4994NnvSvM=",
+    "last_login": "2026-08-25T14:49:31.695Z",
+    "is_superuser": false,
+    "email": "ziadsalem1234554321@gmail.com",
+    "first_name": "ziad",
+    "last_name": "salem",
+    "phone": "01276170819",
+    "profile_picture": "",
+    "birthdate": "2005-02-25",
+    "facebook": null,
+    "country": "EGYPT",
+    "is_active": true,
+    "is_staff": false,
+    "date_joined": "2026-08-25T13:38:29.190Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "campaigns.tag",
+  "pk": 1,
+  "fields": {
+    "name": "Medical",
+    "slug": "medical"
+  }
+},
+{
+  "model": "campaigns.tag",
+  "pk": 2,
+  "fields": {
+    "name": "Education",
+    "slug": "education"
+  }
+},
+{
+  "model": "campaigns.tag",
+  "pk": 3,
+  "fields": {
+    "name": "Emergency",
+    "slug": "emergency"
+  }
+},
+{
+  "model": "campaigns.tag",
+  "pk": 15,
+  "fields": {
+    "name": "Social",
+    "slug": "social"
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 1,
+  "fields": {
+    "owner": [
+      "Aynourhossamelshaer@gmail.com"
+    ],
+    "category": null,
+    "title": "عمر ويونس — طفلان مصريان مصابان بضمور العضلات دوشين",
+    "story": "عمر ويونس — طفلان مصريان مصابان بضمور العضلات دوشين. ووافقت وزارة التضامن في أغسطس 2026 على فتح حساب لجمع التبرعات لعلاجهما، وتبلغ تكلفة العلاج المذكورة للحالة حوالي 300 مليون جنيه.",
+    "target_amount": "300000000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "300000000.00",
+    "campaign_image": "campaigns/268.webp",
+    "case_type": "Rare / Ultra-Rare & High-Cost",
+    "status": "Completed",
+    "deadline": "2027-08-23",
+    "supporting_document": "campaigns/documents/blank_placeholder.txt",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T02:11:50.756Z",
+    "updated_at": "2026-08-23T02:21:39.231Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 2,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": null,
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image.webp",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T03:33:14.231Z",
+    "updated_at": "2026-08-23T03:33:14.231Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 3,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_ycrcTCM.webp",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T03:35:06.183Z",
+    "updated_at": "2026-08-23T03:35:06.183Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 4,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_Cyw4stH.webp",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T04:27:28.298Z",
+    "updated_at": "2026-08-23T04:27:28.298Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 5,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T13:41:17.599Z",
+    "updated_at": "2026-08-23T13:41:17.599Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 6,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T13:43:33.384Z",
+    "updated_at": "2026-08-23T13:43:33.384Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 7,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_yTo5Foc.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T13:43:52.088Z",
+    "updated_at": "2026-08-23T13:43:52.088Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 8,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "0.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_grxmrD0.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T13:46:05.254Z",
+    "updated_at": "2026-08-23T13:46:05.254Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 9,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_rRH4VZB.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T13:48:15.057Z",
+    "updated_at": "2026-08-23T13:48:15.057Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 10,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "جهاز عروسة بالاحتياجات الأساسية",
+    "story": "حملة لدعم عروسة يتيمة تحتاج إلى تجهيزات واحتياجات أساسية للمنزل استعدادًا للزواج. تهدف الحملة إلى توفير الأجهزة والاحتياجات المنزلية الأساسية اللازمة لتجهيز منزلها.",
+    "target_amount": "18000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "1.01",
+    "campaign_image": "campaigns/img1.webp",
+    "case_type": "Normal",
+    "status": "Active",
+    "deadline": "2026-10-23",
+    "supporting_document": "campaigns/documents/New_Text_Document.txt",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T14:32:40.489Z",
+    "updated_at": "2026-08-25T17:00:08.296Z",
+    "tags": [
+      15
+    ]
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 11,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_2ySKqOS.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T14:41:19.343Z",
+    "updated_at": "2026-08-23T14:41:19.343Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 12,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_TthIGQn.webp",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T14:41:19.378Z",
+    "updated_at": "2026-08-23T14:41:19.378Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 13,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_mrKthpA.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T14:42:08.236Z",
+    "updated_at": "2026-08-23T14:42:08.236Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 14,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_jtD3KAz.webp",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T14:42:08.273Z",
+    "updated_at": "2026-08-23T14:42:08.273Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 15,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_7fm34h4.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T17:26:06.860Z",
+    "updated_at": "2026-08-23T17:26:06.860Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 16,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_MDsxweb.webp",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T17:26:06.907Z",
+    "updated_at": "2026-08-23T17:26:06.907Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 17,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_Yxjvppb.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T17:31:05.357Z",
+    "updated_at": "2026-08-23T17:31:05.357Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 18,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_WLM8EMz.webp",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T17:31:05.389Z",
+    "updated_at": "2026-08-23T17:31:05.389Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 19,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_3vTxpHq.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T17:54:22.730Z",
+    "updated_at": "2026-08-23T17:54:22.730Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 20,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_150R2XH.webp",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T17:54:22.765Z",
+    "updated_at": "2026-08-23T17:54:22.765Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 21,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_btS9X9L.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T18:59:28.117Z",
+    "updated_at": "2026-08-23T18:59:28.117Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 22,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_3Q99PIq.webp",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T18:59:28.149Z",
+    "updated_at": "2026-08-23T18:59:28.149Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 23,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_0ehytuM.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T19:01:36.976Z",
+    "updated_at": "2026-08-23T19:01:36.976Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 24,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_UTgHVuf.webp",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T19:01:37.010Z",
+    "updated_at": "2026-08-23T19:01:37.010Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 25,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_8tHb9dy.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T19:11:20.364Z",
+    "updated_at": "2026-08-23T19:11:20.364Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 26,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_c3eakVS.webp",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T19:11:20.397Z",
+    "updated_at": "2026-08-23T19:11:20.397Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 27,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_u80yTj3.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T20:24:29.982Z",
+    "updated_at": "2026-08-23T20:24:29.982Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 28,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_3vwmsvu.webp",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T20:24:30.017Z",
+    "updated_at": "2026-08-23T20:24:30.017Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 29,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_yDBF0ho.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T21:00:29.776Z",
+    "updated_at": "2026-08-23T21:00:29.776Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 30,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_Z8fA2kb.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-23T21:00:29.808Z",
+    "updated_at": "2026-08-23T21:00:29.808Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 31,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_1RQzzmZ.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:25:50.790Z",
+    "updated_at": "2026-08-24T00:25:50.790Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 32,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_C2Z96Xi.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:25:50.822Z",
+    "updated_at": "2026-08-24T00:25:50.822Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 33,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_6M9YZfN.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:28:35.364Z",
+    "updated_at": "2026-08-24T00:28:35.364Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 34,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_ZHdizmh.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:28:35.397Z",
+    "updated_at": "2026-08-24T00:28:35.397Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 35,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_qzvWL0R.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:30:40.187Z",
+    "updated_at": "2026-08-24T00:30:40.187Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 36,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_G8I5cK8.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:30:40.220Z",
+    "updated_at": "2026-08-24T00:30:40.220Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 37,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_qHc6XSc.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:32:34.564Z",
+    "updated_at": "2026-08-24T00:32:34.564Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 38,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_orNPTm7.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:32:34.598Z",
+    "updated_at": "2026-08-24T00:32:34.598Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 39,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_LvmkxUm.jpg",
+    "case_type": "Normal",
+    "status": "Cancelled",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:34:28.045Z",
+    "updated_at": "2026-08-24T00:34:28.045Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 40,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_tUl6u1e.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:34:28.080Z",
+    "updated_at": "2026-08-24T00:34:28.080Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 41,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_UYHp6OB.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:36:52.716Z",
+    "updated_at": "2026-08-24T00:36:52.716Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 42,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_FQWj4Gl.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:36:52.750Z",
+    "updated_at": "2026-08-24T00:36:52.750Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 43,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_HgYVn2j.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:42:30.050Z",
+    "updated_at": "2026-08-24T00:42:30.050Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 44,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_Z7wXye2.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T00:42:30.084Z",
+    "updated_at": "2026-08-24T00:42:30.084Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 45,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_M7jFZnL.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T01:09:51.269Z",
+    "updated_at": "2026-08-24T01:09:51.269Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 46,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_HCW6P4i.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T01:09:51.307Z",
+    "updated_at": "2026-08-24T01:09:51.307Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 47,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_5BjVqBg.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T01:16:33.986Z",
+    "updated_at": "2026-08-24T01:16:33.986Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 48,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_U0MWMAb.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T01:16:34.022Z",
+    "updated_at": "2026-08-24T01:16:34.022Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 49,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_mj5HWi1.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T01:23:33.052Z",
+    "updated_at": "2026-08-24T01:23:33.052Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 50,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_Yeykb1d.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T01:23:33.090Z",
+    "updated_at": "2026-08-24T01:23:33.090Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 51,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_MXErDmc.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T01:28:10.341Z",
+    "updated_at": "2026-08-24T01:28:10.341Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 52,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_p6dIzRM.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T01:28:10.377Z",
+    "updated_at": "2026-08-24T01:28:10.377Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 53,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_FDIKMqg.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T01:34:58.673Z",
+    "updated_at": "2026-08-24T01:34:58.673Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 57,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_z8q08tX.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T01:43:29.608Z",
+    "updated_at": "2026-08-24T01:43:29.608Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 61,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_uYKriA1.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T01:49:33.331Z",
+    "updated_at": "2026-08-24T01:49:33.331Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 63,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_y8d7z8t.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-24T01:58:31.019Z",
+    "updated_at": "2026-08-24T01:58:31.019Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 65,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_ki7WB2L.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T07:51:08.840Z",
+    "updated_at": "2026-08-25T07:51:08.840Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 66,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_4K7m3pb.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T07:51:08.890Z",
+    "updated_at": "2026-08-25T07:51:08.890Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 67,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_037a0xi.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T07:53:27.029Z",
+    "updated_at": "2026-08-25T07:53:27.029Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 68,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_ffmF4wx.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T07:53:27.068Z",
+    "updated_at": "2026-08-25T07:53:27.068Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 69,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_z0XhNVS.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T08:56:42.310Z",
+    "updated_at": "2026-08-25T08:56:42.310Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 70,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_U1CJfR4.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T08:56:42.348Z",
+    "updated_at": "2026-08-25T08:56:42.348Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 71,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_EAOldqs.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T08:59:19.732Z",
+    "updated_at": "2026-08-25T08:59:19.732Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 72,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_bG3GRUc.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T08:59:19.771Z",
+    "updated_at": "2026-08-25T08:59:19.771Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 73,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_9w3n3xm.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T09:09:32.046Z",
+    "updated_at": "2026-08-25T09:09:32.046Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 74,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_SzxzoWb.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T09:09:32.083Z",
+    "updated_at": "2026-08-25T09:09:32.083Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 75,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_VVO9gYf.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T09:21:28.994Z",
+    "updated_at": "2026-08-25T09:21:28.994Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 76,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_jaHZ50N.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T09:21:29.039Z",
+    "updated_at": "2026-08-25T09:21:29.039Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 77,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_0jbNPTn.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T09:29:33.563Z",
+    "updated_at": "2026-08-25T09:29:33.563Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 78,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_fr3KSZh.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T09:29:33.601Z",
+    "updated_at": "2026-08-25T09:29:33.601Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 79,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_NqzyDEy.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T09:40:40.018Z",
+    "updated_at": "2026-08-25T09:40:40.018Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 80,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_NNoQQK7.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T09:40:40.056Z",
+    "updated_at": "2026-08-25T09:40:40.056Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 81,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_F8u8qbl.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T09:49:52.136Z",
+    "updated_at": "2026-08-25T09:49:52.136Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 82,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_ksMT9Pz.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T09:49:52.172Z",
+    "updated_at": "2026-08-25T09:49:52.172Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 83,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_bWRerDr.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T10:05:20.571Z",
+    "updated_at": "2026-08-25T10:05:20.571Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 84,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_ggPxm0J.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T10:05:20.611Z",
+    "updated_at": "2026-08-25T10:05:20.611Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 85,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_PtxCUfX.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T10:16:07.230Z",
+    "updated_at": "2026-08-25T10:16:07.230Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 86,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_0ocShM1.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T10:16:07.272Z",
+    "updated_at": "2026-08-25T10:16:07.272Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 87,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_GZq0AoR.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T10:29:40.745Z",
+    "updated_at": "2026-08-25T10:29:40.745Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 88,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_DBADLyA.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T10:29:40.781Z",
+    "updated_at": "2026-08-25T10:29:40.782Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 89,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_xL3DlK4.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T10:35:07.291Z",
+    "updated_at": "2026-08-25T10:35:07.291Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 90,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_UUacVHw.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T10:35:07.328Z",
+    "updated_at": "2026-08-25T10:35:07.328Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 91,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_bB0PqNW.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T10:48:31.178Z",
+    "updated_at": "2026-08-25T10:48:31.178Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 92,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_Z0AgGMk.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T10:48:31.213Z",
+    "updated_at": "2026-08-25T10:48:31.213Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 93,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_aLEhq9u.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T10:59:04.123Z",
+    "updated_at": "2026-08-25T10:59:04.123Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 94,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_QiT2iH2.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T10:59:04.158Z",
+    "updated_at": "2026-08-25T10:59:04.158Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 95,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_e6SQ96v.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T11:09:46.853Z",
+    "updated_at": "2026-08-25T11:09:46.853Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 96,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_NOLOHXn.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T11:09:46.887Z",
+    "updated_at": "2026-08-25T11:09:46.887Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 97,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_GOJ3ePC.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T11:14:16.307Z",
+    "updated_at": "2026-08-25T11:14:16.307Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 98,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_Sc7Wj7M.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T11:14:16.343Z",
+    "updated_at": "2026-08-25T11:14:16.343Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 99,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_PxIdBoK.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T11:36:17.730Z",
+    "updated_at": "2026-08-25T11:36:17.730Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 100,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_Qwl5FLn.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T11:36:17.766Z",
+    "updated_at": "2026-08-25T11:36:17.766Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 101,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_cMxqlwm.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T11:46:07.667Z",
+    "updated_at": "2026-08-25T11:46:07.667Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 102,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_ein2O28.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T11:46:07.705Z",
+    "updated_at": "2026-08-25T11:46:07.705Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 103,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_BDMCgrx.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T11:57:38.128Z",
+    "updated_at": "2026-08-25T11:57:38.128Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 104,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_V8CWmkO.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T11:57:38.164Z",
+    "updated_at": "2026-08-25T11:57:38.164Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 105,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_HpLd4cp.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:10:11.198Z",
+    "updated_at": "2026-08-25T12:10:11.198Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 106,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_zDOCR4l.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:10:11.234Z",
+    "updated_at": "2026-08-25T12:10:11.234Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 107,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_X1fKqfz.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:13:11.742Z",
+    "updated_at": "2026-08-25T12:13:11.742Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 108,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_tgRkIh9.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:13:11.776Z",
+    "updated_at": "2026-08-25T12:13:11.776Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 109,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_GRQuSuM.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:18:17.073Z",
+    "updated_at": "2026-08-25T12:18:17.073Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 110,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_Xhutbea.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:18:17.107Z",
+    "updated_at": "2026-08-25T12:18:17.107Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 111,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_7GWoKJ1.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:28:57.835Z",
+    "updated_at": "2026-08-25T12:28:57.835Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 112,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_9eJPrLe.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:28:57.870Z",
+    "updated_at": "2026-08-25T12:28:57.870Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 113,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_vrFdIqO.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:36:32.265Z",
+    "updated_at": "2026-08-25T12:36:32.265Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 114,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_80EaT1u.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:36:32.303Z",
+    "updated_at": "2026-08-25T12:36:32.303Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 115,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_efmMonC.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:39:14.500Z",
+    "updated_at": "2026-08-25T12:39:14.500Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 116,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_WeFEQnu.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:39:14.535Z",
+    "updated_at": "2026-08-25T12:39:14.535Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 117,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_kZF5H4t.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:45:39.800Z",
+    "updated_at": "2026-08-25T12:45:39.800Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 118,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_ebKP2WA.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:45:39.837Z",
+    "updated_at": "2026-08-25T12:45:39.837Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 119,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_k6bgbK6.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:48:10.056Z",
+    "updated_at": "2026-08-25T12:48:10.056Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 120,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_ynMRNUe.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:48:10.092Z",
+    "updated_at": "2026-08-25T12:48:10.092Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 121,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_UFp29OE.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:48:37.885Z",
+    "updated_at": "2026-08-25T12:48:37.885Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 122,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_KNYz9CX.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:48:37.922Z",
+    "updated_at": "2026-08-25T12:48:37.922Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 123,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_J1H0W53.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:57:33.961Z",
+    "updated_at": "2026-08-25T12:57:33.961Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 124,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_puma9mS.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T12:57:33.996Z",
+    "updated_at": "2026-08-25T12:57:33.996Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 125,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_v8g36dX.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:01:18.551Z",
+    "updated_at": "2026-08-25T13:01:18.551Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 126,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_dywf5HF.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:01:18.588Z",
+    "updated_at": "2026-08-25T13:01:18.588Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 127,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_Kp4QzKu.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:04:10.413Z",
+    "updated_at": "2026-08-25T13:04:10.413Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 128,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_OwL1Kaw.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:04:10.449Z",
+    "updated_at": "2026-08-25T13:04:10.449Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 129,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_5ZrRHVy.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:06:30.383Z",
+    "updated_at": "2026-08-25T13:06:30.383Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 130,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_snoeI0u.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:06:30.419Z",
+    "updated_at": "2026-08-25T13:06:30.419Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 131,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_FVoOyO5.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:10:29.382Z",
+    "updated_at": "2026-08-25T13:10:29.382Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 132,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_LCtDaJN.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:10:29.418Z",
+    "updated_at": "2026-08-25T13:10:29.418Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 133,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_6e1k01X.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:21:15.783Z",
+    "updated_at": "2026-08-25T13:21:15.783Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 134,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_wUDKijb.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:21:15.819Z",
+    "updated_at": "2026-08-25T13:21:15.819Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 135,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_LkEJ8Ez.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:27:20.981Z",
+    "updated_at": "2026-08-25T13:27:20.981Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 136,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_tDh2406.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:27:21.018Z",
+    "updated_at": "2026-08-25T13:27:21.018Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 137,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_ow9LzRI.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:29:28.635Z",
+    "updated_at": "2026-08-25T13:29:28.635Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 138,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_2ciGm0n.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:29:28.671Z",
+    "updated_at": "2026-08-25T13:29:28.671Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 139,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_TYFCsY2.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:33:43.249Z",
+    "updated_at": "2026-08-25T13:33:43.249Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 140,
+  "fields": {
+    "owner": [
+      "anasabed123z4@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_uHYgcia.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:33:43.285Z",
+    "updated_at": "2026-08-25T13:33:43.285Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 141,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_TUn5fIY.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:42:45.488Z",
+    "updated_at": "2026-08-25T13:42:45.488Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 142,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_6thWVyX.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:42:45.526Z",
+    "updated_at": "2026-08-25T13:42:45.526Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 143,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_ZZCBKvd.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:47:37.011Z",
+    "updated_at": "2026-08-25T13:47:37.011Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 144,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_JdWoZR7.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T13:47:37.046Z",
+    "updated_at": "2026-08-25T13:47:37.046Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 145,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_BB4cb7l.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:02:46.337Z",
+    "updated_at": "2026-08-25T14:02:46.337Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 146,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_CM3UWDI.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:02:46.373Z",
+    "updated_at": "2026-08-25T14:02:46.373Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 147,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_l6jGMJr.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:09:51.642Z",
+    "updated_at": "2026-08-25T14:09:51.642Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 148,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_QaCN8EA.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:09:51.678Z",
+    "updated_at": "2026-08-25T14:09:51.678Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 149,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_0FvAc90.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:17:48.626Z",
+    "updated_at": "2026-08-25T14:17:48.626Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 150,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_JYkUlQB.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:17:48.662Z",
+    "updated_at": "2026-08-25T14:17:48.663Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 151,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_AXR0ko7.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:19:55.103Z",
+    "updated_at": "2026-08-25T14:19:55.103Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 152,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_ZL3k4Vs.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:19:55.138Z",
+    "updated_at": "2026-08-25T14:19:55.138Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 153,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_p2l8dHi.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:22:22.328Z",
+    "updated_at": "2026-08-25T14:22:22.328Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 154,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_uIjcgcN.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:22:22.363Z",
+    "updated_at": "2026-08-25T14:22:22.363Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 155,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_fN0DFh5.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:24:45.847Z",
+    "updated_at": "2026-08-25T14:24:45.847Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 156,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_1iqCsE6.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:24:45.884Z",
+    "updated_at": "2026-08-25T14:24:45.884Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 157,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_zpeArGc.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:28:27.795Z",
+    "updated_at": "2026-08-25T14:28:27.795Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 158,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_7nlUeir.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:28:27.833Z",
+    "updated_at": "2026-08-25T14:28:27.833Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 159,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_nn0cREM.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:31:22.473Z",
+    "updated_at": "2026-08-25T14:31:22.473Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 160,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_LQbh8so.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:31:22.510Z",
+    "updated_at": "2026-08-25T14:31:22.510Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 161,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_MGPXmEz.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:32:46.966Z",
+    "updated_at": "2026-08-25T14:32:46.966Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 162,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_FvrQO0B.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:32:47.003Z",
+    "updated_at": "2026-08-25T14:32:47.003Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 163,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_c4quxoM.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:37:17.911Z",
+    "updated_at": "2026-08-25T14:37:17.911Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 164,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_VCI5pyf.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:37:17.949Z",
+    "updated_at": "2026-08-25T14:37:17.949Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 165,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_iEEdROe.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:41:55.702Z",
+    "updated_at": "2026-08-25T14:41:55.702Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 166,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_XP8GJrg.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:41:55.766Z",
+    "updated_at": "2026-08-25T14:41:55.766Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 167,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_tOdMfPP.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:44:44.111Z",
+    "updated_at": "2026-08-25T14:44:44.111Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 168,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_Ena6zxB.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:44:44.194Z",
+    "updated_at": "2026-08-25T14:44:44.194Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 169,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_MvTGKVP.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:49:31.651Z",
+    "updated_at": "2026-08-25T14:49:31.651Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 170,
+  "fields": {
+    "owner": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "category": null,
+    "title": "Test View Normal Campaign",
+    "story": "Testing via view to see if it fails.",
+    "target_amount": "5000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_sWuQkKM.webp",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T14:49:31.710Z",
+    "updated_at": "2026-08-25T14:49:31.710Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.campaign",
+  "pk": 171,
+  "fields": {
+    "owner": [
+      "shirefbarg@gmail.com"
+    ],
+    "category": null,
+    "title": "Test Title",
+    "story": "Test Story that is long enough to be valid",
+    "target_amount": "1000.00",
+    "initial_raised_amount": "0.00",
+    "raised_amount": "0.00",
+    "campaign_image": "campaigns/test_image_IsGPXum.jpg",
+    "case_type": "Normal",
+    "status": "Pending Review",
+    "deadline": null,
+    "supporting_document": "",
+    "is_manual_critical": false,
+    "created_at": "2026-08-25T15:44:56.910Z",
+    "updated_at": "2026-08-25T15:44:56.910Z",
+    "tags": []
+  }
+},
+{
+  "model": "campaigns.donation",
+  "pk": 1,
+  "fields": {
+    "campaign": 1,
+    "donor_name": "mohamed elsaadany",
+    "donor_email": "egyhelp5@gmail.com",
+    "amount": "5000.00",
+    "is_anonymous": true,
+    "created_at": "2026-08-23T02:21:47.598Z"
+  }
+},
+{
+  "model": "campaigns.donation",
+  "pk": 2,
+  "fields": {
+    "campaign": 1,
+    "donor_name": "mohamed elsaadany",
+    "donor_email": "egyhelp5@gmail.com",
+    "amount": "95000.00",
+    "is_anonymous": true,
+    "created_at": "2026-08-23T02:22:24.808Z"
+  }
+},
+{
+  "model": "campaigns.donation",
+  "pk": 3,
+  "fields": {
+    "campaign": 1,
+    "donor_name": "mohamed elsaadany",
+    "donor_email": "egyhelp5@gmail.com",
+    "amount": "100000.00",
+    "is_anonymous": false,
+    "created_at": "2026-08-23T03:31:46.140Z"
+  }
+},
+{
+  "model": "campaigns.donation",
+  "pk": 4,
+  "fields": {
+    "campaign": 1,
+    "donor_name": "mohamed elsaadany",
+    "donor_email": "egyhelp5@gmail.com",
+    "amount": "100000.00",
+    "is_anonymous": false,
+    "created_at": "2026-08-23T03:33:39.607Z"
+  }
+},
+{
+  "model": "campaigns.donation",
+  "pk": 5,
+  "fields": {
+    "campaign": 1,
+    "donor_name": "mohamed elsaadany",
+    "donor_email": "egyhelp5@gmail.com",
+    "amount": "1.00",
+    "is_anonymous": false,
+    "created_at": "2026-08-23T03:33:53.504Z"
+  }
+},
+{
+  "model": "campaigns.donation",
+  "pk": 6,
+  "fields": {
+    "campaign": 1,
+    "donor_name": "mohamed elsaadany",
+    "donor_email": "egyhelp5@gmail.com",
+    "amount": "399999.00",
+    "is_anonymous": true,
+    "created_at": "2026-08-23T17:53:31.419Z"
+  }
+},
+{
+  "model": "campaigns.donation",
+  "pk": 7,
+  "fields": {
+    "campaign": 1,
+    "donor_name": "mohamed elsaadany",
+    "donor_email": "egyhelp5@gmail.com",
+    "amount": "300000.00",
+    "is_anonymous": false,
+    "created_at": "2026-08-23T17:54:13.120Z"
+  }
+},
+{
+  "model": "campaigns.donation",
+  "pk": 8,
+  "fields": {
+    "campaign": 1,
+    "donor_name": "mohamed elsaadany",
+    "donor_email": "egyhelp5@gmail.com",
+    "amount": "90000000.00",
+    "is_anonymous": true,
+    "created_at": "2026-08-23T17:54:53.598Z"
+  }
+},
+{
+  "model": "campaigns.donation",
+  "pk": 9,
+  "fields": {
+    "campaign": 1,
+    "donor_name": "mohamed elsaadany",
+    "donor_email": "egyhelp5@gmail.com",
+    "amount": "9000000.00",
+    "is_anonymous": true,
+    "created_at": "2026-08-23T17:55:26.422Z"
+  }
+},
+{
+  "model": "campaigns.donation",
+  "pk": 10,
+  "fields": {
+    "campaign": 1,
+    "donor_name": "mohamed elsaadany",
+    "donor_email": "egyhelp5@gmail.com",
+    "amount": "100000000.00",
+    "is_anonymous": true,
+    "created_at": "2026-08-23T17:56:14.673Z"
+  }
+},
+{
+  "model": "campaigns.donation",
+  "pk": 11,
+  "fields": {
+    "campaign": 1,
+    "donor_name": "mohamed elsaadany",
+    "donor_email": "egyhelp5@gmail.com",
+    "amount": "100000000.00",
+    "is_anonymous": false,
+    "created_at": "2026-08-23T17:56:25.151Z"
+  }
+},
+{
+  "model": "campaigns.donation",
+  "pk": 12,
+  "fields": {
+    "campaign": 10,
+    "donor_name": "mohamed elsaadany",
+    "donor_email": "egyhelp5@gmail.com",
+    "amount": "1.01",
+    "is_anonymous": false,
+    "created_at": "2026-08-25T08:16:08.933Z"
+  }
+},
+{
+  "model": "campaigns.campaignrating",
+  "pk": 1,
+  "fields": {
+    "campaign": 10,
+    "user": [
+      "egyhelp5@gmail.com"
+    ],
+    "score": 5,
+    "created_at": "2026-08-25T07:59:31.913Z",
+    "updated_at": "2026-08-25T13:12:15.826Z"
+  }
+},
+{
+  "model": "campaigns.campaignrating",
+  "pk": 2,
+  "fields": {
+    "campaign": 28,
+    "user": [
+      "egyhelp5@gmail.com"
+    ],
+    "score": 1,
+    "created_at": "2026-08-25T09:44:44.970Z",
+    "updated_at": "2026-08-25T09:44:44.970Z"
+  }
+},
+{
+  "model": "campaigns.campaignrating",
+  "pk": 3,
+  "fields": {
+    "campaign": 1,
+    "user": [
+      "egyhelp5@gmail.com"
+    ],
+    "score": 5,
+    "created_at": "2026-08-25T12:34:12.955Z",
+    "updated_at": "2026-08-25T12:34:12.955Z"
+  }
+},
+{
+  "model": "campaigns.campaignreport",
+  "pk": 1,
+  "fields": {
+    "campaign": 10,
+    "reporter": [
+      "egyhelp5@gmail.com"
+    ],
+    "reason": "Fraud or Misleading",
+    "details": "فيييييييييييييييييييك",
+    "status": "Reviewed",
+    "created_at": "2026-08-25T09:09:58.534Z",
+    "updated_at": "2026-08-25T09:09:58.534Z"
+  }
+},
+{
+  "model": "campaigns.campaignreport",
+  "pk": 2,
+  "fields": {
+    "campaign": 28,
+    "reporter": [
+      "egyhelp5@gmail.com"
+    ],
+    "reason": "Spam or Scam",
+    "details": "فيييييييييييك يا ابوناااااااااااا",
+    "status": "Action Taken",
+    "created_at": "2026-08-25T09:45:05.630Z",
+    "updated_at": "2026-08-25T09:45:05.630Z"
+  }
+},
+{
+  "model": "campaigns.campaignreport",
+  "pk": 3,
+  "fields": {
+    "campaign": 1,
+    "reporter": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "reason": "Fraud or Misleading",
+    "details": "This is a test report explanation that is at least 10 characters long.",
+    "status": "Dismissed",
+    "created_at": "2026-08-25T13:42:28.410Z",
+    "updated_at": "2026-08-25T13:42:28.410Z"
+  }
+},
+{
+  "model": "campaigns.campaignreport",
+  "pk": 4,
+  "fields": {
+    "campaign": 10,
+    "reporter": [
+      "ziadsalem1234554321@gmail.com"
+    ],
+    "reason": "Fraud or Misleading",
+    "details": "اقسم بالله فييييييييك",
+    "status": "Reviewed",
+    "created_at": "2026-08-25T13:43:44.572Z",
+    "updated_at": "2026-08-25T13:43:44.572Z"
+  }
+}
+]

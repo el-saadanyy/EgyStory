@@ -4,15 +4,10 @@
 
 /* ── Hero ──────────────────────────────────────────────────────── */
 .hero {
-  background: linear-gradient(
-    135deg,
-    #E4C071 0%,
-    rgba(228, 192, 113, 0.15) 60%,
-    #1C1B18 100%
-  );
-  padding: calc(var(--space-32) + var(--navbar-height)) 0 var(--space-32);
-  position: relative;
-  overflow: hidden;
+    padding: calc(var(--space-32) + var(--navbar-height)) 0 var(--space-32);
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(45deg, #000000 0%, rgba(228, 192, 113, 0.15) 60%, #e4c071 100%) !important;
 }
 
 .hero::before {

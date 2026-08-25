@@ -22,7 +22,7 @@
   {% block extra_css %}{% endblock %}
 
   <!-- Favicon placeholder -->
-  <link rel="icon" type="image/svg+xml" href="{% static 'images/logo.svg' %}">
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/logo.svg' %}?v=2.0">
 </head>
 <body class="{% if request.resolver_match.url_name == 'home' %}is-home{% endif %}">
 
