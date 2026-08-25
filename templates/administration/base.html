@@ -5,9 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Admin{% endblock %} — EgyStory Admin</title>
   {% load static %}
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
-  <link rel="stylesheet" href="{% static 'css/components.css' %}">
-  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'css/main.css' %}?v=18.0">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}?v=18.0">
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}?v=18.0">
+
+
+
   {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -22,10 +30,26 @@
     </div>
 
     <nav class="admin-nav" aria-label="Admin menu">
-      <div class="admin-nav-section">Dashboard</div>
+      <div class="admin-nav-section">Dashboard & Overview</div>
       <a href="{% url 'admin_dashboard' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
-        <span class="admin-nav-icon" aria-hidden="true">📊</span> Dashboard
+        <span class="admin-nav-icon" aria-hidden="true">📊</span> Main Dashboard
       </a>
+
+      <div class="admin-nav-section" style="margin-top:12px;">Campaigns & Moderation</div>
+      <a href="{% url 'admin_moderation' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_moderation' %}active{% endif %}">
+        <span class="admin-nav-icon" aria-hidden="true">📋</span> Campaign Moderation
+      </a>
+
+      <a href="{% url 'admin_reports' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_reports' %}active{% endif %}">
+        <span class="admin-nav-icon" aria-hidden="true">🚩</span> Campaign Reports
+      </a>
+
+      <div class="admin-nav-section" style="margin-top:12px;">Taxonomy & Settings</div>
+      <a href="{% url 'admin_tags' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_tags' or 'admin_edit_tag' in request.resolver_match.url_name %}active{% endif %}">
+        <span class="admin-nav-icon" aria-hidden="true">🏷️</span> Tags Management
+      </a>
+
+
 
       <div class="admin-nav-section" style="margin-top:12px;">User Management</div>
       <a href="{% url 'admin_users' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_users' %}active{% endif %}">
@@ -36,40 +60,8 @@
         <span class="admin-nav-icon" aria-hidden="true">🛡️</span> Admin Management
       </a>
       {% endif %}
-
-      <div class="admin-nav-section" style="margin-top:12px;">Taxonomy & Tags</div>
-      <a href="{% url 'admin_tags' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_tags' %}active{% endif %}">
-        <span class="admin-nav-icon" aria-hidden="true">🏷️</span> Tags Management
-      </a>
-
-      <div class="admin-nav-section" style="margin-top:12px;">Campaigns (Phase 2)</div>
-      <span class="admin-nav-item" style="cursor:default;opacity:0.4;">
-        <span class="admin-nav-icon" aria-hidden="true">📋</span> Campaign Moderation
-        <span class="admin-nav-soon">Phase 2</span>
-      </span>
-      <span class="admin-nav-item" style="cursor:default;opacity:0.4;">
-        <span class="admin-nav-icon" aria-hidden="true">⭐</span> Featured Campaigns
-        <span class="admin-nav-soon">Phase 2</span>
-      </span>
-      <span class="admin-nav-item" style="cursor:default;opacity:0.4;">
-        <span class="admin-nav-icon" aria-hidden="true">🚨</span> Urgency Review
-        <span class="admin-nav-soon">Phase 2</span>
-      </span>
-      <span class="admin-nav-item" style="cursor:default;opacity:0.4;">
-        <span class="admin-nav-icon" aria-hidden="true">🏷️</span> Categories
-        <span class="admin-nav-soon">Phase 2</span>
-      </span>
-
-      <div class="admin-nav-section" style="margin-top:12px;">Moderation (Phase 2)</div>
-      <span class="admin-nav-item" style="cursor:default;opacity:0.4;">
-        <span class="admin-nav-icon" aria-hidden="true">🚩</span> Reports
-        <span class="admin-nav-soon">Phase 2</span>
-      </span>
-      <span class="admin-nav-item" style="cursor:default;opacity:0.4;">
-        <span class="admin-nav-icon" aria-hidden="true">📖</span> Success Stories
-        <span class="admin-nav-soon">Phase 2</span>
-      </span>
     </nav>
+
 
     <div class="admin-sidebar-footer">
       <div class="admin-user-chip">

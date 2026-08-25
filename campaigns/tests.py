@@ -500,4 +500,558 @@ class MultipleTagsTests(TestCase):
         self.assertNotIn(c2, res_none.context['campaigns'])
 
 
+from campaigns.models import CampaignRating
+
+
+class ProjectRatingTests(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(
+            email='rater1@egystory.com',
+            password='TestUser@2026',
+            first_name='Rater',
+            last_name='One',
+            is_active=True
+        )
+        self.user2 = User.objects.create_user(
+            email='rater2@egystory.com',
+            password='TestUser@2026',
+            first_name='Rater',
+            last_name='Two',
+            is_active=True
+        )
+        self.campaign = Campaign.objects.create(
+            title='Rating Test Campaign',
+            story='Story details',
+            target_amount=5000,
+            owner=self.user1,
+            status=CampaignStatus.ACTIVE
+        )
+
+    def test_create_rating(self):
+        from django.urls import reverse
+
+        self.client.force_login(self.user1)
+        url = reverse('campaigns:rate_campaign', kwargs={'campaign_id': self.campaign.id})
+        
+        response = self.client.post(url, {'score': 5})
+        self.assertEqual(response.status_code, 302)
+        
+        self.assertTrue(CampaignRating.objects.filter(campaign=self.campaign, user=self.user1, score=5).exists())
+        self.assertEqual(self.campaign.get_rating_count(), 1)
+        self.assertEqual(self.campaign.get_average_rating(), 5.0)
+
+    def test_update_existing_rating(self):
+        from django.urls import reverse
+
+        CampaignRating.objects.create(campaign=self.campaign, user=self.user1, score=3)
+        self.assertEqual(self.campaign.get_average_rating(), 3.0)
+
+        self.client.force_login(self.user1)
+        url = reverse('campaigns:rate_campaign', kwargs={'campaign_id': self.campaign.id})
+        
+        response = self.client.post(url, {'score': 5})
+        self.assertEqual(response.status_code, 302)
+        
+        # Verify rating updated, not duplicated
+        self.assertEqual(CampaignRating.objects.filter(campaign=self.campaign, user=self.user1).count(), 1)
+        self.assertEqual(CampaignRating.objects.get(campaign=self.campaign, user=self.user1).score, 5)
+        self.assertEqual(self.campaign.get_average_rating(), 5.0)
+
+    def test_rating_average_calculation(self):
+        CampaignRating.objects.create(campaign=self.campaign, user=self.user1, score=5)
+        CampaignRating.objects.create(campaign=self.campaign, user=self.user2, score=3)
+
+        self.assertEqual(self.campaign.get_rating_count(), 2)
+        self.assertEqual(self.campaign.get_average_rating(), 4.0)
+
+    def test_rating_requires_authentication(self):
+        from django.urls import reverse
+
+        url = reverse('campaigns:rate_campaign', kwargs={'campaign_id': self.campaign.id})
+        response = self.client.post(url, {'score': 4})
+        
+        # Redirect to login
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/accounts/login/', response.url)
+
+    def test_invalid_score_rejected(self):
+        from django.urls import reverse
+
+        self.client.force_login(self.user1)
+        url = reverse('campaigns:rate_campaign', kwargs={'campaign_id': self.campaign.id})
+        
+        # Score > 5
+        response = self.client.post(url, {'score': 10})
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(CampaignRating.objects.filter(campaign=self.campaign, user=self.user1).exists())
+
+
+class ProjectImageSliderTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email='slideruser@egystory.com',
+            password='TestUser@2026',
+            first_name='Slider',
+            last_name='User',
+            is_active=True
+        )
+        self.campaign = Campaign.objects.create(
+            title='Slider Test Campaign',
+            story='Story details',
+            target_amount=10000,
+            owner=self.user,
+            status=CampaignStatus.ACTIVE
+        )
+
+    def test_case_detail_context_includes_ratings_and_slider_elements(self):
+        from django.urls import reverse
+
+        url = reverse('campaigns:case_detail', kwargs={'campaign_id': self.campaign.id})
+        response = self.client.get(url)
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('rating_data', response.context)
+        self.assertContains(response, 'project-slider')
+
+
+from campaigns.models import CampaignReport, ReportReason, ReportStatus
+
+
+class ProjectReportTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email='reporter@egystory.com',
+            password='TestUser@2026',
+            first_name='Reporter',
+            last_name='User',
+            is_active=True
+        )
+        self.staff_user = User.objects.create_user(
+            email='staffreport@egystory.com',
+            password='TestUser@2026',
+            first_name='Staff',
+            last_name='User',
+            is_staff=True,
+            is_active=True
+        )
+        self.campaign = Campaign.objects.create(
+            title='Reported Campaign',
+            story='Story details for report testing.',
+            target_amount=5000,
+            owner=self.user,
+            status=CampaignStatus.ACTIVE
+        )
+
+    def test_user_can_submit_campaign_report(self):
+        from django.urls import reverse
+
+        self.client.force_login(self.user)
+        url = reverse('campaigns:report_campaign', kwargs={'campaign_id': self.campaign.id})
+
+        response = self.client.post(url, {
+            'reason': ReportReason.FRAUD,
+            'details': 'This campaign contains misleading information.'
+        })
+        self.assertEqual(response.status_code, 302)
+
+        self.assertTrue(CampaignReport.objects.filter(
+            campaign=self.campaign,
+            reporter=self.user,
+            reason=ReportReason.FRAUD
+        ).exists())
+
+    def test_unauthenticated_user_cannot_report(self):
+        from django.urls import reverse
+
+        url = reverse('campaigns:report_campaign', kwargs={'campaign_id': self.campaign.id})
+        response = self.client.post(url, {
+            'reason': ReportReason.SPAM,
+            'details': 'Spam content explanation.'
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/accounts/login/', response.url)
+
+    def test_admin_reports_panel_and_actions(self):
+        from django.urls import reverse
+
+        report = CampaignReport.objects.create(
+            campaign=self.campaign,
+            reporter=self.user,
+            reason=ReportReason.FRAUD,
+            details='Test details for admin moderation.'
+        )
+
+        self.client.force_login(self.staff_user)
+        
+        # 1. Admin access reports list
+        res_list = self.client.get(reverse('admin_reports'))
+        self.assertEqual(res_list.status_code, 200)
+        self.assertContains(res_list, 'Reported Campaign')
+
+        # 2. Admin dismisses report
+        url_dismiss = reverse('admin_report_action', kwargs={'report_id': report.id, 'action': 'dismiss'})
+        res_action = self.client.post(url_dismiss)
+        self.assertEqual(res_action.status_code, 302)
+        
+        report.refresh_from_db()
+        self.assertEqual(report.status, ReportStatus.DISMISSED)
+
+
+class SimilarProjectsTests(TestCase):
+    def setUp(self):
+        from campaigns.models import Category, Tag
+        self.user = User.objects.create_user(
+            email='similar@egystory.com',
+            password='TestPassword123',
+            first_name='Similar',
+            last_name='Tester',
+            is_active=True
+        )
+        self.cat_health = Category.objects.create(name='Health')
+        self.cat_education = Category.objects.create(name='Education')
+
+        self.tag_urgent = Tag.objects.create(name='UrgentCare')
+        self.tag_surgery = Tag.objects.create(name='Surgery')
+        self.tag_scholarship = Tag.objects.create(name='Scholarship')
+
+        # Target main campaign
+        self.main_campaign = Campaign.objects.create(
+            title='Main Health Campaign',
+            story='Main story text.',
+            target_amount=Decimal('50000.00'),
+            owner=self.user,
+            category=self.cat_health,
+            status=CampaignStatus.ACTIVE
+        )
+        self.main_campaign.tags.add(self.tag_urgent, self.tag_surgery)
+
+    def test_similar_campaigns_excludes_current_campaign(self):
+        from campaigns.views import get_similar_campaigns
+        sim = get_similar_campaigns(self.main_campaign)
+        self.assertNotIn(self.main_campaign, sim)
+
+    def test_similar_campaigns_ranks_by_category_and_tags(self):
+        from campaigns.views import get_similar_campaigns
+        # Campaign 1: Same category + 2 matching tags (Highest score: 10 + 10 = 20)
+        c1 = Campaign.objects.create(
+            title='C1 Match Both Tags & Cat',
+            story='Story',
+            target_amount=10000,
+            owner=self.user,
+            category=self.cat_health,
+            status=CampaignStatus.ACTIVE
+        )
+        c1.tags.add(self.tag_urgent, self.tag_surgery)
+
+        # Campaign 2: Same category + 1 matching tag (Score: 10 + 5 = 15)
+        c2 = Campaign.objects.create(
+            title='C2 Match 1 Tag & Cat',
+            story='Story',
+            target_amount=10000,
+            owner=self.user,
+            category=self.cat_health,
+            status=CampaignStatus.ACTIVE
+        )
+        c2.tags.add(self.tag_urgent)
+
+        # Campaign 3: Different category + 1 matching tag (Score: 0 + 5 = 5)
+        c3 = Campaign.objects.create(
+            title='C3 Match 1 Tag Only',
+            story='Story',
+            target_amount=10000,
+            owner=self.user,
+            category=self.cat_education,
+            status=CampaignStatus.ACTIVE
+        )
+        c3.tags.add(self.tag_surgery)
+
+        # Campaign 4: Different category + no matching tags (Score: 0 - excluded)
+        c4 = Campaign.objects.create(
+            title='C4 Unrelated',
+            story='Story',
+            target_amount=10000,
+            owner=self.user,
+            category=self.cat_education,
+            status=CampaignStatus.ACTIVE
+        )
+        c4.tags.add(self.tag_scholarship)
+
+        sim = get_similar_campaigns(self.main_campaign)
+        self.assertEqual(len(sim), 3)
+        self.assertEqual(sim[0], c1)
+        self.assertEqual(sim[1], c2)
+        self.assertEqual(sim[2], c3)
+        self.assertNotIn(c4, sim)
+
+    def test_similar_campaigns_max_4_limit(self):
+        from campaigns.views import get_similar_campaigns
+        for i in range(6):
+            c = Campaign.objects.create(
+                title=f'Same Cat Campaign {i}',
+                story='Story',
+                target_amount=10000,
+                owner=self.user,
+                category=self.cat_health,
+                status=CampaignStatus.ACTIVE
+            )
+            c.tags.add(self.tag_urgent)
+
+        sim = get_similar_campaigns(self.main_campaign)
+        self.assertEqual(len(sim), 4)
+
+    def test_similar_campaigns_excludes_inactive_or_cancelled(self):
+        from campaigns.views import get_similar_campaigns
+        c_cancelled = Campaign.objects.create(
+            title='Cancelled Campaign',
+            story='Story',
+            target_amount=10000,
+            owner=self.user,
+            category=self.cat_health,
+            status=CampaignStatus.CANCELLED
+        )
+        c_cancelled.tags.add(self.tag_urgent)
+
+        sim = get_similar_campaigns(self.main_campaign)
+        self.assertNotIn(c_cancelled, sim)
+
+    def test_case_detail_context_includes_similar_campaigns(self):
+        from django.urls import reverse
+        c1 = Campaign.objects.create(
+            title='Related Campaign',
+            story='Story',
+            target_amount=10000,
+            owner=self.user,
+            category=self.cat_health,
+            status=CampaignStatus.ACTIVE
+        )
+        c1.tags.add(self.tag_urgent)
+
+        url = reverse('campaigns:case_detail', args=[self.main_campaign.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('similar_campaigns', response.context)
+        self.assertIn(c1, response.context['similar_campaigns'])
+
+
+
+class CreatorCancelCampaignTests(TestCase):
+    def setUp(self):
+        self.owner = User.objects.create_user(
+            email='creator@egystory.com',
+            password='CreatorPassword123',
+            first_name='Creator',
+            last_name='User',
+            is_active=True
+        )
+        self.other_user = User.objects.create_user(
+            email='other@egystory.com',
+            password='OtherPassword123',
+            first_name='Other',
+            last_name='User',
+            is_active=True
+        )
+        self.staff_user = User.objects.create_superuser(
+            email='admincancel@egystory.com',
+            password='AdminPassword123',
+            first_name='Admin',
+            last_name='User',
+            is_active=True
+        )
+        self.campaign = Campaign.objects.create(
+            title='Cancel Test Campaign',
+            story='Test story text.',
+            target_amount=Decimal('10000.00'),
+            raised_amount=Decimal('1000.00'), # 10% (< 25%)
+            owner=self.owner,
+            status=CampaignStatus.ACTIVE
+        )
+
+
+    def test_creator_can_cancel_when_raised_below_25_percent(self):
+        from django.urls import reverse
+        self.assertTrue(self.campaign.can_creator_cancel(self.owner))
+        self.client.force_login(self.owner)
+        url = reverse('campaigns:cancel_campaign', args=[self.campaign.id])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+        
+        self.campaign.refresh_from_db()
+        self.assertEqual(self.campaign.status, CampaignStatus.CANCELLED)
+
+    def test_creator_cannot_cancel_when_raised_equals_25_percent(self):
+        from django.urls import reverse
+        self.campaign.raised_amount = Decimal('2500.00') # Exactly 25%
+        self.campaign.save()
+        
+        self.assertFalse(self.campaign.can_creator_cancel(self.owner))
+        self.client.force_login(self.owner)
+        url = reverse('campaigns:cancel_campaign', args=[self.campaign.id])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+        
+        self.campaign.refresh_from_db()
+        self.assertEqual(self.campaign.status, CampaignStatus.ACTIVE)
+
+    def test_creator_cannot_cancel_when_raised_above_25_percent(self):
+        from django.urls import reverse
+        self.campaign.raised_amount = Decimal('3000.00') # 30% (> 25%)
+        self.campaign.save()
+        
+        self.assertFalse(self.campaign.can_creator_cancel(self.owner))
+        self.client.force_login(self.owner)
+        url = reverse('campaigns:cancel_campaign', args=[self.campaign.id])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+        
+        self.campaign.refresh_from_db()
+        self.assertEqual(self.campaign.status, CampaignStatus.ACTIVE)
+
+    def test_non_owner_cannot_cancel(self):
+        from django.urls import reverse
+        self.assertFalse(self.campaign.can_creator_cancel(self.other_user))
+        self.client.force_login(self.other_user)
+        url = reverse('campaigns:cancel_campaign', args=[self.campaign.id])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+        
+        self.campaign.refresh_from_db()
+        self.assertEqual(self.campaign.status, CampaignStatus.ACTIVE)
+
+    def test_unauthenticated_user_cannot_cancel(self):
+        from django.urls import reverse
+        url = reverse('campaigns:cancel_campaign', args=[self.campaign.id])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/accounts/login/', response.url)
+        
+        self.campaign.refresh_from_db()
+        self.assertEqual(self.campaign.status, CampaignStatus.ACTIVE)
+
+    def test_already_cancelled_campaign_cannot_be_cancelled_again(self):
+        from django.urls import reverse
+        self.campaign.status = CampaignStatus.CANCELLED
+        self.campaign.save()
+        
+        self.assertFalse(self.campaign.can_creator_cancel(self.owner))
+        self.client.force_login(self.owner)
+        url = reverse('campaigns:cancel_campaign', args=[self.campaign.id])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_completed_campaign_cannot_be_cancelled(self):
+        from django.urls import reverse
+        self.campaign.status = CampaignStatus.COMPLETED
+        self.campaign.save()
+        
+        self.assertFalse(self.campaign.can_creator_cancel(self.owner))
+        self.client.force_login(self.owner)
+        url = reverse('campaigns:cancel_campaign', args=[self.campaign.id])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_existing_admin_cancellation_still_works(self):
+        from django.urls import reverse
+        self.client.force_login(self.staff_user)
+        url = reverse('admin_campaign_action', args=[self.campaign.id, 'cancel'])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+        
+        self.campaign.refresh_from_db()
+        self.assertEqual(self.campaign.status, CampaignStatus.CANCELLED)
+
+
+class AlmostFundedFilterTests(TestCase):
+    def setUp(self):
+        from campaigns.models import Category, Donation
+        self.user = User.objects.create_user(
+            email='almostfunded@egystory.com',
+            password='Password123',
+            first_name='Almost',
+            last_name='Funded',
+            is_active=True
+        )
+        self.category = Category.objects.create(name='Relief')
+
+        # Campaign 1: Active, 90% funded (Should appear in Almost Funded)
+        self.almost_funded_campaign = Campaign.objects.create(
+            title='Almost Funded Campaign',
+            story='Story text',
+            target_amount=Decimal('10000.00'),
+            raised_amount=Decimal('9000.00'),
+            owner=self.user,
+            category=self.category,
+            status=CampaignStatus.ACTIVE
+        )
+
+        # Campaign 2: Active, 50% funded (Should NOT appear in Almost Funded)
+        self.half_funded_campaign = Campaign.objects.create(
+            title='Half Funded Campaign',
+            story='Story text',
+            target_amount=Decimal('10000.00'),
+            raised_amount=Decimal('5000.00'),
+            owner=self.user,
+            category=self.category,
+            status=CampaignStatus.ACTIVE
+        )
+
+        # Campaign 3: Completed status, 100% funded (Should NOT appear in Almost Funded)
+        self.completed_campaign = Campaign.objects.create(
+            title='Completed Campaign',
+            story='Story text',
+            target_amount=Decimal('10000.00'),
+            raised_amount=Decimal('10000.00'),
+            owner=self.user,
+            category=self.category,
+            status=CampaignStatus.COMPLETED
+        )
+
+    def test_almost_funded_filter_includes_80_to_99_percent_active_campaigns(self):
+        from django.urls import reverse
+        url = reverse('campaigns:case_list') + '?filter=almost_funded'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        campaigns_in_context = response.context['campaigns']
+        self.assertIn(self.almost_funded_campaign, campaigns_in_context)
+
+    def test_almost_funded_filter_excludes_100_percent_or_completed_campaigns(self):
+        from django.urls import reverse
+        url = reverse('campaigns:case_list') + '?filter=almost_funded'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        campaigns_in_context = response.context['campaigns']
+        self.assertNotIn(self.completed_campaign, campaigns_in_context)
+        self.assertNotIn(self.half_funded_campaign, campaigns_in_context)
+
+    def test_donation_reaching_target_auto_completes_and_removes_from_almost_funded(self):
+        from django.urls import reverse
+        from campaigns.models import Donation
+        # Donate remaining 1000 EGP to push almost_funded_campaign to 100%
+        Donation.objects.create(
+            campaign=self.almost_funded_campaign,
+            donor_name='Helper',
+            donor_email='helper@egystory.com',
+            amount=Decimal('1000.00')
+        )
+        self.almost_funded_campaign.refresh_from_db()
+        # Campaign automatically transitions to COMPLETED status
+        self.assertEqual(self.almost_funded_campaign.status, CampaignStatus.COMPLETED)
+
+        # Verify it no longer appears under Almost Funded filter
+        url = reverse('campaigns:case_list') + '?filter=almost_funded'
+        response = self.client.get(url)
+        campaigns_in_context = response.context['campaigns']
+        self.assertNotIn(self.almost_funded_campaign, campaigns_in_context)
+
+    def test_unrelated_filters_continue_working(self):
+        from django.urls import reverse
+        url_completed = reverse('campaigns:case_list') + '?filter=completed'
+        response_completed = self.client.get(url_completed)
+        self.assertIn(self.completed_campaign, response_completed.context['campaigns'])
+        self.assertNotIn(self.almost_funded_campaign, response_completed.context['campaigns'])
+
+
+
+
+
+
 

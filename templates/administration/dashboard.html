@@ -12,25 +12,25 @@
   <a href="{% url 'admin_users' %}" class="btn btn-outline btn-sm" style="border-color: rgba(255,255,255,0.2); color: #fff;">Manage Users</a>
 </div>
 <div class="admin-stats-grid">
-  <div class="admin-stat-card">
-    <div class="admin-stat-icon users" aria-hidden="true">👥</div>
+  <div class="admin-stat-card" style="border-left: 3px solid var(--color-primary);">
+    <div class="admin-stat-icon users" aria-hidden="true" style="background: rgba(228, 192, 113, 0.15); color: var(--color-primary);">👥</div>
     <div>
-      <div class="admin-stat-value">{{ stats.total_users|intcomma }}</div>
-      <div class="admin-stat-label">Total Users</div>
+      <div class="admin-stat-value" style="font-size: 20px; font-weight: 800; color: var(--color-text-primary);">{{ stats.total_users|intcomma }}</div>
+      <div class="admin-stat-label" style="font-weight: 600; color: var(--color-text-secondary);">Total Users</div>
     </div>
   </div>
-  <div class="admin-stat-card">
-    <div class="admin-stat-icon active" aria-hidden="true">✅</div>
+  <div class="admin-stat-card" style="border-left: 3px solid #16a34a;">
+    <div class="admin-stat-icon active" aria-hidden="true" style="background: rgba(22, 163, 74, 0.15); color: #16a34a;">✅</div>
     <div>
-      <div class="admin-stat-value">{{ stats.active_users|intcomma }}</div>
-      <div class="admin-stat-label">Active Users</div>
+      <div class="admin-stat-value" style="font-size: 20px; font-weight: 800; color: #4ade80;">{{ stats.active_users|intcomma }}</div>
+      <div class="admin-stat-label" style="font-weight: 600; color: var(--color-text-secondary);">Active Users</div>
     </div>
   </div>
-  <div class="admin-stat-card">
-    <div class="admin-stat-icon pending" aria-hidden="true">⏳</div>
+  <div class="admin-stat-card" style="border-left: 3px solid #eab308;">
+    <div class="admin-stat-icon pending" aria-hidden="true" style="background: rgba(234, 179, 8, 0.15); color: #eab308;">⏳</div>
     <div>
-      <div class="admin-stat-value">{{ stats.pending_users|intcomma }}</div>
-      <div class="admin-stat-label">Pending Activation</div>
+      <div class="admin-stat-value" style="font-size: 20px; font-weight: 800; color: #fde047;">{{ stats.pending_users|intcomma }}</div>
+      <div class="admin-stat-label" style="font-weight: 600; color: var(--color-text-secondary);">Pending Activation</div>
     </div>
   </div>
 </div>
@@ -38,97 +38,50 @@
 <!-- Campaigns Stats -->
 <div class="section-title" style="margin-top: var(--space-8); margin-bottom: var(--space-4);">Campaign Statistics</div>
 <div class="admin-stats-grid">
-  <div class="admin-stat-card">
-    <div class="admin-stat-icon pending" aria-hidden="true">📝</div>
+  <div class="admin-stat-card" style="border-left: 3px solid #f97316;">
+    <div class="admin-stat-icon pending" aria-hidden="true" style="background: rgba(249, 115, 22, 0.15); color: #f97316;">📝</div>
     <div>
-      <div class="admin-stat-value">{{ stats.pending_campaigns|intcomma }}</div>
-      <div class="admin-stat-label">Pending Review</div>
+      <div class="admin-stat-value" style="font-size: 20px; font-weight: 800; color: #fdba74;">{{ stats.pending_campaigns|intcomma }}</div>
+      <div class="admin-stat-label" style="font-weight: 600; color: var(--color-text-secondary);">Pending Review</div>
     </div>
   </div>
-  <div class="admin-stat-card">
-    <div class="admin-stat-icon active" aria-hidden="true">📢</div>
+  <div class="admin-stat-card" style="border-left: 3px solid #3b82f6;">
+    <div class="admin-stat-icon active" aria-hidden="true" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">📢</div>
     <div>
-      <div class="admin-stat-value">{{ stats.active_campaigns|intcomma }}</div>
-      <div class="admin-stat-label">Active Campaigns</div>
+      <div class="admin-stat-value" style="font-size: 20px; font-weight: 800; color: #93c5fd;">{{ stats.active_campaigns|intcomma }}</div>
+      <div class="admin-stat-label" style="font-weight: 600; color: var(--color-text-secondary);">Active Campaigns</div>
     </div>
   </div>
-  <div class="admin-stat-card">
-    <div class="admin-stat-icon users" aria-hidden="true">🏆</div>
+  <div class="admin-stat-card" style="border-left: 3px solid #10b981;">
+    <div class="admin-stat-icon users" aria-hidden="true" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">🏆</div>
     <div>
-      <div class="admin-stat-value">{{ stats.completed_campaigns|intcomma }}</div>
-      <div class="admin-stat-label">Completed</div>
+      <div class="admin-stat-value" style="font-size: 20px; font-weight: 800; color: #6ee7b7;">{{ stats.completed_campaigns|intcomma }}</div>
+      <div class="admin-stat-label" style="font-weight: 600; color: var(--color-text-secondary);">Completed</div>
     </div>
   </div>
-  <div class="admin-stat-card">
-    <div class="admin-stat-icon active" aria-hidden="true">💰</div>
+  <a href="{% url 'admin_tags' %}" class="admin-stat-card" style="text-decoration: none; border-left: 3px solid #8b5cf6;">
+    <div class="admin-stat-icon pending" aria-hidden="true" style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6;">🏷️</div>
     <div>
-      <div class="admin-stat-value" title="{{ stats.total_raised|intcomma }} EGP">
-        {{ stats.total_raised|intcomma }} <span style="font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-muted);">EGP</span>
-      </div>
-      <div class="admin-stat-label">Total Raised</div>
-    </div>
-  </div>
-  <a href="{% url 'admin_tags' %}" class="admin-stat-card" style="text-decoration: none;">
-    <div class="admin-stat-icon pending" aria-hidden="true">🏷️</div>
-    <div>
-      <div class="admin-stat-value">{{ stats.total_tags|intcomma }}</div>
-      <div class="admin-stat-label">Total Tags</div>
+      <div class="admin-stat-value" style="font-size: 20px; font-weight: 800; color: #c4b5fd;">{{ stats.total_tags|intcomma }}</div>
+      <div class="admin-stat-label" style="font-weight: 600; color: var(--color-text-secondary);">Total Tags</div>
     </div>
   </a>
+
+  <!-- Total Raised (Last Stat Card - Full Width Span for Large Numbers) -->
+  <div class="admin-stat-card" style="border-left: 4px solid var(--color-primary); grid-column: 1 / -1; padding: 22px 28px; background: linear-gradient(135deg, #1A1A1A 0%, rgba(228, 192, 113, 0.08) 100%);">
+    <div class="admin-stat-icon active" aria-hidden="true" style="background: rgba(228, 192, 113, 0.18); color: var(--color-primary); width: 54px; height: 54px; font-size: 26px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">💰</div>
+    <div style="flex: 1; min-width: 0;">
+      <div class="admin-stat-value" style="font-size: 26px; font-weight: 900; color: var(--color-primary); letter-spacing: -0.5px; word-break: break-word;" title="{{ stats.total_raised|floatformat:'-2'|intcomma }} EGP">
+        {{ stats.total_raised|floatformat:"-2"|intcomma }} <span style="font-size: 15px; font-weight: 800; color: rgba(255,255,255,0.75); text-transform: uppercase; margin-left: 6px;">EGP</span>
+      </div>
+      <div class="admin-stat-label" style="font-weight: 600; color: var(--color-text-secondary); font-size: 14px; margin-top: 2px;">Total Raised Across All Campaigns</div>
+    </div>
+  </div>
 </div>
 
-<!-- Pending Campaigns Moderation -->
-<div class="section-title" style="margin-top: var(--space-8); margin-bottom: var(--space-4);">Pending Campaigns Review</div>
-<div class="admin-card" style="padding: 0;">
-  {% if pending_campaigns %}
-    <table class="table" style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr style="background: var(--color-bg-secondary); border-bottom: 1px solid var(--color-border); text-align: left;">
-          <th style="padding: var(--space-4);">Campaign</th>
-          <th style="padding: var(--space-4);">Owner</th>
-          <th style="padding: var(--space-4);">Type</th>
-          <th style="padding: var(--space-4);">Goal</th>
-          <th style="padding: var(--space-4);">Submitted</th>
-          <th style="padding: var(--space-4);">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for campaign in pending_campaigns %}
-          <tr style="border-bottom: 1px solid var(--color-border);">
-            <td style="padding: var(--space-4);">
-              <strong>{{ campaign.title }}</strong><br>
-              <a href="{% url 'campaigns:case_detail' campaign.id %}" target="_blank" style="font-size: var(--font-size-sm); color: var(--color-primary);">Preview</a>
-            </td>
-            <td style="padding: var(--space-4);">{{ campaign.owner.get_full_name }}</td>
-            <td style="padding: var(--space-4);">
-              {% if campaign.case_type == 'Rare / Ultra-Rare & High-Cost' %}
-                <span class="badge badge-rare">Rare</span>
-                {% if campaign.supporting_document %}
-                  <br><a href="{{ campaign.supporting_document.url }}" target="_blank" style="font-size: var(--font-size-xs);">View Doc</a>
-                {% endif %}
-              {% else %}
-                <span class="badge">Standard</span>
-              {% endif %}
-            </td>
-            <td style="padding: var(--space-4);">{{ campaign.target_amount }} EGP</td>
-            <td style="padding: var(--space-4);">{{ campaign.created_at|date }}</td>
-            <td style="padding: var(--space-4);">
-              <div style="display: flex; gap: var(--space-2);">
-                <a href="{% url 'admin_campaign_edit' campaign.id %}" class="btn btn-outline btn-sm" style="border-color: rgba(255,255,255,0.2); color: #fff;">Edit / Tags</a>
-                <a href="{% url 'admin_campaign_action' campaign.id 'approve' %}" class="btn btn-primary btn-sm">Approve</a>
-                <button type="button" class="btn btn-danger btn-sm btn-reject-campaign" data-campaign-id="{{ campaign.id }}" data-campaign-title="{{ campaign.title }}" data-action-url="{% url 'admin_campaign_action' campaign.id 'reject' %}">Reject</button>
-              </div>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    <div style="padding: var(--space-8); text-align: center; color: var(--color-text-secondary);">
-      No pending campaigns to review.
-    </div>
-  {% endif %}
-</div>
+
+
+
 
 <!-- Active Campaigns & Critical Classification -->
 <div class="section-title" style="margin-top: var(--space-8); margin-bottom: var(--space-4);">Active Campaigns &amp; Critical Classification</div>

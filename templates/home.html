@@ -5,8 +5,9 @@
 {% block meta_description %}EgyStory — Egypt's crowdfunding platform. Help real people, fund real stories that matter.{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/home.css' %}?v=18.0">
 {% endblock %}
+
 
 {% block content %}
 
@@ -16,7 +17,7 @@
     
     <!-- Hero Text -->
     <div>
-      <div class="hero-eyebrow">
+      <div class="hero-eyebrow" style="color: #E4C071; border-color: rgba(228, 192, 113, 0.3); background: rgba(228, 192, 113, 0.1);">
         🇪🇬 Egypt's Crowdfunding Platform
       </div>
       <h1 id="hero-title" class="hero-title">
@@ -27,7 +28,8 @@
         Every campaign is a story — transparent, verified, and made in Egypt.
       </p>
       <div class="hero-actions">
-        <a href="{% url 'campaigns:case_create' %}" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(198, 40, 40, 0.4);">Start a Story</a>
+        <a href="{% url 'campaigns:case_create' %}" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px #E4C071;">Start a Story</a>
+
         <a href="#how-it-works" class="btn btn-outline btn-lg" style="border-color: rgba(255,255,255,0.2); color: white;">How It Works</a>
       </div>
 
@@ -57,7 +59,8 @@
       {% if slider_campaigns %}
         <div class="hero-slider" style="width: 100%; max-width: 500px; position: relative; height: 560px;">
           {% for campaign in slider_campaigns %}
-            <div class="slider-item {% if forloop.first %}active{% endif %}">
+            <div class="slider-item {% if forloop.first %}active{% endif %}" data-campaign-url="{% url 'campaigns:case_detail' campaign.id %}">
+
               <div class="slider-image-area">
                 {% if campaign.campaign_image %}
                   <img src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}">
@@ -243,7 +246,8 @@
   </div>
 </section>
 
-<section style="padding: 100px 0; background: linear-gradient(135deg, #1A1A1A 0%, #2D1515 100%); color: var(--color-white); text-align: center;">
+<section style="padding: 100px 0; background: linear-gradient(135deg, #1A1A1A 0%, rgba(228, 192, 113, 0.15) 100%); color: var(--color-white); text-align: center;">
+
   <div class="container" style="max-width: 800px;">
     <h2 style="font-size: 40px; font-weight: 900; margin-bottom: 24px; line-height: 1.2;">Ready to make a difference?</h2>
     <p style="font-size: 20px; color: rgba(255,255,255,0.7); margin-bottom: 48px; line-height: 1.6;">

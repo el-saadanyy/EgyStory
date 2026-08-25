@@ -86,3 +86,36 @@ class DonationForm(forms.ModelForm):
         if amount <= 0:
             raise forms.ValidationError("Donation amount must be greater than zero.")
         return amount
+
+from .models import CampaignRating, CampaignReport
+
+class RatingForm(forms.ModelForm):
+    class Meta:
+        model = CampaignRating
+        fields = ['score']
+        widgets = {
+            'score': forms.NumberInput(attrs={'min': 1, 'max': 5, 'class': 'rating-score-input'}),
+        }
+
+    def clean_score(self):
+        score = self.cleaned_data.get('score')
+        if not score or score < 1 or score > 5:
+            raise forms.ValidationError("Rating score must be an integer between 1 and 5.")
+        return score
+
+class ReportForm(forms.ModelForm):
+    class Meta:
+        model = CampaignReport
+        fields = ['reason', 'details']
+        widgets = {
+            'reason': forms.Select(attrs={'class': 'form-input'}),
+            'details': forms.Textarea(attrs={'class': 'form-input', 'rows': 4, 'placeholder': 'Describe why you are reporting this campaign...'}),
+        }
+
+    def clean_details(self):
+        details = self.cleaned_data.get('details', '').strip()
+        if len(details) < 10:
+            raise forms.ValidationError("Please provide a detailed explanation (at least 10 characters).")
+        return details
+
+

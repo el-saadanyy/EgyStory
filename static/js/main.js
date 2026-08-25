@@ -309,5 +309,191 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+
+  // 9. Project Detail Image Slider (Feature #10)
+  const detailSlider = document.querySelector('.project-slider');
+  if (detailSlider) {
+    const slides = detailSlider.querySelectorAll('.slider-slide');
+    const thumbnails = detailSlider.querySelectorAll('.slider-thumbnail-item');
+    const prevBtn = detailSlider.querySelector('.slider-prev');
+    const nextBtn = detailSlider.querySelector('.slider-next');
+    const counterBadge = detailSlider.querySelector('.slider-counter-badge');
+    let currentIndex = 0;
+
+    function updateSlider(index) {
+      if (slides.length === 0) return;
+      currentIndex = (index + slides.length) % slides.length;
+
+      slides.forEach((slide, idx) => {
+        if (idx === currentIndex) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      thumbnails.forEach((thumb, idx) => {
+        if (idx === currentIndex) {
+          thumb.classList.add('active');
+          thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+        } else {
+          thumb.classList.remove('active');
+        }
+      });
+
+      if (counterBadge) {
+        counterBadge.textContent = (currentIndex + 1) + ' / ' + slides.length;
+      }
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function () {
+        updateSlider(currentIndex - 1);
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () {
+        updateSlider(currentIndex + 1);
+      });
+    }
+
+    thumbnails.forEach((thumb, idx) => {
+      thumb.addEventListener('click', function () {
+        updateSlider(idx);
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
+      if (e.key === 'ArrowLeft') {
+        updateSlider(currentIndex - 1);
+      } else if (e.key === 'ArrowRight') {
+        updateSlider(currentIndex + 1);
+      }
+    });
+  }
+
+  // 10. Clickable Campaign Cards & Hero Slider Delegation
+  document.addEventListener('click', function (e) {
+    // A. Campaign Card Click Handling
+    const card = e.target.closest('.campaign-card');
+    if (card) {
+      const interactiveEl = e.target.closest('a, button, input, select, textarea, label, form, .badge-action, [role="button"]');
+      if (!interactiveEl) {
+        const url = card.dataset.campaignUrl;
+        if (url) {
+          window.location.href = url;
+          return;
+        }
+      }
+    }
+
+    // B. Hero Campaign Slider Item Click Handling
+    const slide = e.target.closest('.hero-slider .slider-item.active');
+    if (slide) {
+      const interactiveEl = e.target.closest('a, button, input, select, textarea, label, form, .slider-arrow, .slider-dot, [role="button"]');
+      if (!interactiveEl) {
+        const url = slide.dataset.campaignUrl;
+        if (url) {
+          window.location.href = url;
+          return;
+        }
+      }
+    }
+  });
+
+  // Keyboard accessibility (Enter or Space key on campaign cards & hero slides)
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const activeEl = document.activeElement;
+    if (!activeEl) return;
+
+    if (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT') return;
+
+    if (activeEl.classList.contains('campaign-card') || (activeEl.classList.contains('slider-item') && activeEl.classList.contains('active'))) {
+      const interactiveEl = e.target.closest('a, button, input, select, textarea, label, form, .slider-arrow, .slider-dot, [role="button"]');
+      if (interactiveEl && interactiveEl !== activeEl) return;
+
+      const url = activeEl.dataset.campaignUrl;
+      if (url) {
+        e.preventDefault();
+        window.location.href = url;
+      }
+    }
+  });
+
+  // 7. Campaign Report Modal Toggle Handler
+
+  const reportOpenBtn = document.getElementById('btn-open-report-modal');
+  const reportModal = document.getElementById('reportModal');
+  const reportCloseBtn = document.getElementById('btn-close-report-modal');
+  const reportCancelBtn = document.getElementById('btn-cancel-report-modal');
+
+  if (reportModal) {
+    function openReportModal() {
+      reportModal.style.display = 'flex';
+      reportModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeReportModal() {
+      reportModal.style.display = 'none';
+      reportModal.setAttribute('aria-hidden', 'true');
+    }
+
+    if (reportOpenBtn) {
+      reportOpenBtn.addEventListener('click', openReportModal);
+    }
+    if (reportCloseBtn) {
+      reportCloseBtn.addEventListener('click', closeReportModal);
+    }
+    if (reportCancelBtn) {
+      reportCancelBtn.addEventListener('click', closeReportModal);
+    }
+
+    reportModal.addEventListener('click', function (e) {
+      if (e.target === reportModal) {
+        closeReportModal();
+      }
+    });
+  }
+
+  // 8. Campaign Cancel Modal Toggle Handler (Feature #9)
+  const cancelOpenBtn = document.getElementById('btn-open-cancel-modal');
+  const cancelModal = document.getElementById('cancelCampaignModal');
+  const cancelCloseBtn = document.getElementById('btn-close-cancel-modal');
+  const cancelKeepBtn = document.getElementById('btn-cancel-modal-close');
+
+  if (cancelModal) {
+    function openCancelModal() {
+      cancelModal.style.display = 'flex';
+      cancelModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeCancelModal() {
+      cancelModal.style.display = 'none';
+      cancelModal.setAttribute('aria-hidden', 'true');
+    }
+
+    if (cancelOpenBtn) {
+      cancelOpenBtn.addEventListener('click', openCancelModal);
+    }
+    if (cancelCloseBtn) {
+      cancelCloseBtn.addEventListener('click', closeCancelModal);
+    }
+    if (cancelKeepBtn) {
+      cancelKeepBtn.addEventListener('click', closeCancelModal);
+    }
+
+    cancelModal.addEventListener('click', function (e) {
+      if (e.target === cancelModal) {
+        closeCancelModal();
+      }
+    });
+  }
 });
+
+
+
+
 

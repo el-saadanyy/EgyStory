@@ -59,6 +59,51 @@
   gap: var(--space-4);
 }
 
+/* Auth Inputs Background Override — Always WHITE (#ffffff) when containing data or autofilled */
+.auth-page .form-control,
+.auth-card .form-control,
+.auth-page input[type="text"],
+.auth-page input[type="email"],
+.auth-page input[type="password"],
+.auth-page select,
+.auth-card input[type="text"],
+.auth-card input[type="email"],
+.auth-card input[type="password"],
+.auth-card select {
+  background-color: #ffffff !important;
+}
+
+.auth-page .form-control:focus,
+.auth-card .form-control:focus {
+  background-color: #ffffff !important;
+}
+
+/* Override WebKit / Browser Autofill Light-Blue Background (#e8f0fe) */
+.auth-page .form-control:-webkit-autofill,
+.auth-page .form-control:-webkit-autofill:hover,
+.auth-page .form-control:-webkit-autofill:focus,
+.auth-page .form-control:-webkit-autofill:active,
+.auth-card .form-control:-webkit-autofill,
+.auth-card .form-control:-webkit-autofill:hover,
+.auth-card .form-control:-webkit-autofill:focus,
+.auth-card .form-control:-webkit-autofill:active,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: var(--color-text-primary, #1C1B18) !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  background-color: #ffffff !important;
+}
+
+
 .auth-footer-text {
   text-align: center;
   font-size: var(--font-size-sm);

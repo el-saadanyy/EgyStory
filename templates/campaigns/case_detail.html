@@ -30,18 +30,24 @@
                 <span class="badge" style="background: rgba(220, 38, 38, 0.1); color: rgb(220, 38, 38); padding: 6px 12px; font-size: 13px;">Critical</span>
               {% endif %}
               <span class="badge" style="background: {% if campaign.status == 'Completed' %}rgba(22, 163, 74, 0.1); color: rgb(22, 163, 74);{% else %}rgba(255,255,255,0.1); color: var(--color-text-secondary);{% endif %} padding: 6px 12px; font-size: 13px;">{{ campaign.status }}</span>
+              
+              <!-- Rating Summary Badge -->
+              <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); padding: 6px 12px; font-size: 13px; font-weight: 700;">
+                ★ {% if rating_data.count > 0 %}{{ rating_data.average }} / 5 ({{ rating_data.count }} rating{% if rating_data.count != 1 %}s{% endif %}){% else %}New (No ratings yet){% endif %}
+              </span>
             </div>
             <h1 style="font-size: 40px; font-weight: 800; color: var(--color-text-primary); line-height: 1.2; margin-bottom: 16px;">{{ campaign.title }}</h1>
           </div>
 
           <!-- Main Image -->
-          <div style="width: 100%; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: 24px; background: #000;">
+          <div class="project-slider" style="width: 100%; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: 24px; background: #000;">
             {% if campaign.campaign_image %}
               <img src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block; opacity: 0.95;">
             {% else %}
               <img src="{% static 'images/placeholder-campaign.jpg' %}" alt="{{ campaign.title }}" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block;">
             {% endif %}
           </div>
+
 
           <!-- Additional Pictures Gallery (Non-slider) -->
           {% if campaign.images.all %}
@@ -82,6 +88,26 @@
               </div>
             </div>
             {% endif %}
+
+            <!-- Star Rating System (Feature #8) -->
+            <div style="margin-top: 48px; border-top: 1px solid var(--color-border); padding-top: 32px;">
+              <h3 style="font-size: 18px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 12px;">Rate This Campaign</h3>
+              {% if user.is_authenticated %}
+                <form method="post" action="{% url 'campaigns:rate_campaign' campaign.id %}" class="star-rating-form" style="display: flex; align-items: center; gap: 12px;">
+                  {% csrf_token %}
+                  <div class="rating-stars" style="display: flex; flex-direction: row-reverse; gap: 4px;">
+                    {% for i in "54321" %}
+                      <input type="radio" id="star{{ i }}" name="score" value="{{ i }}" {% if user_rating and user_rating.score|slugify == i %}checked{% endif %} style="display: none;">
+                      <label for="star{{ i }}" title="{{ i }} stars" style="font-size: 28px; color: var(--color-text-muted); cursor: pointer; transition: color 0.2s;">★</label>
+                    {% endfor %}
+                  </div>
+                  <button type="submit" class="btn btn-outline btn-sm">{% if user_rating %}Update Rating{% else %}Submit Rating{% endif %}</button>
+                </form>
+              {% else %}
+                <p style="font-size: 14px; color: var(--color-text-secondary);"><a href="{% url 'login' %}?next={{ request.path }}" style="color: var(--color-primary); text-decoration: underline;">Log in</a> to leave a rating for this campaign.</p>
+              {% endif %}
+            </div>
+
           </div>
         </div>
 
@@ -134,10 +160,106 @@
                 <div style="font-size: 13px; color: var(--color-text-secondary);">Created on {{ campaign.created_at|date }}</div>
               </div>
             </div>
+
+            <!-- Cancel Campaign Trigger (Feature #9: Creator < 25%) -->
+            {% if user.is_authenticated and user == campaign.owner and can_creator_cancel %}
+
+              <div style="margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--color-border); text-align: center;">
+                <button type="button" id="btn-open-cancel-modal" class="btn btn-outline-danger btn-sm" style="width: 100%; border-color: var(--color-danger); color: var(--color-danger); font-weight: 600; padding: 10px;">
+                  🚫 Cancel My Campaign
+                </button>
+              </div>
+            {% endif %}
+
+            <!-- Report Campaign Trigger (Feature #5) -->
+            <div style="margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--color-border); text-align: center;">
+              {% if user.is_authenticated %}
+                <button type="button" id="btn-open-report-modal" class="btn btn-ghost btn-sm" style="color: var(--color-danger); font-weight: 600; width: 100%; gap: 6px;">
+                  🚩 Report this Campaign
+                </button>
+              {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-ghost btn-sm" style="color: var(--color-text-muted); font-size: 12px;">
+                  🚩 Log in to report campaign
+                </a>
+              {% endif %}
+            </div>
+
           </div>
-        </div>
-      </div>
+      <!-- Similar Projects Section (Feature #11) -->
+      {% if similar_campaigns %}
+        <section class="similar-projects-section" style="margin-top: 64px; padding-top: 48px; border-top: 1px solid var(--color-border);">
+          <div style="margin-bottom: 32px;">
+            <h2 style="font-size: 26px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 8px;">Similar Projects</h2>
+            <p style="font-size: 15px; color: var(--color-text-secondary);">Other active campaigns related by category and topic that may interest you.</p>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px;">
+            {% for campaign in similar_campaigns %}
+              {% include 'includes/campaign_card.html' with campaign=campaign %}
+            {% endfor %}
+          </div>
+        </section>
+      {% endif %}
+
     </div>
   </div>
 </main>
+
+
+<!-- Cancel Campaign Modal (Feature #9) -->
+{% if user.is_authenticated and user == campaign.owner and can_creator_cancel %}
+
+<div id="cancelCampaignModal" class="modal" role="dialog" aria-labelledby="cancelModalTitle" aria-hidden="true" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
+  <div class="modal-content" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 32px; max-width: 500px; width: 90%; position: relative; box-shadow: var(--shadow-xl);">
+    <button type="button" id="btn-close-cancel-modal" aria-label="Close modal" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; font-size: 20px; color: var(--color-text-muted); cursor: pointer;">✕</button>
+    <h2 id="cancelModalTitle" style="font-size: 22px; font-weight: 800; color: var(--color-danger); margin-bottom: 8px;">Cancel Campaign?</h2>
+    <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 24px;">Are you sure you want to cancel <strong>"{{ campaign.title }}"</strong>? As the campaign creator, you are eligible to cancel because the raised amount is below 25% of your target goal. This action cannot be undone.</p>
+    
+    <form method="post" action="{% url 'campaigns:cancel_campaign' campaign.id %}">
+      {% csrf_token %}
+      <div style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button type="button" id="btn-cancel-modal-close" class="btn btn-secondary">Keep Campaign</button>
+        <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<!-- Report Campaign Modal (Feature #5) -->
+{% if user.is_authenticated %}
+<div id="reportModal" class="modal" role="dialog" aria-labelledby="reportModalTitle" aria-hidden="true" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
+  <div class="modal-content" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 32px; max-width: 500px; width: 90%; position: relative; box-shadow: var(--shadow-xl);">
+    <button type="button" id="btn-close-report-modal" aria-label="Close modal" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; font-size: 20px; color: var(--color-text-muted); cursor: pointer;">✕</button>
+    <h2 id="reportModalTitle" style="font-size: 22px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 8px;">Report Campaign</h2>
+    <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 24px;">Help protect the community. If you suspect fraud or policy violations, please report details below.</p>
+    
+    <form method="post" action="{% url 'campaigns:report_campaign' campaign.id %}">
+      {% csrf_token %}
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label for="id_reason" class="form-label" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--color-text-primary);">Reason for Report</label>
+        <select name="reason" id="id_reason" class="form-control" style="width: 100%; padding: 12px; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text-primary); border: 1px solid var(--color-border);" required>
+          <option value="Fraud or Misleading">Fraudulent or Misleading Information</option>
+          <option value="Inappropriate Content">Inappropriate or Offensive Content</option>
+          <option value="Spam or Scam">Spam or Scam</option>
+          <option value="Other">Other Violation</option>
+        </select>
+
+      </div>
+
+      <div class="form-group" style="margin-bottom: 24px;">
+        <label for="id_details" class="form-label" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--color-text-primary);">Additional Details</label>
+        <textarea name="details" id="id_details" rows="4" class="form-control" placeholder="Provide specific details or links to support your report..." style="width: 100%; padding: 12px; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text-primary); border: 1px solid var(--color-border);" required></textarea>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button type="button" id="btn-cancel-report-modal" class="btn btn-secondary">Cancel</button>
+        <button type="submit" class="btn btn-danger">Submit Report</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
 {% endblock %}
+

@@ -4,34 +4,40 @@
    ================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
 
 /* ── CSS Custom Properties ─────────────────────────────────────── */
 :root {
-  /* Brand Colors */
-  --color-primary:        #C62828;
-  --color-primary-hover:  #991B1B;
-  --color-primary-light:  #FEE2E2;
-  --color-gold:           #D4A017;
-  --color-gold-light:     #FEF3C7;
+  /* Typography */
+  --font-arabic: 'Tajawal', sans-serif;
+  --font-latin:  'Inter', sans-serif;
+  --font-sans:   'Tajawal', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Brand Colors — Pharaonic Gold Palette */
+  --color-primary:        #E4C071;
+  --color-primary-hover:  #C8A355;
+  --color-primary-light:  rgba(228, 192, 113, 0.18);
+  --color-gold:           #E4C071;
+  --color-gold-light:     rgba(228, 192, 113, 0.15);
   --color-success:        #16A34A;
   --color-success-light:  #DCFCE7;
   --color-warning:        #D97706;
   --color-warning-light:  #FEF3C7;
-  --color-danger:         #DC2626;
-  --color-danger-light:   #FEE2E2;
+  --color-danger:         #A93A2E;
+  --color-danger-light:   rgba(169, 58, 46, 0.18);
 
-  /* Neutrals */
+  /* Neutrals — Temple Basalt & Limestone */
   --color-white:          #FFFFFF;
-  --color-bg:             #1a1a1a;
-  --color-surface:        #242424;
-  --color-border:         rgba(255,255,255,0.08);
-  --color-border-focus:   #C62828;
+  --color-bg:             #1C1B18;
+  --color-surface:        #2A2823;
+  --color-border:         rgba(245, 237, 213, 0.12);
+  --color-border-focus:   #E4C071;
 
-  /* Text */
-  --color-text-primary:   #F9FAFB;
-  --color-text-secondary: #D1D5DB;
-  --color-text-muted:     #9CA3AF;
-  --color-text-inverse:   #FFFFFF;
+  /* Text — Limestone Sand / Warm White */
+  --color-text-primary:   #F5EDD5;
+  --color-text-secondary: #D9CFB8;
+  --color-text-muted:     #AFA793;
+  --color-text-inverse:   #1C1B18;
 
   /* Shadows */
   --shadow-xs:   0 1px 2px rgba(0,0,0,.06);

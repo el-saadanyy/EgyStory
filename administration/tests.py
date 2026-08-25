@@ -340,3 +340,5 @@ class AdminTagManagementTests(TestCase):
         self.assertRedirects(response, reverse('admin_tags'))
         self.assertFalse(Tag.objects.filter(id=self.tag.id).exists())
 
+
+

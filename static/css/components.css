@@ -513,3 +513,30 @@
   gap: var(--space-3);
 }
 
+/* ── Campaign Card Hover Elevation Lift ────────────────────────── */
+.campaign-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease !important;
+}
+.campaign-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 14px 28px -4px rgba(0, 0, 0, 0.45) !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* ── Interactive Star Rating Form Hover ────────────────────────── */
+.rating-stars label:hover,
+.rating-stars label:hover ~ label,
+.rating-stars input:checked ~ label {
+  color: #E4C071 !important;
+}
+
+/* ── Gallery Thumbnail Hover State ─────────────────────────────── */
+.slider-thumbnail-item {
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+.slider-thumbnail-item:hover {
+  border-color: var(--color-primary) !important;
+  opacity: 1 !important;
+}
+
+

@@ -5,6 +5,7 @@ from django.conf import settings
 # pyrefly: ignore [missing-import]
 from django.utils import timezone
 from decimal import Decimal
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class CampaignStatus(models.TextChoices):
     PENDING = 'Pending Review', 'Pending Review'
@@ -112,13 +113,28 @@ class Campaign(models.Model):
             return True
         return False
 
+    def can_creator_cancel(self, user):
+        """
+        A creator can cancel their campaign ONLY if:
+        - user is authenticated and is the owner of the campaign
+        - campaign status is Active or Pending (not already Cancelled, Completed, or Expired)
+        - raised amount (get_total_raised()) is strictly LESS THAN 25% of target_amount (< 25%)
+        """
+        if not user or not user.is_authenticated:
+            return False
+        if self.owner_id != user.id:
+            return False
+        if self.status not in [CampaignStatus.PENDING, CampaignStatus.ACTIVE]:
+            return False
+        if self.target_amount <= 0:
+            return False
+        
+        total_raised = self.get_total_raised()
+        threshold = self.target_amount * Decimal('0.25')
+        return total_raised < threshold
+
+
     def get_urgency_score(self):
-        """
-        Urgency Score Calculation (0-100)
-        Factor 1: Deadline Proximity (max 40 pts) - closer deadline = higher score. Max impact at <= 7 days.
-        Factor 2: Remaining Amount Ratio (max 30 pts) - closer to 0 remaining means higher urgency to finish.
-        Factor 3: Required Daily Funding Rate (max 30 pts) - only active in final 30 days. Higher rate = higher score.
-        """
         score = 0
         
         # Factor 1: Deadline Proximity
@@ -175,6 +191,28 @@ class Campaign(models.Model):
         """Campaign is Critical if manually overridden OR automatically urgent."""
         return self.is_manual_critical or self.is_auto_critical()
 
+    def get_average_rating(self):
+        avg = self.ratings.aggregate(models.Avg('score'))['score__avg']
+        if avg is None:
+            return 0.0
+        return round(float(avg), 1)
+
+    def get_rating_count(self):
+        return self.ratings.count()
+
+    def get_star_rating_data(self):
+        avg = self.get_average_rating()
+        full_stars = int(avg)
+        has_half_star = (avg - full_stars) >= 0.3
+        empty_stars = 5 - full_stars - (1 if has_half_star else 0)
+        return {
+            'average': avg,
+            'full_stars': range(full_stars),
+            'has_half_star': has_half_star,
+            'empty_stars': range(max(0, empty_stars)),
+            'count': self.get_rating_count()
+        }
+
 class Donation(models.Model):
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='donations')
     donor_name = models.CharField(max_length=255)
@@ -193,8 +231,9 @@ class Donation(models.Model):
             # Update Campaign safely
             campaign = self.campaign
             campaign.raised_amount += self.amount
-            if campaign.raised_amount >= campaign.target_amount and campaign.status == CampaignStatus.ACTIVE:
+            if campaign.get_total_raised() >= campaign.target_amount and campaign.status == CampaignStatus.ACTIVE:
                 campaign.status = CampaignStatus.COMPLETED
+
             campaign.save(update_fields=['raised_amount', 'status'])
 
 class CampaignUpdate(models.Model):
@@ -216,4 +255,49 @@ class CampaignImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.campaign.title}"
+
+class CampaignRating(models.Model):
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='ratings')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='campaign_ratings')
+    score = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('campaign', 'user')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.email} rated {self.campaign.title} - {self.score}/5"
+
+class ReportReason(models.TextChoices):
+    FRAUD = 'Fraud or Misleading', 'Fraud or Misleading Information'
+    INAPPROPRIATE = 'Inappropriate Content', 'Inappropriate Content'
+    SPAM = 'Spam or Scam', 'Spam or Scam'
+    OTHER = 'Other', 'Other'
+
+class ReportStatus(models.TextChoices):
+    PENDING = 'Pending Review', 'Pending Review'
+    REVIEWED = 'Reviewed', 'Reviewed'
+    DISMISSED = 'Dismissed', 'Dismissed'
+    ACTION_TAKEN = 'Action Taken', 'Action Taken'
+
+class CampaignReport(models.Model):
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='reports')
+    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='submitted_reports')
+    reason = models.CharField(max_length=50, choices=ReportReason.choices, default=ReportReason.OTHER)
+    details = models.TextField(help_text="Detailed description of the issue.")
+    status = models.CharField(max_length=50, choices=ReportStatus.choices, default=ReportStatus.PENDING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Report #{self.id} for {self.campaign.title} ({self.status})"
+
+
 

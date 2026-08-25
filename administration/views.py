@@ -76,7 +76,20 @@ def dashboard(request):
     })
 
 @admin_required
+def campaign_moderation(request):
+    """
+    Dedicated Campaign Moderation Page: Review and approve/reject pending campaigns.
+    """
+    from campaigns.models import Campaign, CampaignStatus
+    pending_campaigns = Campaign.objects.filter(status=CampaignStatus.PENDING).order_by('created_at')
+    
+    return render(request, 'administration/moderation.html', {
+        'pending_campaigns': pending_campaigns,
+    })
+
+@admin_required
 def campaign_action(request, campaign_id, action):
+
     from campaigns.models import Campaign, CampaignStatus
     campaign = get_object_or_404(Campaign, id=campaign_id)
     
@@ -396,3 +409,57 @@ def admin_campaign_edit(request, campaign_id):
         'case_types': CaseType.choices,
         'status_choices': CampaignStatus.choices,
     })
+
+@admin_required
+def admin_reports(request):
+    """
+    Moderation Panel: Manage reported campaigns in custom Admin Dashboard.
+    """
+    from campaigns.models import CampaignReport, ReportStatus
+    
+    current_status = request.GET.get('status', 'all')
+    reports = CampaignReport.objects.select_related('campaign', 'reporter').all()
+    
+    if current_status == 'pending':
+        reports = reports.filter(status=ReportStatus.PENDING)
+    elif current_status == 'reviewed':
+        reports = reports.filter(status=ReportStatus.REVIEWED)
+    elif current_status == 'dismissed':
+        reports = reports.filter(status=ReportStatus.DISMISSED)
+    elif current_status == 'action_taken':
+        reports = reports.filter(status=ReportStatus.ACTION_TAKEN)
+
+    return render(request, 'administration/reports.html', {
+        'reports': reports,
+        'current_status': current_status,
+        'status_choices': ReportStatus.choices,
+    })
+
+@admin_required
+def admin_report_action(request, report_id, action):
+    """
+    Take action on a reported campaign (Dismiss, Mark Reviewed, or Cancel Campaign).
+    """
+    from campaigns.models import CampaignReport, ReportStatus, CampaignStatus
+    report = get_object_or_404(CampaignReport, id=report_id)
+    
+    if action == 'dismiss':
+        report.status = ReportStatus.DISMISSED
+        report.save(update_fields=['status'])
+        messages.success(request, f'Report #{report.id} dismissed.')
+    elif action == 'mark_reviewed':
+        report.status = ReportStatus.REVIEWED
+        report.save(update_fields=['status'])
+        messages.success(request, f'Report #{report.id} marked as Reviewed.')
+    elif action == 'cancel_campaign':
+        report.status = ReportStatus.ACTION_TAKEN
+        report.save(update_fields=['status'])
+        campaign = report.campaign
+        campaign.status = CampaignStatus.CANCELLED
+        campaign.save(update_fields=['status'])
+        messages.warning(request, f'Campaign "{campaign.title}" has been cancelled due to report #{report.id}.')
+
+    return redirect('admin_reports')
+
+
+

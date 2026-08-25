@@ -4,11 +4,17 @@
 
 /* ── Hero ──────────────────────────────────────────────────────── */
 .hero {
-  background: linear-gradient(135deg, #1A1A1A 0%, #2D1515 60%, #3D1A1A 100%);
+  background: linear-gradient(
+    135deg,
+    #E4C071 0%,
+    rgba(228, 192, 113, 0.15) 60%,
+    #1C1B18 100%
+  );
   padding: calc(var(--space-32) + var(--navbar-height)) 0 var(--space-32);
   position: relative;
   overflow: hidden;
 }
+
 .hero::before {
   content: '';
   position: absolute;
@@ -341,3 +347,16 @@
   .hero { padding: calc(var(--space-12) + var(--navbar-height)) 0 var(--space-12); }
   .trust-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Hero Slider Image Hover Zoom ───────────────────────────── */
+.slider-image-area {
+  overflow: hidden !important;
+}
+.slider-image-area img {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease !important;
+}
+.slider-item.active:hover .slider-image-area img {
+  transform: scale(1.045) !important;
+  filter: brightness(1.06) !important;
+}
+
