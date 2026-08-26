@@ -299,5 +299,30 @@ class CampaignReport(models.Model):
     def __str__(self):
         return f"Report #{self.id} for {self.campaign.title} ({self.status})"
 
+class Comment(models.Model):
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='campaign_comments')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Comment by {self.user} on {self.campaign.title}"
+
+
+class CommentReport(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='reports')
+    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reported_comments')
+    reason = models.TextField(blank=True, default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('comment', 'reporter')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Report on Comment #{self.comment.id} by {self.reporter}"
 

@@ -1,265 +1,244 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ campaign.title }} - EgyStory{% endblock %}
+{% block title %}{{ campaign.title }} | EgyStory{% endblock %}
 
 {% block content %}
-<main style="background-color: var(--color-bg); padding-top: 40px; padding-bottom: 64px; min-height: calc(100vh - var(--navbar-height));">
-  <div class="container">
-    <div style="display: grid; grid-template-columns: 1fr; gap: 40px; align-items: start; max-width: 1200px; margin: 0 auto;">
+<main style="padding: 40px 0; background-color: var(--color-bg); min-height: calc(100vh - 160px);">
+  <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+    
+    <!-- Breadcrumb -->
+    <nav style="margin-bottom: 24px; font-size: 14px; color: var(--color-text-secondary);">
+      <a href="{% url 'campaigns:case_list' %}" style="color: var(--color-text-muted); text-decoration: none;">Campaigns</a>
+      <span style="color: var(--color-text-primary); font-weight: 500;">{{ campaign.title }}</span>
+    </nav>
+
+    <!-- Content Grid -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px; align-items: start;">
       
-      <!-- Desktop layout wrapper for CSS grid -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
-        <div style="grid-column: span 2;">
-          
-          <!-- Title & Badges -->
-          <div style="margin-bottom: 24px;">
-            <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
-              {% if campaign.category %}
-                <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 6px 12px; font-size: 13px;">📁 {{ campaign.category.name }}</span>
-              {% endif %}
-              {% if campaign.tags.all %}
-                {% for tag in campaign.tags.all %}
-                  <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 6px 12px; font-size: 13px;">🏷️ {{ tag.name }}</span>
-                {% endfor %}
-              {% endif %}
-              {% if campaign.case_type == 'Rare / Ultra-Rare & High-Cost' %}
-                <span class="badge" style="background: rgba(147, 51, 234, 0.1); color: rgb(147, 51, 234); padding: 6px 12px; font-size: 13px;">Rare / High-Cost</span>
-              {% endif %}
-              {% if campaign.is_critical %}
-                <span class="badge" style="background: rgba(220, 38, 38, 0.1); color: rgb(220, 38, 38); padding: 6px 12px; font-size: 13px;">Critical</span>
-              {% endif %}
-              <span class="badge" style="background: {% if campaign.status == 'Completed' %}rgba(22, 163, 74, 0.1); color: rgb(22, 163, 74);{% else %}rgba(255,255,255,0.1); color: var(--color-text-secondary);{% endif %} padding: 6px 12px; font-size: 13px;">{{ campaign.status }}</span>
-              
-              <!-- Rating Summary Badge -->
-              <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); padding: 6px 12px; font-size: 13px; font-weight: 700;">
-                ★ {% if rating_data.count > 0 %}{{ rating_data.average }} / 5 ({{ rating_data.count }} rating{% if rating_data.count != 1 %}s{% endif %}){% else %}New (No ratings yet){% endif %}
-              </span>
+      <!-- Main Content Column -->
+      <div>
+        <!-- Media Gallery Header -->
+        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); overflow: hidden; margin-bottom: 32px; box-shadow: var(--shadow-sm);">
+          {% if campaign.cover_image %}
+            <img src="{{ campaign.cover_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: 400px; object-fit: cover;">
+          {% else %}
+            <div style="width: 100%; height: 350px; background: var(--color-bg); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted);">
+              <span style="font-size: 48px;">🖼️</span>
             </div>
-            <h1 style="font-size: 40px; font-weight: 800; color: var(--color-text-primary); line-height: 1.2; margin-bottom: 16px;">{{ campaign.title }}</h1>
+          {% endif %}
+        </div>
+
+        <!-- Story & Details Section -->
+        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 32px; margin-bottom: 32px; box-shadow: var(--shadow-sm);">
+          
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+            <span style="background: rgba(139, 92, 246, 0.1); color: var(--color-primary); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;">
+              {{ campaign.category.name|default:"General" }}
+            </span>
+            <span style="font-size: 13px; color: var(--color-text-muted);">
+              Created {{ campaign.created_at|date:"M d, Y" }}
+            </span>
           </div>
 
-          <!-- Main Image -->
-          <div class="project-slider" style="width: 100%; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: 24px; background: #000;">
-            {% if campaign.campaign_image %}
-              <img src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block; opacity: 0.95;">
-            {% else %}
-              <img src="{% static 'images/placeholder-campaign.jpg' %}" alt="{{ campaign.title }}" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block;">
-            {% endif %}
-          </div>
+          <h1 style="font-size: 28px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 20px; line-height: 1.3;">
+            {{ campaign.title }}
+          </h1>
 
-
-          <!-- Additional Pictures Gallery (Non-slider) -->
-          {% if campaign.images.all %}
-            <div style="margin-bottom: 32px;">
-              <h3 style="font-size: 18px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 16px;">Additional Pictures</h3>
-              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px;">
-                {% for img_obj in campaign.images.all %}
-                  <div style="position: relative; border-radius: var(--radius-md); overflow: hidden; height: 120px; border: 1px solid var(--color-border); background: #000;">
-                    <img src="{{ img_obj.image.url }}" alt="Campaign picture" style="width: 100%; height: 100%; object-fit: cover;">
-                    {% if user == campaign.owner or user.is_staff %}
-                      <form method="post" action="{% url 'campaigns:delete_campaign_image' img_obj.id %}" style="position: absolute; top: 6px; right: 6px;" onsubmit="return confirm('Delete this picture?');">
-                        {% csrf_token %}
-                        <button type="submit" title="Delete image" style="background: rgba(220, 38, 38, 0.85); color: white; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center;">✕</button>
-                      </form>
-                    {% endif %}
-                  </div>
-                {% endfor %}
+          <!-- User Info Header -->
+          <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--color-border);">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--color-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px;">
+              {{ campaign.user.first_name|first|default:campaign.user.username|first|upper }}
+            </div>
+            <div>
+              <div style="font-weight: 600; font-size: 15px; color: var(--color-text-primary);">
+                {{ campaign.user.first_name }} {{ campaign.user.last_name }}
               </div>
+              <div style="font-size: 12px; color: var(--color-text-muted);">
+                Campaign Organizer
+              </div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div style="font-size: 16px; line-height: 1.8; color: var(--color-text-secondary); white-space: pre-line; margin-bottom: 32px;">
+            {{ campaign.description }}
+          </div>
+
+          <!-- Extra Images Grid -->
+          {% if campaign.images.all %}
+            <h3 style="font-size: 18px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 16px;">Gallery</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 32px;">
+              {% for img in campaign.images.all %}
+                <a href="{{ img.image.url }}" target="_blank" style="border-radius: var(--radius-md); overflow: hidden; height: 100px; border: 1px solid var(--color-border);">
+                  <img src="{{ img.image.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                </a>
+              {% endfor %}
             </div>
           {% endif %}
 
-          <!-- The Story Section -->
-          <div style="background: var(--color-surface); padding: 40px; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
-            <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 24px; border-bottom: 2px solid var(--color-border); padding-bottom: 12px;">The Story</h2>
-            <div style="font-size: 17px; line-height: 1.8; color: var(--color-text-primary); white-space: pre-wrap;">{{ campaign.story }}</div>
+          <!-- Star Rating System (Feature #8) -->
+          <div style="margin-top: 48px; border-top: 1px solid var(--color-border); padding-top: 32px;">
+            <h3 style="font-size: 20px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 12px;">Rate this Campaign</h3>
             
-            {% if campaign.updates.all %}
-            <div style="margin-top: 48px; border-top: 1px solid var(--color-border); padding-top: 32px;">
-              <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Updates ({{ campaign.updates.count }})</h2>
-              <div style="display: flex; flex-direction: column; gap: 24px;">
-                {% for update in campaign.updates.all %}
-                  <div style="background: var(--color-bg); padding: 24px; border-radius: var(--radius-md); border-left: 4px solid var(--color-primary);">
-                    <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">{{ update.title }}</h3>
-                    <div style="font-size: 13px; color: var(--color-text-muted); margin-bottom: 12px;">Posted on {{ update.created_at|date }}</div>
-                    <p style="font-size: 15px; line-height: 1.6; color: var(--color-text-secondary);">{{ update.content }}</p>
-                  </div>
-                {% endfor %}
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+              <div style="font-size: 32px; font-weight: 800; color: var(--color-text-primary);">
+                {{ average_rating|default:"0.0" }} <span style="font-size: 18px; color: var(--color-text-muted); font-weight: 400;">/ 5.0</span>
+              </div>
+              <div style="color: #f59e0b; font-size: 20px;">
+                ★★★★★
               </div>
             </div>
+
+            {% if user.is_authenticated %}
+              <form method="post" action="{% url 'campaigns:rate_campaign' campaign.id %}" style="display: flex; align-items: center; gap: 12px;">
+                {% csrf_token %}
+                <select name="rating" style="padding: 8px 12px; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text-primary); border: 1px solid var(--color-border); font-size: 14px;">
+                  <option value="5" {% if user_rating == 5 %}selected{% endif %}>5 Stars - Excellent</option>
+                  <option value="4" {% if user_rating == 4 %}selected{% endif %}>4 Stars - Very Good</option>
+                  <option value="3" {% if user_rating == 3 %}selected{% endif %}>3 Stars - Good</option>
+                  <option value="2" {% if user_rating == 2 %}selected{% endif %}>2 Stars - Fair</option>
+                  <option value="1" {% if user_rating == 1 %}selected{% endif %}>1 Star - Poor</option>
+                </select>
+                <button type="submit" class="btn btn-secondary btn-sm" style="padding: 8px 16px;">
+                  {% if user_rating %}Update Rating{% else %}Submit Rating{% endif %}
+                </button>
+              </form>
+            {% else %}
+              <p style="font-size: 13px; color: var(--color-text-muted);">
+                Please <a href="{% url 'login' %}" style="color: var(--color-primary);">log in</a> to leave a rating.
+              </p>
+            {% endif %}
+          </div>
+
+          <!-- Campaign Comments Section (Requirement #4 & #6) -->
+          <div style="margin-top: 48px; border-top: 1px solid var(--color-border); padding-top: 32px;">
+            <h3 style="font-size: 20px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 20px;">
+              Comments ({% if comments %}{{ comments.count }}{% else %}{{ campaign.comments.count }}{% endif %})
+            </h3>
+
+            <!-- Add Comment Form -->
+            {% if user.is_authenticated %}
+              <form method="post" action="{% url 'campaigns:add_comment' campaign.id %}" style="margin-bottom: 32px;">
+                {% csrf_token %}
+                <div style="margin-bottom: 12px;">
+                  <textarea name="content" rows="3" placeholder="Leave a comment..." style="width: 100%; padding: 14px; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text-primary); border: 1px solid var(--color-border); font-size: 15px; resize: vertical;" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm" style="padding: 10px 20px; font-weight: 600;">Post Comment</button>
+              </form>
+            {% else %}
+              <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 24px;">
+                <a href="{% url 'login' %}?next={{ request.path }}" style="color: var(--color-primary); text-decoration: underline;">Log in</a> to leave a comment.
+              </p>
             {% endif %}
 
-            <!-- Star Rating System (Feature #8) -->
-            <div style="margin-top: 48px; border-top: 1px solid var(--color-border); padding-top: 32px;">
-              <h3 style="font-size: 18px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 12px;">Rate This Campaign</h3>
-              {% if user.is_authenticated %}
-                <form method="post" action="{% url 'campaigns:rate_campaign' campaign.id %}" class="star-rating-form" style="display: flex; align-items: center; gap: 12px;">
-                  {% csrf_token %}
-                  <div class="rating-stars" style="display: flex; flex-direction: row-reverse; gap: 4px;">
-                    {% for i in "54321" %}
-                      <input type="radio" id="star{{ i }}" name="score" value="{{ i }}" {% if user_rating and user_rating.score|slugify == i %}checked{% endif %} style="display: none;">
-                      <label for="star{{ i }}" title="{{ i }} stars" style="font-size: 28px; color: var(--color-text-muted); cursor: pointer; transition: color 0.2s;">★</label>
-                    {% endfor %}
+            <!-- Comments List -->
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              {% for comment in campaign.comments.all %}
+                <div style="background: var(--color-bg); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--color-border); position: relative;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div style="font-weight: 700; font-size: 15px; color: var(--color-text-primary);">
+                      {{ comment.user.first_name }} {{ comment.user.last_name }} <span style="font-size: 13px; font-weight: 400; color: var(--color-text-muted);">(@{{ comment.user.username }})</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--color-text-muted);">
+                      {{ comment.created_at|date:"M d, Y H:i" }}
+                    </div>
                   </div>
-                  <button type="submit" class="btn btn-outline btn-sm">{% if user_rating %}Update Rating{% else %}Submit Rating{% endif %}</button>
-                </form>
-              {% else %}
-                <p style="font-size: 14px; color: var(--color-text-secondary);"><a href="{% url 'login' %}?next={{ request.path }}" style="color: var(--color-primary); text-decoration: underline;">Log in</a> to leave a rating for this campaign.</p>
-              {% endif %}
-            </div>
+                  <p style="font-size: 15px; line-height: 1.6; color: var(--color-text-secondary); margin: 0; white-space: pre-wrap;">{{ comment.content }}</p>
 
+                  <!-- Report Comment Action -->
+                  {% if user.is_authenticated and comment.user != user %}
+                    <div style="margin-top: 12px; text-align: right;">
+                      <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('reportCommentModal{{ comment.id }}').style.display='flex';" style="color: var(--color-danger); font-size: 12px; padding: 4px 8px;">
+                        🚩 Report Comment
+                      </button>
+                    </div>
+
+                    <!-- Report Comment Modal -->
+                    <div id="reportCommentModal{{ comment.id }}" class="modal" role="dialog" aria-hidden="true" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
+                      <div class="modal-content" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 24px; max-width: 450px; width: 90%; text-align: left; position: relative;">
+                        <button type="button" onclick="document.getElementById('reportCommentModal{{ comment.id }}').style.display='none';" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; font-size: 18px; color: var(--color-text-muted); cursor: pointer;">✕</button>
+                        <h4 style="font-size: 18px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 8px;">Report Comment</h4>
+                        <p style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 16px;">Please state the reason for reporting this comment:</p>
+                        <form method="post" action="{% url 'campaigns:report_comment' comment.id %}">
+                          {% csrf_token %}
+                          <textarea name="reason" rows="3" placeholder="Provide details on why this comment is inappropriate..." style="width: 100%; padding: 10px; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text-primary); border: 1px solid var(--color-border); font-size: 14px; margin-bottom: 16px;" required></textarea>
+                          <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('reportCommentModal{{ comment.id }}').style.display='none';">Cancel</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Submit Report</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  {% endif %}
+                </div>
+              {% empty %}
+                <p style="font-size: 14px; color: var(--color-text-muted); text-align: center; margin: 16px 0;">No comments yet. Be the first to share your thoughts!</p>
+              {% endfor %}
+            </div>
           </div>
+
+        </div>
+      </div>
+
+      <!-- Sidebar Column -->
+      <div style="position: sticky; top: 24px;">
+        
+        <!-- Target & Progress Box -->
+        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-sm); margin-bottom: 24px;">
+          
+          <div style="margin-bottom: 20px;">
+            <span style="font-size: 32px; font-weight: 800; color: var(--color-primary);">${{ campaign.current_amount|default:"0" }}</span>
+            <span style="font-size: 14px; color: var(--color-text-muted);">raised of ${{ campaign.target_amount }} goal</span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div style="width: 100%; height: 10px; background: var(--color-bg); border-radius: 5px; overflow: hidden; margin-bottom: 24px;">
+            <div style="width: {{ campaign.progress_percentage|default:'0' }}%; height: 100%; background: var(--color-primary); border-radius: 5px;"></div>
+          </div>
+
+          <!-- Action Buttons -->
+          {% if user.is_authenticated %}
+            <a href="{% url 'donations:donate' campaign.id %}" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 700; text-align: center; display: block; margin-bottom: 12px; border-radius: var(--radius-md);">
+              Donate Now
+            </a>
+          {% else %}
+            <a href="{% url 'login' %}?next={% url 'donations:donate' campaign.id %}" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 700; text-align: center; display: block; margin-bottom: 12px; border-radius: var(--radius-md);">
+              Log in to Donate
+            </a>
+          {% endif %}
+
+          <!-- Report Campaign Button -->
+          {% if user.is_authenticated and campaign.user != user %}
+            <button type="button" class="btn btn-outline" onclick="document.getElementById('reportCampaignModal').style.display='flex';" style="width: 100%; padding: 10px; font-size: 13px; text-align: center; color: var(--color-danger); border-color: rgba(239, 68, 68, 0.3);">
+              🚩 Report Campaign
+            </button>
+          {% endif %}
+
         </div>
 
-        <!-- Sidebar / Action Card -->
-        <div style="grid-column: span 1;">
-          <div style="background: var(--color-surface); padding: 32px; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); border: 1px solid var(--color-border); position: sticky; top: calc(var(--navbar-height) + 32px);">
-            
-            <!-- Amount Raised -->
-            <div style="margin-bottom: 24px;">
-              <div style="font-size: 44px; font-weight: 800; color: var(--color-text-primary); line-height: 1;">{{ campaign.get_total_raised }} <span style="font-size: 20px; color: var(--color-text-muted); font-weight: 600;">EGP</span></div>
-              <div style="font-size: 16px; color: var(--color-text-secondary); margin-top: 8px;">raised of <span style="font-weight: 600;">{{ campaign.target_amount }} EGP</span> goal</div>
-            </div>
-
-            <!-- Progress Bar -->
-            <div style="background: rgba(255,255,255,0.1); border-radius: 99px; height: 10px; width: 100%; overflow: hidden; margin-bottom: 12px;">
-              <div style="background: {% if campaign.status == 'Completed' %}#16a34a{% else %}var(--color-primary){% endif %}; height: 100%; width: calc({{ campaign.get_progress_percentage }} * 1%); border-radius: 99px;"></div>
-            </div>
-            
-            <div style="display: flex; justify-content: space-between; font-size: 15px; margin-bottom: 32px; font-weight: 600;">
-              <span style="color: var(--color-text-primary);">{{ campaign.get_progress_percentage }}% Funded</span>
-              {% if campaign.deadline %}
-                <span style="color: var(--color-text-secondary); display: flex; align-items: center; gap: 6px;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                  {{ campaign.get_days_remaining }} days left
-                </span>
-              {% endif %}
-            </div>
-
-            <!-- Action Button -->
-            {% if campaign.status == 'Active' %}
-              <a href="{% url 'campaigns:donate' campaign.id %}" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 18px; font-weight: 700; border-radius: var(--radius-lg); box-shadow: 0 4px 14px rgba(198, 40, 40, 0.3);">Donate Now</a>
-              <p style="text-align: center; font-size: 13px; color: var(--color-text-muted); margin-top: 16px;">100% secure payment</p>
-            {% elif campaign.status == 'Completed' %}
-              <div style="width: 100%; padding: 16px; background: rgba(22, 163, 74, 0.1); color: rgb(22, 163, 74); border-radius: var(--radius-lg); text-align: center; font-weight: 700; font-size: 18px; border: 1px solid rgba(22, 163, 74, 0.2);">
-                🎉 Target Reached!
-              </div>
-              <p style="text-align: center; font-size: 14px; color: var(--color-text-secondary); margin-top: 12px;">This campaign has been successfully funded.</p>
-            {% else %}
-              <button class="btn btn-secondary" style="width: 100%; padding: 16px; font-size: 18px; font-weight: 700; border-radius: var(--radius-lg); background: rgba(255,255,255,0.1); color: var(--color-text-muted); border: none; cursor: not-allowed;" disabled>Campaign {{ campaign.status }}</button>
-            {% endif %}
-
-            <!-- Organizer Info -->
-            <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--color-border); display: flex; align-items: center; gap: 16px;">
-              <div style="width: 48px; height: 48px; background: var(--color-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--color-text-muted);">
-                👤
-              </div>
-              <div>
-                <div style="font-size: 13px; color: var(--color-text-muted);">Organized by</div>
-                <div style="font-weight: 700; color: var(--color-text-primary);">{{ campaign.owner.first_name }} {{ campaign.owner.last_name }}</div>
-                <div style="font-size: 13px; color: var(--color-text-secondary);">Created on {{ campaign.created_at|date }}</div>
-              </div>
-            </div>
-
-            <!-- Cancel Campaign Trigger (Feature #9: Creator < 25%) -->
-            {% if user.is_authenticated and user == campaign.owner and can_creator_cancel %}
-
-              <div style="margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--color-border); text-align: center;">
-                <button type="button" id="btn-open-cancel-modal" class="btn btn-outline-danger btn-sm" style="width: 100%; border-color: var(--color-danger); color: var(--color-danger); font-weight: 600; padding: 10px;">
-                  🚫 Cancel My Campaign
-                </button>
-              </div>
-            {% endif %}
-
-            <!-- Report Campaign Trigger (Feature #5) -->
-            <div style="margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--color-border); text-align: center;">
-              {% if user.is_authenticated %}
-                <button type="button" id="btn-open-report-modal" class="btn btn-ghost btn-sm" style="color: var(--color-danger); font-weight: 600; width: 100%; gap: 6px;">
-                  🚩 Report this Campaign
-                </button>
-              {% else %}
-                <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-ghost btn-sm" style="color: var(--color-text-muted); font-size: 12px;">
-                  🚩 Log in to report campaign
-                </a>
-              {% endif %}
-            </div>
-
-          </div>
-      <!-- Similar Projects Section (Feature #11) -->
-      {% if similar_campaigns %}
-        <section class="similar-projects-section" style="margin-top: 64px; padding-top: 48px; border-top: 1px solid var(--color-border);">
-          <div style="margin-bottom: 32px;">
-            <h2 style="font-size: 26px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 8px;">Similar Projects</h2>
-            <p style="font-size: 15px; color: var(--color-text-secondary);">Other active campaigns related by category and topic that may interest you.</p>
-          </div>
-          
-          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px;">
-            {% for campaign in similar_campaigns %}
-              {% include 'includes/campaign_card.html' with campaign=campaign %}
-            {% endfor %}
-          </div>
-        </section>
-      {% endif %}
+      </div>
 
     </div>
   </div>
 </main>
 
-
-<!-- Cancel Campaign Modal (Feature #9) -->
-{% if user.is_authenticated and user == campaign.owner and can_creator_cancel %}
-
-<div id="cancelCampaignModal" class="modal" role="dialog" aria-labelledby="cancelModalTitle" aria-hidden="true" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
-  <div class="modal-content" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 32px; max-width: 500px; width: 90%; position: relative; box-shadow: var(--shadow-xl);">
-    <button type="button" id="btn-close-cancel-modal" aria-label="Close modal" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; font-size: 20px; color: var(--color-text-muted); cursor: pointer;">✕</button>
-    <h2 id="cancelModalTitle" style="font-size: 22px; font-weight: 800; color: var(--color-danger); margin-bottom: 8px;">Cancel Campaign?</h2>
-    <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 24px;">Are you sure you want to cancel <strong>"{{ campaign.title }}"</strong>? As the campaign creator, you are eligible to cancel because the raised amount is below 25% of your target goal. This action cannot be undone.</p>
-    
-    <form method="post" action="{% url 'campaigns:cancel_campaign' campaign.id %}">
-      {% csrf_token %}
-      <div style="display: flex; gap: 12px; justify-content: flex-end;">
-        <button type="button" id="btn-cancel-modal-close" class="btn btn-secondary">Keep Campaign</button>
-        <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
-      </div>
-    </form>
-  </div>
-</div>
-{% endif %}
-
-<!-- Report Campaign Modal (Feature #5) -->
-{% if user.is_authenticated %}
-<div id="reportModal" class="modal" role="dialog" aria-labelledby="reportModalTitle" aria-hidden="true" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
-  <div class="modal-content" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 32px; max-width: 500px; width: 90%; position: relative; box-shadow: var(--shadow-xl);">
-    <button type="button" id="btn-close-report-modal" aria-label="Close modal" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; font-size: 20px; color: var(--color-text-muted); cursor: pointer;">✕</button>
-    <h2 id="reportModalTitle" style="font-size: 22px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 8px;">Report Campaign</h2>
-    <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 24px;">Help protect the community. If you suspect fraud or policy violations, please report details below.</p>
-    
+<!-- Report Campaign Modal -->
+{% if user.is_authenticated and campaign.user != user %}
+<div id="reportCampaignModal" class="modal" role="dialog" aria-hidden="true" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
+  <div class="modal-content" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 28px; max-width: 480px; width: 90%; text-align: left; position: relative;">
+    <button type="button" onclick="document.getElementById('reportCampaignModal').style.display='none';" style="position: absolute; top: 18px; right: 18px; background: transparent; border: none; font-size: 20px; color: var(--color-text-muted); cursor: pointer;">✕</button>
+    <h3 style="font-size: 20px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 8px;">Report Campaign</h3>
+    <p style="font-size: 14px; color: var(--color-text-secondary); margin-bottom: 20px;">Please state the reason why you are reporting this campaign:</p>
     <form method="post" action="{% url 'campaigns:report_campaign' campaign.id %}">
       {% csrf_token %}
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label for="id_reason" class="form-label" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--color-text-primary);">Reason for Report</label>
-        <select name="reason" id="id_reason" class="form-control" style="width: 100%; padding: 12px; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text-primary); border: 1px solid var(--color-border);" required>
-          <option value="Fraud or Misleading">Fraudulent or Misleading Information</option>
-          <option value="Inappropriate Content">Inappropriate or Offensive Content</option>
-          <option value="Spam or Scam">Spam or Scam</option>
-          <option value="Other">Other Violation</option>
-        </select>
-
-      </div>
-
-      <div class="form-group" style="margin-bottom: 24px;">
-        <label for="id_details" class="form-label" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--color-text-primary);">Additional Details</label>
-        <textarea name="details" id="id_details" rows="4" class="form-control" placeholder="Provide specific details or links to support your report..." style="width: 100%; padding: 12px; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text-primary); border: 1px solid var(--color-border);" required></textarea>
-      </div>
-
+      <textarea name="reason" rows="4" placeholder="Provide clear details regarding fraudulent activity, inappropriate content, etc..." style="width: 100%; padding: 12px; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text-primary); border: 1px solid var(--color-border); font-size: 14px; margin-bottom: 20px;" required></textarea>
       <div style="display: flex; gap: 12px; justify-content: flex-end;">
-        <button type="button" id="btn-cancel-report-modal" class="btn btn-secondary">Cancel</button>
+        <button type="button" class="btn btn-secondary" onclick="document.getElementById('reportCampaignModal').style.display='none';">Cancel</button>
         <button type="submit" class="btn btn-danger">Submit Report</button>
       </div>
     </form>
   </div>
 </div>
 {% endif %}
-
 {% endblock %}
-
