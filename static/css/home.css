@@ -6,8 +6,15 @@
 .hero {
     padding: calc(var(--space-32) + var(--navbar-height)) 0 var(--space-32);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     background: linear-gradient(45deg, #000000 0%, rgba(228, 192, 113, 0.15) 60%, #e4c071 100%) !important;
+}
+
+.hero-tag-badge:hover {
+  background: var(--color-primary, #E4C071) !important;
+  color: #1C1B18 !important;
+  border-color: #E4C071 !important;
+  box-shadow: 0 0 12px rgba(228, 192, 113, 0.4);
 }
 
 .hero::before {
@@ -126,18 +133,23 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--color-surface);
+  background: var(--color-surface, #2A2823);
   border-radius: 30px;
   overflow: hidden;
-  box-shadow: var(--shadow-xl);
-  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
   display: flex;
   flex-direction: column;
-  transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease,
+              background-color 0.35s ease;
   opacity: 0;
   pointer-events: none;
   transform: translateX(30px);
   z-index: 1;
+  cursor: pointer;
 }
 
 .slider-item.active {
@@ -145,6 +157,13 @@
   pointer-events: auto;
   transform: translateX(0);
   z-index: 2;
+}
+
+.slider-item.active:hover {
+  transform: translateY(-8px) scale(1.015) !important;
+  border-color: #E4C071 !important;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(228, 192, 113, 0.25) !important;
+  background-color: #322F2A !important;
 }
 
 /* Outgoing slide transition to slide out to the left slightly */
@@ -159,12 +178,19 @@
   height: 280px;
   flex-shrink: 0;
   width: 100%;
+  overflow: hidden !important;
 }
 
 .slider-image-area img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s ease !important;
+}
+
+.slider-item.active:hover .slider-image-area img {
+  transform: scale(1.06) !important;
+  filter: brightness(1.08) contrast(1.02) !important;
 }
 
 .slider-content-area {
@@ -181,11 +207,16 @@
   margin-bottom: 12px;
   line-height: 1.2;
   color: var(--color-white);
+  transition: color 0.35s ease;
   /* Truncation */
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.slider-item.active:hover .slider-title {
+  color: #E4C071;
 }
 
 .slider-desc {
@@ -314,7 +345,9 @@
 }
 .trust-icon {
   width: 48px; height: 48px;
-  background: rgba(198,40,40,0.15);
+  background: rgba(228, 192, 113, 0.15);
+  color: #E4C071;
+  border: 1px solid rgba(228, 192, 113, 0.3);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto var(--space-3);
@@ -353,5 +386,39 @@
 .slider-item.active:hover .slider-image-area img {
   transform: scale(1.045) !important;
   filter: brightness(1.06) !important;
+}
+
+/* ── How It Works Step Card Hover Effect ───────────────────── */
+.step-card {
+  background: var(--color-bg);
+  padding: 40px 32px;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease,
+              background-color 0.35s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.step-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--color-primary, #E4C071);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), 0 0 20px rgba(228, 192, 113, 0.18);
+  background-color: var(--color-surface, #2A2823);
+}
+
+.step-card .step-number {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.step-card:hover .step-number {
+  transform: scale(1.12);
+  background-color: #E4C071 !important;
+  color: #1C1B18 !important;
+  box-shadow: 0 0 15px rgba(228, 192, 113, 0.4);
 }
 

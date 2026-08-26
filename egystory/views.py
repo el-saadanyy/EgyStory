@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from campaigns.models import Campaign, CampaignStatus, CaseType
+from campaigns.models import Campaign, CampaignStatus, CaseType, Tag
 
 def home(request):
     """EgyStory home page — Campaign Galleries."""
@@ -42,14 +42,27 @@ def home(request):
             if len(slider_campaigns) < 5:
                 slider_campaigns.append(c)
 
-    # Success Stories: Newest completed campaigns first (max 3)
-    success_stories = Campaign.objects.filter(status=CampaignStatus.COMPLETED).order_by('-created_at')[:3]
+    # Success Stories: Completed campaigns sorted by Average Rating Descending (max 3)
+    completed_campaigns = list(Campaign.objects.filter(status=CampaignStatus.COMPLETED))
+    completed_campaigns.sort(key=lambda c: (c.get_average_rating(), c.created_at), reverse=True)
+    success_stories = completed_campaigns[:3]
+
+    # Homepage Section Galleries — Sorted by Average Rating Descending (Highest -> Lowest)
+    critical_cases = list(critical_campaigns)
+    critical_cases.sort(key=lambda c: (c.get_average_rating(), c.created_at), reverse=True)
+
+    rare_cases = list(rare_campaigns)
+    rare_cases.sort(key=lambda c: (c.get_average_rating(), c.created_at), reverse=True)
+
+    normal_cases = list(normal_campaigns)
+    normal_cases.sort(key=lambda c: (c.get_average_rating(), c.created_at), reverse=True)
 
     context = {
         'slider_campaigns': slider_campaigns,
-        'critical_cases': critical_campaigns[:3],
-        'rare_cases': rare_campaigns[:3],
-        'normal_cases': normal_campaigns[:3],
+        'critical_cases': critical_cases[:3],
+        'rare_cases': rare_cases[:3],
+        'normal_cases': normal_cases[:3],
         'success_stories': success_stories,
+        'tags': Tag.objects.all(),
     }
     return render(request, 'home.html', context)

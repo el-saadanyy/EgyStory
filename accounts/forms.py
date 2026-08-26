@@ -154,8 +154,27 @@ class ProfileEditForm(forms.ModelForm):
 
 
 class DeleteAccountForm(forms.Form):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Enter your current password',
+            'autocomplete': 'current-password',
+        }),
+        label='Current Password',
+        error_messages={'required': 'Please enter your current password to confirm deletion.'},
+    )
     confirm = forms.BooleanField(
         required=True,
         label='I understand this action is permanent and cannot be undone.',
         error_messages={'required': 'You must confirm to delete your account.'},
     )
+
+    def __init__(self, user=None, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if password and self.user:
+            if not self.user.check_password(password):
+                raise forms.ValidationError('Incorrect password. Please enter your current password.')
+        return password

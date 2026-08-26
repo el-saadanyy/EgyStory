@@ -32,28 +32,34 @@
 
 /* Primary */
 .btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-text-inverse);
-  border-color: var(--color-primary);
+  background-color: var(--color-primary, #E4C071);
+  color: #1C1B18;
+  border-color: var(--color-primary, #E4C071);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(228, 192, 113, 0.2);
 }
+
 .btn-primary:hover:not(:disabled) {
-  background-color: var(--color-primary-hover);
-  border-color: var(--color-primary-hover);
-  color: var(--color-text-inverse);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  background-color: #C8A355;
+  border-color: #C8A355;
+  color: #1C1B18;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(228, 192, 113, 0.35);
 }
 
 /* Outline */
 .btn-outline {
   background-color: transparent;
-  color: var(--color-primary);
-  border-color: var(--color-primary);
+  color: var(--color-primary, #E4C071);
+  border-color: rgba(228, 192, 113, 0.6);
+  font-weight: 600;
 }
 .btn-outline:hover:not(:disabled) {
-  background-color: var(--color-primary);
-  color: var(--color-text-inverse);
-  transform: translateY(-1px);
+  background-color: var(--color-primary, #E4C071);
+  color: #1C1B18;
+  border-color: var(--color-primary, #E4C071);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(228, 192, 113, 0.25);
 }
 
 /* Ghost */
@@ -63,21 +69,23 @@
   border-color: transparent;
 }
 .btn-ghost:hover:not(:disabled) {
-  background-color: rgba(255,255,255,0.05);
-  color: var(--color-text-primary);
+  background-color: rgba(228, 192, 113, 0.12);
+  color: var(--color-primary, #E4C071);
 }
 
 /* Danger */
 .btn-danger {
-  background-color: var(--color-danger);
-  color: var(--color-text-inverse);
-  border-color: var(--color-danger);
+  background-color: var(--color-danger, #A93A2E);
+  color: #FFFFFF;
+  border-color: var(--color-danger, #A93A2E);
+  font-weight: 600;
 }
 .btn-danger:hover:not(:disabled) {
-  background-color: #B91C1C;
-  border-color: #B91C1C;
-  color: var(--color-text-inverse);
-  transform: translateY(-1px);
+  background-color: #DC2626;
+  border-color: #DC2626;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3);
 }
 
 /* Sizes */
@@ -87,15 +95,16 @@
 
 /* ── Cards ─────────────────────────────────────────────────────── */
 .card {
-  background-color: var(--color-surface);
+  background-color: var(--color-surface, #2A2823);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
   overflow: hidden;
-  transition: box-shadow var(--transition-base), transform var(--transition-base);
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
 }
 .card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  border-color: rgba(228, 192, 113, 0.3);
 }
 .card-body {
   padding: var(--space-6);
@@ -154,6 +163,84 @@
   background-color: rgba(255,255,255,0.03);
   color: var(--color-text-secondary);
   cursor: not-allowed;
+}
+
+/* ── Custom Select Dropdowns (Global Theme) ───────────────────── */
+select,
+select.form-control {
+  color-scheme: dark;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--color-surface, #2A2823) !important;
+  color: var(--color-text-primary, #F5EDD5) !important;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 11px var(--space-4);
+  padding-right: 42px;
+  font-size: var(--font-size-base);
+  font-family: inherit;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23E4C071' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+}
+
+select:hover,
+select.form-control:hover {
+  border-color: var(--color-primary, #E4C071);
+  background-color: #322F2A !important;
+}
+
+select:focus,
+select.form-control:focus {
+  outline: none;
+  border-color: var(--color-primary, #E4C071) !important;
+  box-shadow: 0 0 0 3px rgba(228, 192, 113, 0.25) !important;
+  background-color: #322F2A !important;
+}
+
+/* RTL (Arabic) positioning for dropdown icon */
+[dir="rtl"] select,
+[dir="rtl"] select.form-control,
+body.rtl select,
+html[lang="ar"] select {
+  background-position: left 14px center;
+  padding-left: 42px;
+  padding-right: var(--space-4);
+}
+
+/* Custom styling for native option dropdown elements */
+select option {
+  color-scheme: dark;
+  background-color: #2A2823 !important;
+  color: #F5EDD5 !important;
+  opacity: 1 !important;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+/* Ensure placeholder, disabled, selected, and first-child options remain fully bright & readable */
+select option:disabled,
+select option[disabled],
+select option[value=""],
+select option:first-child,
+select option:checked {
+  color-scheme: dark;
+  background-color: #2A2823 !important;
+  color: #F5EDD5 !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #F5EDD5 !important;
+}
+
+/* Disabled select */
+select:disabled,
+select.form-control:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: rgba(255, 255, 255, 0.03) !important;
 }
 
 .form-error {
@@ -284,11 +371,13 @@
 }
 .alert-success .alert-progress { background: #16a34a; }
 
+
 .alert-error {
-  background-color: rgba(220, 38, 38, 0.12);
-  color: #fca5a5;
-  border-color: rgba(220, 38, 38, 0.25);
-  border-left: 3px solid #dc2626;
+    background-color: rgba(220, 38, 38, 0.12);
+    color: #fca5a5;
+    border-color: rgba(220, 38, 38, 0.25);
+    border-left: 3px solid #dc2626;
+    margin-bottom: 21px;
 }
 .alert-error .alert-progress { background: #dc2626; }
 
@@ -515,12 +604,25 @@
 
 /* ── Campaign Card Hover Elevation Lift ────────────────────────── */
 .campaign-card {
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease !important;
 }
 .campaign-card:hover {
-  transform: translateY(-4px) !important;
-  box-shadow: 0 14px 28px -4px rgba(0, 0, 0, 0.45) !important;
-  border-color: var(--color-primary) !important;
+  transform: translateY(-6px) !important;
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.6), 0 0 20px rgba(228, 192, 113, 0.15) !important;
+  border-color: #E4C071 !important;
+}
+.campaign-card .campaign-image-wrapper {
+  overflow: hidden !important;
+}
+.campaign-card .campaign-image-wrapper img {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.campaign-card:hover .campaign-image-wrapper img {
+  transform: scale(1.06) !important;
+}
+.campaign-card .progress-bar {
+  background: linear-gradient(90deg, #E4C071 0%, #F5EDD5 100%) !important;
+  box-shadow: 0 0 10px rgba(228, 192, 113, 0.5) !important;
 }
 
 /* ── Interactive Star Rating Form Hover ────────────────────────── */
@@ -537,6 +639,68 @@
 .slider-thumbnail-item:hover {
   border-color: var(--color-primary) !important;
   opacity: 1 !important;
+}
+
+/* ── Search Autocomplete Dropdown (Global Theme) ───────────────────── */
+.search-autocomplete-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--color-surface, #2A2823);
+  border: 1.5px solid var(--color-primary, #E4C071);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 24px rgba(228, 192, 113, 0.2);
+  z-index: 999;
+  overflow: hidden;
+  max-height: 340px;
+  overflow-y: auto;
+  backdrop-filter: blur(12px);
+  padding: 6px 0;
+}
+
+.autocomplete-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  color: var(--color-text-primary, #F5EDD5);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.active {
+  background-color: rgba(228, 192, 113, 0.18);
+  color: #E4C071;
+}
+
+.autocomplete-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.autocomplete-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: rgba(228, 192, 113, 0.15);
+  color: #E4C071;
+  border: 1px solid rgba(228, 192, 113, 0.3);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 

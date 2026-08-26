@@ -1050,6 +1050,254 @@ class AlmostFundedFilterTests(TestCase):
         self.assertNotIn(self.almost_funded_campaign, response_completed.context['campaigns'])
 
 
+class HomepageRatingSortingTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email='sortuser@egystory.com',
+            password='TestUser@2026',
+            first_name='Sort',
+            last_name='Tester'
+        )
+
+        # Create two normal campaigns with different ratings
+        self.c1 = Campaign.objects.create(
+            title='Normal Lower Rated',
+            story='Story 1',
+            target_amount=10000,
+            owner=self.user,
+            status=CampaignStatus.ACTIVE,
+            case_type=CaseType.NORMAL
+        )
+        self.c2 = Campaign.objects.create(
+            title='Normal Higher Rated',
+            story='Story 2',
+            target_amount=10000,
+            owner=self.user,
+            status=CampaignStatus.ACTIVE,
+            case_type=CaseType.NORMAL
+        )
+
+        from campaigns.models import CampaignRating
+        CampaignRating.objects.create(campaign=self.c1, user=self.user, score=2)
+        CampaignRating.objects.create(campaign=self.c2, user=self.user, score=5)
+
+    def test_homepage_normal_cases_sorted_by_rating_descending(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        normal_cases = response.context['normal_cases']
+        # Higher rated c2 (5 stars) must come before lower rated c1 (2 stars)
+        self.assertEqual(normal_cases[0], self.c2)
+        self.assertEqual(normal_cases[1], self.c1)
+
+
+from django.urls import reverse
+
+class CampaignSearchFunctionalityTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email='searchuser@egystory.com',
+            password='SearchUser@2026',
+            first_name='Search',
+            last_name='Tester'
+        )
+
+        from campaigns.models import Tag
+        self.tag_medical = Tag.objects.create(name='Medical')
+        self.tag_education = Tag.objects.create(name='Education')
+
+        self.c1 = Campaign.objects.create(
+            title='Urgent Cardiac Surgery for Child',
+            story='Emergency heart surgery needed in Cairo',
+            target_amount=50000,
+            owner=self.user,
+            status=CampaignStatus.ACTIVE
+        )
+        self.c1.tags.add(self.tag_medical)
+
+        self.c2 = Campaign.objects.create(
+            title='University Tuition Assistance',
+            story='Help a bright engineering student complete senior year',
+            target_amount=20000,
+            owner=self.user,
+            status=CampaignStatus.ACTIVE
+        )
+        self.c2.tags.add(self.tag_education)
+
+    def test_search_by_exact_title(self):
+        url = reverse('campaigns:case_list') + '?q=Urgent Cardiac Surgery for Child'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.c1, response.context['campaigns'])
+        self.assertNotIn(self.c2, response.context['campaigns'])
+
+    def test_search_by_partial_title(self):
+        url = reverse('campaigns:case_list') + '?q=cardiac'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.c1, response.context['campaigns'])
+        self.assertNotIn(self.c2, response.context['campaigns'])
+
+    def test_search_by_tag(self):
+        url = reverse('campaigns:case_list') + '?q=Education'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.c2, response.context['campaigns'])
+        self.assertNotIn(self.c1, response.context['campaigns'])
+
+    def test_empty_search_query(self):
+        url = reverse('campaigns:case_list') + '?q='
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.c1, response.context['campaigns'])
+        self.assertIn(self.c2, response.context['campaigns'])
+
+    def test_search_with_no_matching_results(self):
+        url = reverse('campaigns:case_list') + '?q=NonexistentQueryXYZ123'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['campaigns']), 0)
+
+
+class CampaignAutocompleteEndpointTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email='auto@egystory.com',
+            password='AutoUser@2026',
+            first_name='Auto',
+            last_name='Tester'
+        )
+
+        from campaigns.models import Tag
+        self.tag = Tag.objects.create(name='Pediatric')
+
+        self.c1 = Campaign.objects.create(
+            title='Medical Treatment for Ahmed',
+            story='Surgery needed',
+            target_amount=15000,
+            owner=self.user,
+            status=CampaignStatus.ACTIVE
+        )
+        self.c1.tags.add(self.tag)
+
+        self.c2 = Campaign.objects.create(
+            title='Medical Device for Clinic',
+            story='Equipment support',
+            target_amount=30000,
+            owner=self.user,
+            status=CampaignStatus.ACTIVE
+        )
+
+    def test_autocomplete_by_title(self):
+        url = reverse('campaigns:campaign_autocomplete') + '?q=Medical'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        titles = [s['title'] for s in data['suggestions']]
+        self.assertIn('Medical Treatment for Ahmed', titles)
+        self.assertIn('Medical Device for Clinic', titles)
+
+    def test_autocomplete_by_tag(self):
+        url = reverse('campaigns:campaign_autocomplete') + '?q=pediatric'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(len(data['suggestions']), 1)
+        self.assertEqual(data['suggestions'][0]['title'], 'Medical Treatment for Ahmed')
+        self.assertIn('Tag', data['suggestions'][0]['match_type'])
+
+    def test_autocomplete_partial_and_case_insensitive(self):
+        url = reverse('campaigns:campaign_autocomplete') + '?q=medic'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(len(data['suggestions']) >= 2)
+
+    def test_autocomplete_short_query(self):
+        url = reverse('campaigns:campaign_autocomplete') + '?q=m'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(len(data['suggestions']), 0)
+
+    def test_autocomplete_limit_max(self):
+        # Create 10 campaigns matching 'Batch'
+        for i in range(10):
+            Campaign.objects.create(
+                title=f'Batch Campaign {i}',
+                story='Story',
+                target_amount=5000,
+                owner=self.user,
+                status=CampaignStatus.ACTIVE
+            )
+        url = reverse('campaigns:campaign_autocomplete') + '?q=batch'
+        response = self.client.get(url)
+        data = response.json()
+        self.assertLessEqual(len(data['suggestions']), 6)
+
+    def test_existing_search_endpoint_remains_unchanged(self):
+        url = reverse('campaigns:case_list') + '?q=Medical'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('campaigns', response.context)
+
+
+class HomepageTagIntegrationTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email='hometag@egystory.com',
+            password='HomeTagUser@2026',
+            first_name='Home',
+            last_name='Tag'
+        )
+        from campaigns.models import Tag
+        self.social_tag = Tag.objects.create(name='Social', slug='social')
+        self.medical_tag = Tag.objects.create(name='Medical', slug='medical')
+
+        self.c_social = Campaign.objects.create(
+            title='Social Community Project',
+            story='Helping families in local village',
+            target_amount=12000,
+            owner=self.user,
+            status=CampaignStatus.ACTIVE
+        )
+        self.c_social.tags.add(self.social_tag)
+
+        self.c_medical = Campaign.objects.create(
+            title='Medical Care Initiative',
+            story='Providing free medicine',
+            target_amount=25000,
+            owner=self.user,
+            status=CampaignStatus.ACTIVE
+        )
+        self.c_medical.tags.add(self.medical_tag)
+
+    def test_homepage_exposes_tags(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('tags', response.context)
+        self.assertIn(self.social_tag, response.context['tags'])
+        self.assertIn(self.medical_tag, response.context['tags'])
+
+    def test_homepage_tag_url_routes_to_case_list_with_slug(self):
+        url = reverse('campaigns:case_list') + '?tag=social'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['selected_tag'], 'social')
+        self.assertIn(self.c_social, response.context['campaigns'])
+        self.assertNotIn(self.c_medical, response.context['campaigns'])
+
+    def test_homepage_search_input_wrapper_structure(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode('utf-8')
+        self.assertIn('position: relative; flex: 1;', content)
+        self.assertIn('Search campaigns by title or tag...', content)
+
+
+
+
+
+
 
 
 

@@ -11,11 +11,11 @@
     <!-- Badges -->
     <div class="campaign-badges" style="position: absolute; top: 12px; left: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
       {% if campaign.category %}
-        <span class="badge" style="background: rgba(37, 99, 235, 0.9); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; backdrop-filter: blur(4px);">{{ campaign.category.name }}</span>
+        <span class="badge" style="background: rgba(228, 192, 113, 0.95); color: #1C1B18; padding: 4px 10px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.3);">{{ campaign.category.name }}</span>
       {% endif %}
       {% if campaign.tags.all %}
         {% for tag in campaign.tags.all %}
-          <span class="badge" style="background: rgba(16, 185, 129, 0.9); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; backdrop-filter: blur(4px);">{{ tag.name }}</span>
+          <span class="badge" style="background: rgba(16, 185, 129, 0.9); color: white; padding: 4px 10px; border-radius: var(--radius-full); font-size: 12px; font-weight: 600; backdrop-filter: blur(4px);">{{ tag.name }}</span>
         {% endfor %}
       {% endif %}
       {% if campaign.case_type == 'Rare / Ultra-Rare & High-Cost' %}

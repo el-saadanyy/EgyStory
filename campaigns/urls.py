@@ -5,6 +5,7 @@ app_name = 'campaigns'
 
 urlpatterns = [
     path('', views.case_list, name='case_list'),
+    path('autocomplete/', views.campaign_autocomplete, name='campaign_autocomplete'),
     path('new/', views.case_create, name='case_create'),
     path('<int:campaign_id>/', views.case_detail, name='case_detail'),
     path('<int:campaign_id>/rate/', views.rate_campaign, name='rate_campaign'),

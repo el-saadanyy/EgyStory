@@ -4,7 +4,7 @@
 {% block title %}Delete Account{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}?v=100.0">
 {% endblock %}
 
 {% block content %}
@@ -29,6 +29,19 @@
       <form method="post" novalidate id="delete-account-form">
         {% csrf_token %}
 
+        <!-- Password verification field -->
+        <div class="form-group" style="margin-bottom:20px;">
+          <label for="{{ form.password.id_for_label }}" class="form-label" style="font-weight:600;color:var(--color-text-primary);margin-bottom:8px;display:block;">
+            Current Password <span style="color:var(--color-danger);">*</span>
+          </label>
+          <input type="password" name="{{ form.password.html_name }}" id="{{ form.password.id_for_label }}"
+            class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+            placeholder="Enter your current password" autocomplete="current-password" required>
+          {% for error in form.password.errors %}
+            <span class="form-error" role="alert" style="color:var(--color-danger);font-size:13px;margin-top:4px;display:block;">{{ error }}</span>
+          {% endfor %}
+        </div>
+
         <!-- Confirmation checkbox -->
         <div class="form-group" style="margin-bottom:28px;">
           <div class="form-check">
@@ -39,7 +52,7 @@
             </label>
           </div>
           {% for error in form.confirm.errors %}
-            <span class="form-error" role="alert">{{ error }}</span>
+            <span class="form-error" role="alert" style="color:var(--color-danger);font-size:13px;margin-top:4px;display:block;">{{ error }}</span>
           {% endfor %}
         </div>
 

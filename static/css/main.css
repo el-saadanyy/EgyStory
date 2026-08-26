@@ -8,6 +8,8 @@
 
 /* ── CSS Custom Properties ─────────────────────────────────────── */
 :root {
+  color-scheme: dark;
+
   /* Typography */
   --font-arabic: 'Tajawal', sans-serif;
   --font-latin:  'Inter', sans-serif;

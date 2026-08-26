@@ -3,8 +3,55 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q, F
+from django.http import JsonResponse
+from django.urls import reverse
 from .models import Campaign, CampaignStatus, CaseType, Category, Tag, CampaignImage, CampaignRating, CampaignReport
 from .forms import CampaignForm, DonationForm, RatingForm, ReportForm
+
+def campaign_autocomplete(request):
+    """
+    Lightweight JSON endpoint for campaign search autocomplete suggestions.
+    Searches by title or tag name for active/completed campaigns.
+    """
+    query = request.GET.get('q', '').strip()
+    if not query or len(query) < 2:
+        return JsonResponse({'suggestions': []})
+
+    base_qs = Campaign.objects.filter(
+        status__in=[CampaignStatus.ACTIVE, CampaignStatus.COMPLETED]
+    )
+
+    # 1. Matches by title
+    title_matches = base_qs.filter(title__icontains=query).distinct()[:6]
+
+    suggestions = []
+    seen_ids = set()
+
+    for c in title_matches:
+        seen_ids.add(c.id)
+        suggestions.append({
+            'id': c.id,
+            'title': c.title,
+            'url': reverse('campaigns:case_detail', kwargs={'campaign_id': c.id}),
+            'match_type': 'Campaign'
+        })
+
+    # 2. Matches by tag (if limit not reached)
+    if len(suggestions) < 6:
+        tag_matches = base_qs.filter(tags__name__icontains=query).exclude(id__in=seen_ids).distinct()[:6 - len(suggestions)]
+        for c in tag_matches:
+            seen_ids.add(c.id)
+            matching_tag = c.tags.filter(name__icontains=query).first()
+            tag_label = f"Tag: {matching_tag.name}" if matching_tag else "Tag match"
+            suggestions.append({
+                'id': c.id,
+                'title': c.title,
+                'url': reverse('campaigns:case_detail', kwargs={'campaign_id': c.id}),
+                'match_type': tag_label
+            })
+
+    return JsonResponse({'suggestions': suggestions})
+
 
 def case_list(request):
     # Only show Active or Completed publicly

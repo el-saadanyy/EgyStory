@@ -53,12 +53,12 @@
       
       {% if categories %}
         {% for cat in categories %}
-          <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&category={{ cat.slug }}" class="badge {% if selected_category == cat.slug %}badge-info{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none; {% if selected_category == cat.slug %}background: rgba(37, 99, 235, 0.9); color: white;{% endif %}">📁 {{ cat.name }}</a>
+          <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&category={{ cat.slug }}" class="badge {% if selected_category == cat.slug %}badge-primary{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none; {% if selected_category == cat.slug %}background: #E4C071; color: #1C1B18; font-weight: 700; box-shadow: 0 0 12px rgba(228, 192, 113, 0.4);{% endif %}">📁 {{ cat.name }}</a>
         {% endfor %}
       {% endif %}
       {% if tags %}
         {% for tag in tags %}
-          <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&tag={{ tag.slug }}" class="badge {% if selected_tag == tag.slug %}badge-info{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none; {% if selected_tag == tag.slug %}background: rgba(16, 185, 129, 0.9); color: white;{% endif %}">🏷️ {{ tag.name }}</a>
+          <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&tag={{ tag.slug }}" class="badge {% if selected_tag == tag.slug %}badge-primary{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none; {% if selected_tag == tag.slug %}background: #E4C071; color: #1C1B18; font-weight: 700; box-shadow: 0 0 12px rgba(228, 192, 113, 0.4);{% endif %}">🏷️ {{ tag.name }}</a>
         {% endfor %}
       {% endif %}
     </div>

@@ -491,6 +491,146 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+
+  // 11. Search Autocomplete / Suggestions
+  const searchForms = document.querySelectorAll('form[action*="cases"]');
+  searchForms.forEach(function (form) {
+    const searchInput = form.querySelector('input[name="q"]');
+    if (!searchInput) return;
+
+    // Create autocomplete dropdown element
+    const dropdown = document.createElement('div');
+    dropdown.className = 'search-autocomplete-dropdown';
+    dropdown.style.display = 'none';
+
+    // Position relative wrapper
+    let wrapper = searchInput.parentElement;
+    if (wrapper) {
+      if (getComputedStyle(wrapper).position === 'static') {
+        wrapper.style.position = 'relative';
+      }
+      wrapper.appendChild(dropdown);
+    }
+
+    let debounceTimer = null;
+    let selectedIndex = -1;
+    let currentQuery = '';
+
+    function hideDropdown() {
+      dropdown.style.display = 'none';
+      dropdown.innerHTML = '';
+      selectedIndex = -1;
+    }
+
+    function renderSuggestions(suggestions, query) {
+      if (!suggestions || suggestions.length === 0) {
+        hideDropdown();
+        return;
+      }
+
+      dropdown.innerHTML = '';
+      selectedIndex = -1;
+
+      suggestions.forEach(function (item, index) {
+        const row = document.createElement('a');
+        row.href = item.url;
+        row.className = 'autocomplete-item';
+        row.dataset.index = index;
+
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'autocomplete-title';
+        titleSpan.textContent = item.title;
+
+        const badgeSpan = document.createElement('span');
+        badgeSpan.className = 'autocomplete-badge';
+        badgeSpan.textContent = item.match_type || 'Campaign';
+
+        row.appendChild(titleSpan);
+        row.appendChild(badgeSpan);
+
+        row.addEventListener('click', function (e) {
+          e.preventDefault();
+          window.location.href = item.url;
+        });
+
+        dropdown.appendChild(row);
+      });
+
+      dropdown.style.display = 'block';
+    }
+
+    function fetchSuggestions(query) {
+      if (!query || query.length < 2) {
+        hideDropdown();
+        return;
+      }
+
+      currentQuery = query;
+      const url = '/cases/autocomplete/?q=' + encodeURIComponent(query);
+
+      fetch(url)
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (currentQuery === query) {
+            renderSuggestions(data.suggestions, query);
+          }
+        })
+        .catch(function () { hideDropdown(); });
+    }
+
+    searchInput.addEventListener('input', function () {
+      const query = searchInput.value.trim();
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(function () {
+        fetchSuggestions(query);
+      }, 250);
+    });
+
+    searchInput.addEventListener('keydown', function (e) {
+      const items = dropdown.querySelectorAll('.autocomplete-item');
+      if (dropdown.style.display === 'block' && items.length > 0) {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          selectedIndex = (selectedIndex + 1) % items.length;
+          highlightItem(items);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+          highlightItem(items);
+        } else if (e.key === 'Escape') {
+          hideDropdown();
+        } else if (e.key === 'Enter') {
+          if (selectedIndex >= 0 && items[selectedIndex]) {
+            e.preventDefault();
+            items[selectedIndex].click();
+          }
+        }
+      }
+    });
+
+    function highlightItem(items) {
+      items.forEach(function (el, idx) {
+        if (idx === selectedIndex) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      });
+    }
+
+    document.addEventListener('click', function (e) {
+      if (!form.contains(e.target)) {
+        hideDropdown();
+      }
+    });
+
+    searchInput.addEventListener('focus', function () {
+      const query = searchInput.value.trim();
+      if (query.length >= 2 && dropdown.children.length > 0) {
+        dropdown.style.display = 'block';
+      }
+    });
+  });
 });
 
 

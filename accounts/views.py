@@ -296,7 +296,7 @@ def profile_edit(request):
 
 @login_required
 def delete_account(request):
-    form = DeleteAccountForm(request.POST or None)
+    form = DeleteAccountForm(user=request.user, data=request.POST or None)
     if request.method == 'POST' and form.is_valid():
         user = request.user
         logout(request)

@@ -5,7 +5,7 @@
 {% block meta_description %}EgyStory — Egypt's crowdfunding platform. Help real people, fund real stories that matter.{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}?v=19.0">
+<link rel="stylesheet" href="{% static 'css/home.css' %}?v=101.0">
 {% endblock %}
 
 
@@ -34,9 +34,26 @@
       </div>
 
       <form action="{% url 'campaigns:case_list' %}" method="get" style="margin-top: 24px; display: flex; gap: 8px; max-width: 500px;">
-        <input type="text" name="q" placeholder="Search campaigns by title or tag..." class="form-control" style="border-radius: var(--radius-full); padding: 12px 20px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); font-size: 15px;">
+        <div style="position: relative; flex: 1;">
+          <input type="text" name="q" placeholder="Search campaigns by title or tag..." class="form-control" style="border-radius: var(--radius-full); padding: 12px 20px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); font-size: 15px; width: 100%;">
+        </div>
         <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-full); padding: 0 24px; font-weight: 600;">Search</button>
       </form>
+      
+      <!-- Homepage Popular Tag Chips -->
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; align-items: center;" class="hero-tag-chips">
+        <span style="font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 600;">Popular Tags:</span>
+        {% if tags %}
+          {% for tag in tags %}
+            <a href="{% url 'campaigns:case_list' %}?tag={{ tag.slug }}" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">🏷️ {{ tag.name }}</a>
+          {% endfor %}
+        {% else %}
+          <a href="{% url 'campaigns:case_list' %}?tag=education" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">🏷️ Education</a>
+          <a href="{% url 'campaigns:case_list' %}?tag=emergency" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">🏷️ Emergency</a>
+          <a href="{% url 'campaigns:case_list' %}?tag=medical" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">🏷️ Medical</a>
+          <a href="{% url 'campaigns:case_list' %}?tag=social" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">🏷️ Social</a>
+        {% endif %}
+      </div>
       
       <div class="hero-stats">
         <div>
@@ -166,24 +183,32 @@
 </section>
 {% endif %}
 
-<!-- ── Normal Cases ──────────────────────────────────────────── -->
+<!-- ── Normal Cases / Community Support ──────────────────────────────────── -->
 {% if normal_cases %}
-<section style="padding: 80px 0; background-color: var(--color-bg);">
+<section style="padding: 84px 0; background-color: var(--color-bg); position: relative;">
   <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
+    
+    <!-- Section Header Banner -->
+    <div style="background: linear-gradient(135deg, rgba(228, 192, 113, 0.08) 0%, rgba(42, 40, 35, 0.6) 100%); border: 1px solid rgba(228, 192, 113, 0.25); border-radius: var(--radius-xl); padding: 36px 40px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; box-shadow: 0 12px 32px rgba(0,0,0,0.3);">
       <div>
-        <div style="display: inline-flex; align-items: center; gap: 8px; color: var(--color-primary); font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(228, 192, 113, 0.15); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.3); padding: 6px 16px; border-radius: var(--radius-full); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">
           🤝 Community Support
         </div>
-        <h2 style="font-size: 32px; font-weight: 800; color: var(--color-text-primary);">Normal Cases</h2>
+        <h2 style="font-size: 34px; font-weight: 800; color: var(--color-text-primary); margin: 0; line-height: 1.2;">Normal Cases</h2>
+        <p style="color: var(--color-text-secondary); font-size: 16px; margin: 8px 0 0 0; max-width: 580px;">Support everyday stories and community campaigns making a direct, positive impact across Egypt.</p>
       </div>
-      <a href="{% url 'campaigns:case_list' %}?filter=active" class="btn btn-outline" style="border-radius: var(--radius-full); padding: 10px 24px;">See More</a>
+      <a href="{% url 'campaigns:case_list' %}?filter=active" class="btn btn-primary" style="padding: 12px 28px; font-size: 15px; font-weight: 700; box-shadow: 0 4px 16px rgba(228, 192, 113, 0.25);">
+        Explore All Cases →
+      </a>
     </div>
+
+    <!-- Campaigns Grid -->
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px;">
       {% for campaign in normal_cases %}
         {% include 'includes/campaign_card.html' %}
       {% endfor %}
     </div>
+
   </div>
 </section>
 {% endif %}
@@ -219,26 +244,26 @@
     </div>
     
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 32px; text-align: center;">
-      <div style="background: var(--color-bg); padding: 40px 32px; border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
-        <div style="width: 64px; height: 64px; background: rgba(198, 40, 40, 0.1); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 0 auto 24px;">1</div>
+      <div class="step-card">
+        <div class="step-number" style="width: 64px; height: 64px; background: rgba(198, 40, 40, 0.1); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 0 auto 24px;">1</div>
         <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">A Story Is Submitted</h3>
         <p style="color: var(--color-text-secondary); line-height: 1.6;">Register securely and share your campaign details with the community.</p>
       </div>
       
-      <div style="background: var(--color-bg); padding: 40px 32px; border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
-        <div style="width: 64px; height: 64px; background: rgba(198, 40, 40, 0.1); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 0 auto 24px;">2</div>
+      <div class="step-card">
+        <div class="step-number" style="width: 64px; height: 64px; background: rgba(198, 40, 40, 0.1); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 0 auto 24px;">2</div>
         <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">Admin Reviews It</h3>
         <p style="color: var(--color-text-secondary); line-height: 1.6;">Our team verifies the campaign to ensure trust and transparency.</p>
       </div>
       
-      <div style="background: var(--color-bg); padding: 40px 32px; border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
-        <div style="width: 64px; height: 64px; background: rgba(198, 40, 40, 0.1); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 0 auto 24px;">3</div>
+      <div class="step-card">
+        <div class="step-number" style="width: 64px; height: 64px; background: rgba(198, 40, 40, 0.1); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 0 auto 24px;">3</div>
         <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">People Support It</h3>
         <p style="color: var(--color-text-secondary); line-height: 1.6;">The Egyptian community donates securely to help you reach your target.</p>
       </div>
 
-      <div style="background: var(--color-bg); padding: 40px 32px; border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
-        <div style="width: 64px; height: 64px; background: rgba(22, 163, 74, 0.1); color: rgb(22, 163, 74); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 0 auto 24px;">4</div>
+      <div class="step-card">
+        <div class="step-number" style="width: 64px; height: 64px; background: rgba(22, 163, 74, 0.1); color: rgb(22, 163, 74); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; margin: 0 auto 24px;">4</div>
         <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">Goal Reached</h3>
         <p style="color: var(--color-text-secondary); line-height: 1.6;">Funds reach the people who need them. Real impact achieved.</p>
       </div>

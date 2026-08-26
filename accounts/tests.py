@@ -312,3 +312,68 @@ class UserProfileFieldsTests(TestCase):
         self.assertIsNone(old_user.birthdate)
         self.assertIsNone(old_user.facebook)
         self.assertIsNone(old_user.country)
+
+
+class PasswordProtectedAccountDeletionTests(TestCase):
+    def setUp(self):
+        self.password = 'SecureUserPass123!'
+        self.user = User.objects.create_user(
+            email='delete_test_user@egystory.com',
+            password=self.password,
+            first_name='Delete',
+            last_name='Tester',
+            phone='01099998888',
+            is_active=True
+        )
+        self.delete_url = reverse('delete_account')
+
+    def test_unauthenticated_user_cannot_access_or_delete_account(self):
+        # GET access denied / redirected to login
+        get_response = self.client.get(self.delete_url)
+        self.assertEqual(get_response.status_code, 302)
+        self.assertIn('/accounts/login/', get_response.url)
+
+        # POST deletion denied / redirected to login
+        post_response = self.client.post(self.delete_url, {'confirm': 'on', 'password': self.password})
+        self.assertEqual(post_response.status_code, 302)
+        self.assertTrue(User.objects.filter(pk=self.user.pk).exists())
+
+    def test_authenticated_user_can_access_delete_page(self):
+        self.client.force_login(self.user)
+        response = self.client.get(self.delete_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'accounts/delete_confirm.html')
+
+    def test_empty_password_prevents_account_deletion(self):
+        self.client.force_login(self.user)
+        response = self.client.post(self.delete_url, {'confirm': 'on', 'password': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(User.objects.filter(pk=self.user.pk).exists())
+        self.assertFormError(response.context['form'], 'password', 'Please enter your current password to confirm deletion.')
+
+    def test_incorrect_password_prevents_account_deletion(self):
+        self.client.force_login(self.user)
+        response = self.client.post(self.delete_url, {'confirm': 'on', 'password': 'WrongPassword123'})
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(User.objects.filter(pk=self.user.pk).exists())
+        self.assertFormError(response.context['form'], 'password', 'Incorrect password. Please enter your current password.')
+
+    def test_correct_password_deletes_own_account(self):
+        self.client.force_login(self.user)
+        response = self.client.post(self.delete_url, {'confirm': 'on', 'password': self.password})
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(User.objects.filter(pk=self.user.pk).exists())
+
+    def test_user_cannot_delete_another_user_account(self):
+        other_user = User.objects.create_user(
+            email='other_user@egystory.com',
+            password='OtherUserPass123!',
+            first_name='Other',
+            last_name='User',
+            phone='01011112222',
+            is_active=True
+        )
+        self.client.force_login(self.user)
+        self.client.post(self.delete_url, {'confirm': 'on', 'password': self.password})
+        self.assertTrue(User.objects.filter(pk=other_user.pk).exists())
+
