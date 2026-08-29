@@ -33,7 +33,8 @@ def register(request):
     form = RegistrationForm(request.POST or None, request.FILES or None)
     if request.method == 'POST' and form.is_valid():
         email = form.cleaned_data.get('email')
-        existing_user = User.objects.filter(email=email, is_active=False).first()
+        existing_user = User.objects.filter(
+            email=email, is_active=False).first()
 
         if existing_user:
             # Re-use existing inactive user
@@ -53,7 +54,7 @@ def register(request):
 
         # Delete any existing activation tokens for this user
         ActivationToken.objects.filter(user=user).delete()
-        
+
         # Create activation token
         token = ActivationToken.objects.create(user=user)
 
@@ -79,23 +80,24 @@ def register(request):
             )
             if not sent:
                 raise Exception("Email failed to send (send_mail returned 0)")
-                
+
             request.session['activation_email'] = user.email
             messages.success(
                 request,
                 f'Account created! We sent a 6-digit verification code to {user.email}.'
             )
             return redirect('verify_otp')
-            
+
         except Exception as e:
-            logger.error(f"SMTP Email Delivery Error during registration: {str(e)}", exc_info=True)
-            
+            logger.error(
+                f"SMTP Email Delivery Error during registration: {str(e)}", exc_info=True)
+
             # Clean up the token we just made
             token.delete()
             # Only delete the user if they were just created in this request
             if is_new_user:
                 user.delete()
-                
+
             messages.error(
                 request,
                 'Failed to send the activation email. Please ensure your email is correct and try again.'
@@ -126,14 +128,16 @@ def activate(request, token):
     user.save()
     activation_token.delete()
 
-    messages.success(request, 'Your account has been activated! You can now log in.')
+    messages.success(
+        request, 'Your account has been activated! You can now log in.')
     return render(request, 'accounts/activation_success.html', {'user': user})
 
 
 def verify_otp(request):
     email = request.session.get('activation_email')
     if not email:
-        messages.error(request, 'No pending activation found. Please register or log in.')
+        messages.error(
+            request, 'No pending activation found. Please register or log in.')
         return redirect('login')
 
     try:
@@ -148,11 +152,13 @@ def verify_otp(request):
     if request.method == 'POST':
         otp = request.POST.get('otp', '').strip()
         try:
-            activation_token = ActivationToken.objects.get(user=user, token=otp)
-            
+            activation_token = ActivationToken.objects.get(
+                user=user, token=otp)
+
             if activation_token.is_expired():
                 activation_token.delete()
-                messages.error(request, 'This OTP has expired. Please request a new one.')
+                messages.error(
+                    request, 'This OTP has expired. Please request a new one.')
             else:
                 user.is_active = True
                 user.save()
@@ -160,9 +166,10 @@ def verify_otp(request):
                 # Clear session
                 if 'activation_email' in request.session:
                     del request.session['activation_email']
-                messages.success(request, 'Your account has been activated! You can now log in.')
+                messages.success(
+                    request, 'Your account has been activated! You can now log in.')
                 return redirect('login')
-                
+
         except ActivationToken.DoesNotExist:
             messages.error(request, 'Invalid OTP. Please try again.')
 
@@ -173,18 +180,18 @@ def resend_otp(request):
     email = request.session.get('activation_email')
     if not email:
         return redirect('login')
-        
+
     try:
         user = User.objects.get(email=email)
         if user.is_active:
             return redirect('login')
-            
+
         # Delete old token if exists
         ActivationToken.objects.filter(user=user).delete()
-        
+
         # Create new token
         token = ActivationToken.objects.create(user=user)
-        
+
         # Send email
         subject = 'Activate your EgyStory account'
         html_message = render_to_string('accounts/activation_email.html', {
@@ -204,17 +211,20 @@ def resend_otp(request):
             )
             if not sent:
                 raise Exception("Email failed to send (send_mail returned 0)")
-                
-            messages.success(request, f'A new verification code has been sent to {email}.')
+
+            messages.success(
+                request, f'A new verification code has been sent to {email}.')
         except Exception as e:
-            logger.error(f"SMTP Email Delivery Error during resend OTP: {str(e)}", exc_info=True)
+            logger.error(
+                f"SMTP Email Delivery Error during resend OTP: {str(e)}", exc_info=True)
             # Delete the token we just created because the email failed
             token.delete()
-            messages.error(request, 'Failed to send the activation email. Please try again later.')
-            
+            messages.error(
+                request, 'Failed to send the activation email. Please try again later.')
+
     except User.DoesNotExist:
         pass
-        
+
     return redirect('verify_otp')
 
 
@@ -245,7 +255,8 @@ def login_view(request):
         user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, 'Welcome back! You have been logged in successfully.')
+            messages.success(
+                request, 'Welcome back! You have been logged in successfully.')
             next_url = request.GET.get('next', 'home')
             return redirect(next_url)
         else:
@@ -268,8 +279,10 @@ def logout_view(request):
 @login_required
 def profile(request):
     from campaigns.models import Campaign, Donation
-    user_campaigns = Campaign.objects.filter(owner=request.user).order_by('-created_at')
-    user_donations = Donation.objects.filter(donor_email=request.user.email, is_anonymous=False).order_by('-created_at')
+    user_campaigns = Campaign.objects.filter(
+        owner=request.user).order_by('-created_at')
+    user_donations = Donation.objects.filter(
+        donor_email=request.user.email, is_anonymous=False).order_by('-created_at')
     return render(request, 'accounts/profile.html', {
         'user': request.user,
         'user_campaigns': user_campaigns,
