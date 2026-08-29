@@ -3,60 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login — EgyStory</title>
+  <title>Admin Sign In — EgyStory</title>
   {% load static %}
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
-  <link rel="stylesheet" href="{% static 'css/components.css' %}">
-  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
-  <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'css/main.css' %}?v=131.0">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}?v=131.0">
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}?v=235.0">
+  <link rel="stylesheet" href="{% static 'css/auth.css' %}?v=131.0">
 </head>
-<body>
+<body style="background-color: #11100E; min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow-x: hidden; font-family: var(--font-sans);">
 
-<div class="admin-login-page">
-  <div class="admin-login-card">
+<!-- Ambient gold glow -->
+<div style="position: absolute; top: 10%; left: 50%; transform: translateX(-50%); width: 600px; height: 350px; background: radial-gradient(ellipse at center, rgba(228, 192, 113, 0.12) 0%, transparent 70%); pointer-events: none;" aria-hidden="true"></div>
 
-    <div class="admin-login-header">
-      <img src="{% static 'images/logo.svg' %}?v=2.0" alt="EgyStory" height="36" class="admin-login-logo">
-      <div class="admin-login-badge">Admin Access</div>
-      <h1 class="admin-login-title">Admin Sign In</h1>
-      <p class="admin-login-subtitle">
-        Restricted to authorized administrators only.
+<div class="admin-login-page" style="width: 100%; max-width: 460px; padding: 24px; position: relative; z-index: 10;">
+  <div class="admin-card" style="padding: 40px 36px; border-radius: 28px !important; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(228, 192, 113, 0.2);">
+
+    <div style="text-align: center; margin-bottom: 32px;">
+      <a href="{% url 'home' %}" style="display: inline-block; margin-bottom: 16px;">
+        <img src="{% static 'images/logo.svg' %}?v=2.0" alt="EgyStory" height="36">
+      </a>
+      <div style="margin-bottom: 12px;">
+        <span class="admin-brand-badge">🛡️ Administration</span>
+      </div>
+      <h1 style="font-size: 24px; font-weight: 900; color: #FFFFFF; letter-spacing: -0.3px; margin: 0 0 6px 0;">Sign In to Console</h1>
+      <p style="color: #AFA793; font-size: 13.5px; margin: 0;">
+        Restricted to verified system staff &amp; administrators.
       </p>
     </div>
 
     {% if messages %}
       {% for message in messages %}
-        <div class="alert alert-error admin-login-alert" role="alert">{{ message }}</div>
+        <div style="background: rgba(220, 38, 38, 0.15); color: #f87171; border: 1px solid rgba(220, 38, 38, 0.35); padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-weight: 600; font-size: 13.5px; text-align: center;" role="alert">
+          {{ message }}
+        </div>
       {% endfor %}
     {% endif %}
 
-    <form method="post" novalidate id="admin-login-form">
+    <form method="post" novalidate id="admin-login-form" style="padding: 0; margin: 0;">
       {% csrf_token %}
 
-      <div class="form-group">
-        <label for="id_email" class="form-label">Admin Email</label>
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label for="id_email" class="form-label">Administrator Email</label>
         <input type="email" name="email" id="id_email" class="form-control"
-          placeholder="admin@egystory.com" autocomplete="email" required autofocus>
+          placeholder="admin@egystory.com" autocomplete="email" required autofocus style="padding: 13px 18px;">
       </div>
 
-      <div class="form-group">
+      <div class="form-group" style="margin-bottom: 26px;">
         <label for="id_password" class="form-label">Password</label>
-        <div class="password-field">
+        <div class="password-field" style="position: relative;">
           <input type="password" name="password" id="id_password" class="form-control"
-            placeholder="Password" autocomplete="current-password" required>
-          <button type="button" class="password-toggle" aria-label="Show password">
+            placeholder="Enter password..." autocomplete="current-password" required style="padding: 13px 18px;">
+          <button type="button" class="password-toggle" aria-label="Show password" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #AFA793; cursor: pointer;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-full btn-lg" id="admin-login-btn">
-        Sign In to Admin Panel
+      <button type="submit" class="btn btn-primary" id="admin-login-btn" style="width: 100%; padding: 14px; font-size: 15px; font-weight: 800; justify-content: center; border-radius: var(--radius-full);">
+        Authorize &amp; Sign In &rarr;
       </button>
     </form>
 
-    <div class="admin-login-footer">
-      <a href="{% url 'home' %}" class="admin-login-back">← Back to EgyStory</a>
+    <div style="text-align: center; margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+      <a href="{% url 'home' %}" style="color: #E4C071; text-decoration: underline; font-size: 13.5px; font-weight: 600;">
+        &larr; Return to EgyStory Home
+      </a>
     </div>
 
   </div>

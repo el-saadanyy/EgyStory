@@ -68,6 +68,7 @@ class Campaign(models.Model):
     deadline = models.DateField(null=True, blank=True)
     supporting_document = models.FileField(upload_to='campaigns/documents/', null=True, blank=True)
     is_manual_critical = models.BooleanField(default=False, verbose_name="Manually Marked Critical")
+    is_featured = models.BooleanField(default=False, verbose_name="Featured Campaign")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

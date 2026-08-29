@@ -5,32 +5,38 @@
 {% block page_title %}Edit Campaign{% endblock %}
 
 {% block admin_content %}
-<div style="max-width: 900px; margin: 0 auto;">
+<div style="max-width: 920px; margin: 0 auto;">
 
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6);">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
     <div>
-      <h2 style="font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 4px;">Edit Campaign</h2>
-      <p style="color: var(--color-text-secondary); font-size: 14px;">Manage campaign details and assign multiple tags</p>
+      <div class="section-title" style="margin-bottom: 4px;">
+        <span>✏️ Edit Campaign &amp; Tags</span>
+      </div>
+      <p style="color: #AFA793; font-size: 14px; margin: 0;">Update story details, categorization, status, and associated tags.</p>
     </div>
-    <a href="{% url 'admin_dashboard' %}" class="btn btn-outline btn-sm" style="border-color: rgba(255,255,255,0.2); color: #fff;">← Back to Dashboard</a>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-outline btn-sm">
+      &larr; Back to Dashboard
+    </a>
   </div>
 
-  <div class="admin-card" style="padding: var(--space-6);">
+  <div class="admin-card">
     <form method="post" id="admin-campaign-form">
       {% csrf_token %}
 
       <!-- Section 1: Basic Info -->
-      <h3 style="font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 10px;">Basic Information</h3>
-
-      <div style="margin-bottom: 20px;">
-        <label style="display: block; font-weight: 700; color: #fff; margin-bottom: 8px;">Title</label>
-        <input type="text" name="title" value="{{ campaign.title }}" required class="form-control" style="width: 100%; padding: 12px 16px; border-radius: var(--radius-md); background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--color-border); font-size: 16px;">
+      <div style="font-size: 16px; font-weight: 800; color: #FFFFFF; margin-bottom: 20px; border-bottom: 1px solid rgba(228, 192, 113, 0.18); padding-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+        <span>📌</span> Basic Campaign Information
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px;">
-        <div>
-          <label style="display: block; font-weight: 700; color: #fff; margin-bottom: 8px;">Category</label>
-          <select name="category" class="form-control" style="width: 100%; padding: 10px 14px; border-radius: var(--radius-md); background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--color-border);">
+      <div class="form-group">
+        <label class="form-label">Campaign Title <span style="color: #f87171;">*</span></label>
+        <input type="text" name="title" value="{{ campaign.title }}" required class="form-control" placeholder="Enter campaign title...">
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 24px;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label">Category</label>
+          <select name="category" class="form-control">
             <option value="">-- No Category --</option>
             {% for cat in categories %}
               <option value="{{ cat.id }}" {% if campaign.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
@@ -38,18 +44,18 @@
           </select>
         </div>
 
-        <div>
-          <label style="display: block; font-weight: 700; color: #fff; margin-bottom: 8px;">Case Type</label>
-          <select name="case_type" class="form-control" style="width: 100%; padding: 10px 14px; border-radius: var(--radius-md); background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--color-border);">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label">Case Classification</label>
+          <select name="case_type" class="form-control">
             {% for val, label in case_types %}
               <option value="{{ val }}" {% if campaign.case_type == val %}selected{% endif %}>{{ label }}</option>
             {% endfor %}
           </select>
         </div>
 
-        <div>
-          <label style="display: block; font-weight: 700; color: #fff; margin-bottom: 8px;">Status</label>
-          <select name="status" class="form-control" style="width: 100%; padding: 10px 14px; border-radius: var(--radius-md); background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--color-border);">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label">Campaign Status</label>
+          <select name="status" class="form-control">
             {% for val, label in status_choices %}
               <option value="{{ val }}" {% if campaign.status == val %}selected{% endif %}>{{ label }}</option>
             {% endfor %}
@@ -57,38 +63,48 @@
         </div>
       </div>
 
-      <!-- Section 2: Multiple Tags Selection -->
-      <h3 style="font-size: 18px; font-weight: 700; color: #fff; margin-top: 32px; margin-bottom: 16px; border-bottom: 1px solid var(--color-border); padding-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-        🏷️ Assign Multiple Tags
-      </h3>
-      <p style="color: var(--color-text-secondary); font-size: 14px; margin-bottom: 16px;">Select all tags that apply to this campaign (multiple selections allowed):</p>
+      <div style="margin-bottom: 24px;">
+        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 14px 18px; background: rgba(228, 192, 113, 0.08); border-radius: var(--radius-lg); border: 1.5px solid rgba(228, 192, 113, 0.3);">
+          <input type="checkbox" name="is_featured" {% if campaign.is_featured %}checked{% endif %} style="width: 20px; height: 20px; accent-color: #E4C071; cursor: pointer;">
+          <div>
+            <div style="color: #FFFFFF; font-weight: 800; font-size: 15px;">🌟 Mark as Featured Campaign</div>
+            <div style="color: #AFA793; font-size: 13px; margin-top: 2px;">Designates this story as an administrative featured showcase.</div>
+          </div>
+        </label>
+      </div>
 
-      <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); padding: 20px; border-radius: var(--radius-md); margin-bottom: 32px;">
+      <!-- Section 2: Multiple Tags Selection -->
+      <div style="font-size: 16px; font-weight: 800; color: #FFFFFF; margin-top: 32px; margin-bottom: 14px; border-bottom: 1px solid rgba(228, 192, 113, 0.18); padding-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+        <span>🏷️</span> Assign Platform Tags
+      </div>
+      <p style="color: #AFA793; font-size: 13.5px; margin-bottom: 16px;">Select all tags that apply to this case story:</p>
+
+      <div style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(228, 192, 113, 0.2); padding: 20px; border-radius: var(--radius-xl); margin-bottom: 28px;">
         {% if all_tags %}
-          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px;">
             {% for tag in all_tags %}
-              <label style="display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 600; cursor: pointer; padding: 10px 14px; background: rgba(255,255,255,0.05); border-radius: var(--radius-md); border: 1px solid var(--color-border); transition: all 0.2s;">
-                <input type="checkbox" name="tags" value="{{ tag.id }}" {% if tag.id in campaign_tag_ids %}checked{% endif %} style="width: 18px; height: 18px; accent-color: var(--color-primary); cursor: pointer;">
-                <span>🏷️ {{ tag.name }}</span>
+              <label style="display: flex; align-items: center; gap: 10px; color: #FFFFFF; font-weight: 600; cursor: pointer; padding: 10px 14px; background: rgba(255, 255, 255, 0.04); border-radius: var(--radius-lg); border: 1px solid rgba(228, 192, 113, 0.2); transition: all 0.2s;">
+                <input type="checkbox" name="tags" value="{{ tag.id }}" {% if tag.id in campaign_tag_ids %}checked{% endif %} style="width: 18px; height: 18px; accent-color: #E4C071; cursor: pointer;">
+                <span style="font-size: 14px;">🏷️ {{ tag.name }}</span>
               </label>
             {% endfor %}
           </div>
         {% else %}
-          <div style="color: var(--color-text-muted); font-size: 14px; text-align: center; padding: 16px;">
-            No tags found in system. <a href="{% url 'admin_tags' %}" style="color: var(--color-primary); font-weight: bold;">Create Tags first</a>
+          <div style="color: #AFA793; font-size: 14px; text-align: center; padding: 16px;">
+            No tags found in the system. <a href="{% url 'admin_tags' %}" style="color: #E4C071; font-weight: 700; text-decoration: underline;">Create Tags first</a>
           </div>
         {% endif %}
       </div>
 
       <!-- Section 3: Story -->
-      <div style="margin-bottom: 24px;">
-        <label style="display: block; font-weight: 700; color: #fff; margin-bottom: 8px;">Story Description</label>
-        <textarea name="story" rows="6" class="form-control" style="width: 100%; padding: 12px 16px; border-radius: var(--radius-md); background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--color-border); font-size: 15px;">{{ campaign.story }}</textarea>
+      <div class="form-group">
+        <label class="form-label">Story Narrative / Description</label>
+        <textarea name="story" rows="7" class="form-control" placeholder="Write full campaign story narrative...">{{ campaign.story }}</textarea>
       </div>
 
-      <div style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--color-border);">
-        <a href="{% url 'admin_dashboard' %}" class="btn btn-ghost" style="color: var(--color-text-muted);">Cancel</a>
-        <button type="submit" class="btn btn-primary" style="padding: 14px 32px; font-weight: 700; font-size: 16px;">Save Campaign Changes</button>
+      <div style="display: flex; gap: 14px; justify-content: flex-end; padding-top: 20px; border-top: 1px solid rgba(228, 192, 113, 0.18); margin-top: 28px;">
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-ghost">Cancel</a>
+        <button type="submit" class="btn btn-primary" style="padding: 12px 32px; font-weight: 800;">Save Campaign Changes</button>
       </div>
     </form>
   </div>

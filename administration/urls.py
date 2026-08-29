@@ -7,6 +7,8 @@ urlpatterns = [
     path('campaign/<int:campaign_id>/edit/', views.admin_campaign_edit, name='admin_campaign_edit'),
 
     path('campaign/<int:campaign_id>/toggle-critical/', views.toggle_manual_critical, name='admin_toggle_manual_critical'),
+    path('campaign/<int:campaign_id>/toggle-featured/', views.toggle_featured, name='admin_toggle_featured'),
+    path('campaign/<int:campaign_id>/delete-completed/', views.delete_completed_campaign, name='admin_delete_completed_campaign'),
     path('campaign/<int:campaign_id>/<str:action>/', views.campaign_action, name='admin_campaign_action'),
     path('login/', views.admin_login, name='admin_login'),
     path('logout/', views.admin_logout, name='admin_logout'),
