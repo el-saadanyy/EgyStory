@@ -341,4 +341,156 @@ class AdminTagManagementTests(TestCase):
         self.assertFalse(Tag.objects.filter(id=self.tag.id).exists())
 
 
+class AdminFeaturedCampaignTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.staff_user = User.objects.create_user(email='stafffeat@egystory.com', password='password123', is_staff=True, is_active=True)
+        self.normal_user = User.objects.create_user(email='userfeat@egystory.com', password='password123', is_active=True)
+        from campaigns.models import Campaign, CampaignStatus, CaseType
+        from decimal import Decimal
+        self.campaign = Campaign.objects.create(
+            owner=self.normal_user,
+            title='Test Featured Campaign',
+            story='Story text for testing featured flag',
+            target_amount=Decimal('10000.00'),
+            status=CampaignStatus.ACTIVE,
+            case_type=CaseType.NORMAL,
+            is_featured=False
+        )
+
+    def test_unauthenticated_cannot_toggle_featured(self):
+        response = self.client.post(reverse('admin_toggle_featured', args=[self.campaign.id]))
+        self.assertRedirects(response, reverse('admin_login'))
+
+    def test_non_staff_cannot_toggle_featured(self):
+        self.client.force_login(self.normal_user)
+        response = self.client.post(reverse('admin_toggle_featured', args=[self.campaign.id]))
+        self.assertEqual(response.status_code, 403)
+
+    def test_staff_can_toggle_featured_on_and_off(self):
+        self.client.force_login(self.staff_user)
+        
+        # Toggle ON
+        response = self.client.post(reverse('admin_toggle_featured', args=[self.campaign.id]), follow=True)
+        self.assertRedirects(response, reverse('admin_dashboard'))
+        self.campaign.refresh_from_db()
+        self.assertTrue(self.campaign.is_featured)
+
+        # Toggle OFF
+        response = self.client.post(reverse('admin_toggle_featured', args=[self.campaign.id]), follow=True)
+        self.assertRedirects(response, reverse('admin_dashboard'))
+        self.campaign.refresh_from_db()
+        self.assertFalse(self.campaign.is_featured)
+
+    def test_admin_campaign_edit_updates_is_featured(self):
+        self.client.force_login(self.staff_user)
+        response = self.client.post(reverse('admin_campaign_edit', args=[self.campaign.id]), {
+            'title': 'Updated Title',
+            'story': 'Updated Story',
+            'case_type': 'Normal',
+            'status': 'Active',
+            'is_featured': 'on',
+        }, follow=True)
+        self.assertRedirects(response, reverse('admin_dashboard'))
+        self.campaign.refresh_from_db()
+        self.assertTrue(self.campaign.is_featured)
+
+
+class AdminCompletedCampaignTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.staff_user = User.objects.create_user(email='staffcomp@egystory.com', password='password123', is_staff=True, is_active=True)
+        self.normal_user = User.objects.create_user(email='usercomp@egystory.com', password='password123', is_active=True)
+        from campaigns.models import Campaign, CampaignStatus, CaseType
+        from decimal import Decimal
+
+        self.completed_campaign = Campaign.objects.create(
+            owner=self.normal_user,
+            title='Completed Medical Case',
+            story='Successfully funded story',
+            target_amount=Decimal('50000.00'),
+            raised_amount=Decimal('50000.00'),
+            status=CampaignStatus.COMPLETED,
+            case_type=CaseType.NORMAL
+        )
+
+        self.active_campaign = Campaign.objects.create(
+            owner=self.normal_user,
+            title='Active Ongoing Case',
+            story='Currently active story',
+            target_amount=Decimal('30000.00'),
+            raised_amount=Decimal('10000.00'),
+            status=CampaignStatus.ACTIVE,
+            case_type=CaseType.NORMAL
+        )
+
+        self.pending_campaign = Campaign.objects.create(
+            owner=self.normal_user,
+            title='Pending Review Case',
+            story='Story waiting for review',
+            target_amount=Decimal('20000.00'),
+            status=CampaignStatus.PENDING,
+            case_type=CaseType.NORMAL
+        )
+
+    def test_unauthenticated_cannot_access_dashboard(self):
+        response = self.client.get(reverse('admin_dashboard'))
+        self.assertRedirects(response, reverse('admin_login'))
+
+    def test_non_staff_cannot_access_dashboard(self):
+        self.client.force_login(self.normal_user)
+        response = self.client.get(reverse('admin_dashboard'))
+        self.assertEqual(response.status_code, 403)
+
+    def test_staff_dashboard_displays_completed_campaigns(self):
+        self.client.force_login(self.staff_user)
+        response = self.client.get(reverse('admin_dashboard'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('completed_campaigns', response.context)
+        self.assertContains(response, 'Completed Medical Case')
+        self.assertIn(self.completed_campaign, response.context['completed_campaigns'])
+        self.assertNotIn(self.active_campaign, response.context['completed_campaigns'])
+        self.assertNotIn(self.pending_campaign, response.context['completed_campaigns'])
+
+    def test_non_staff_cannot_delete_completed_campaign(self):
+        self.client.force_login(self.normal_user)
+        response = self.client.post(reverse('admin_delete_completed_campaign', args=[self.completed_campaign.id]))
+        self.assertEqual(response.status_code, 403)
+        from campaigns.models import Campaign
+        self.assertTrue(Campaign.objects.filter(id=self.completed_campaign.id).exists())
+
+    def test_get_request_does_not_delete_completed_campaign(self):
+        self.client.force_login(self.staff_user)
+        response = self.client.get(reverse('admin_delete_completed_campaign', args=[self.completed_campaign.id]))
+        self.assertRedirects(response, reverse('admin_dashboard'))
+        from campaigns.models import Campaign
+        self.assertTrue(Campaign.objects.filter(id=self.completed_campaign.id).exists())
+
+    def test_staff_can_delete_completed_campaign_via_post(self):
+        self.client.force_login(self.staff_user)
+        response = self.client.post(reverse('admin_delete_completed_campaign', args=[self.completed_campaign.id]), follow=True)
+        self.assertRedirects(response, reverse('admin_dashboard'))
+        from campaigns.models import Campaign
+        self.assertFalse(Campaign.objects.filter(id=self.completed_campaign.id).exists())
+        messages_list = list(response.context['messages'])
+        self.assertTrue(any('permanently deleted' in str(m) for m in messages_list))
+
+    def test_cannot_delete_non_completed_campaign_via_delete_completed_endpoint(self):
+        self.client.force_login(self.staff_user)
+        # Attempt to delete Active campaign
+        response = self.client.post(reverse('admin_delete_completed_campaign', args=[self.active_campaign.id]), follow=True)
+        self.assertRedirects(response, reverse('admin_dashboard'))
+        from campaigns.models import Campaign
+        self.assertTrue(Campaign.objects.filter(id=self.active_campaign.id).exists())
+        messages_list = list(response.context['messages'])
+        self.assertTrue(any('because it is not completed' in str(m) for m in messages_list))
+
+        # Attempt to delete Pending campaign
+        response2 = self.client.post(reverse('admin_delete_completed_campaign', args=[self.pending_campaign.id]), follow=True)
+        self.assertRedirects(response2, reverse('admin_dashboard'))
+        self.assertTrue(Campaign.objects.filter(id=self.pending_campaign.id).exists())
+
+
+
+
 

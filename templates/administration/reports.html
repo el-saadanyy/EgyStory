@@ -5,88 +5,107 @@
 {% block page_title %}Campaign Reports Moderation{% endblock %}
 
 {% block admin_content %}
-<div class="admin-card" style="padding: 28px 32px; margin-bottom: 24px; text-align: left;">
-  <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; border-bottom: 1px solid var(--color-border); padding-bottom: 20px;">
-    <div>
-      <h2 style="font-size: 20px; font-weight: 700; color: var(--color-text-primary); margin: 0 0 6px 0;">Campaign Reports Queue</h2>
-      <p style="font-size: 14px; color: var(--color-text-secondary); margin: 0;">Review flagged campaigns, verify user claims, and take appropriate moderation actions.</p>
+<div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
+  <div>
+    <div class="section-title" style="margin-bottom: 6px;">
+      <span>🚩 Campaign Reports Moderation</span>
     </div>
-    
-    <!-- Status Filter Buttons -->
-    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-      <a href="?status=all" class="btn btn-sm {% if current_status == 'all' %}btn-primary{% else %}btn-ghost{% endif %}">All</a>
-      <a href="?status=pending" class="btn btn-sm {% if current_status == 'pending' %}btn-primary{% else %}btn-ghost{% endif %}">Pending Review</a>
-      <a href="?status=reviewed" class="btn btn-sm {% if current_status == 'reviewed' %}btn-primary{% else %}btn-ghost{% endif %}">Reviewed</a>
-      <a href="?status=dismissed" class="btn btn-sm {% if current_status == 'dismissed' %}btn-primary{% else %}btn-ghost{% endif %}">Dismissed</a>
-      <a href="?status=action_taken" class="btn btn-sm {% if current_status == 'action_taken' %}btn-primary{% else %}btn-ghost{% endif %}">Action Taken</a>
-    </div>
+    <p style="font-size: 14px; color: #AFA793; margin: 0;">Review flagged cases, inspect reasons and user details, and take required actions.</p>
   </div>
+  
+  <!-- Status Filter Pills -->
+  <div class="admin-filter-bar">
+    <a href="?status=all" class="admin-filter-pill {% if current_status == 'all' %}active{% endif %}">All</a>
+    <a href="?status=pending" class="admin-filter-pill {% if current_status == 'pending' %}active{% endif %}">⏳ Pending</a>
+    <a href="?status=reviewed" class="admin-filter-pill {% if current_status == 'reviewed' %}active{% endif %}">✓ Reviewed</a>
+    <a href="?status=dismissed" class="admin-filter-pill {% if current_status == 'dismissed' %}active{% endif %}">✕ Dismissed</a>
+    <a href="?status=action_taken" class="admin-filter-pill {% if current_status == 'action_taken' %}active{% endif %}">⚡ Action Taken</a>
+  </div>
+</div>
 
+<div class="admin-card">
   {% if reports %}
     <div style="overflow-x: auto; width: 100%;">
-      <table class="admin-table" style="width: 100%; border-collapse: collapse; min-width: 750px; text-align: left;">
+      <table class="table">
         <thead>
-          <tr style="border-bottom: 2px solid var(--color-border); text-align: left; font-size: 12px; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
-            <th style="padding: 12px 16px;">ID</th>
-            <th style="padding: 12px 16px;">Campaign</th>
-            <th style="padding: 12px 16px;">Reason & Details</th>
-            <th style="padding: 12px 16px;">Reporter</th>
-            <th style="padding: 12px 16px;">Status</th>
-            <th style="padding: 12px 16px;">Submitted</th>
-            <th style="padding: 12px 16px; text-align: right;">Actions</th>
+          <tr>
+            <th style="width: 60px;">ID</th>
+            <th>Reported Campaign</th>
+            <th>Reason &amp; Details</th>
+            <th>Reporter</th>
+            <th>Report Status</th>
+            <th>Submitted</th>
+            <th class="actions-col" style="text-align: right; padding-right: 24px;">Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for report in reports %}
-            <tr style="border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: middle;">
-              <td style="padding: 16px; font-weight: 700; color: var(--color-text-muted);">#{{ report.id }}</td>
-              <td style="padding: 16px;">
-                <a href="{% url 'campaigns:case_detail' report.campaign.id %}" target="_blank" style="font-weight: 700; color: var(--color-primary); text-decoration: none;">
-                  {{ report.campaign.title|truncatechars:32 }}
-                </a>
-                <div style="font-size: 12px; color: var(--color-text-muted); margin-top: 2px;">Campaign Status: <span style="font-weight: 600;">{{ report.campaign.status }}</span></div>
-              </td>
-              <td style="padding: 16px;">
-                <span class="badge" style="background: rgba(220, 38, 38, 0.15); color: #f87171; border: 1px solid rgba(220, 38, 38, 0.3); padding: 4px 10px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-                  🚩 {{ report.get_reason_display }}
-                </span>
-                <div style="font-size: 13px; color: #d1d5db; margin-top: 8px; max-width: 320px; background: rgba(0,0,0,0.25); padding: 8px 12px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05); line-height: 1.5;">
-                  {{ report.details }}
+            <tr>
+              <td style="font-weight: 800; color: #E4C071;">#{{ report.id }}</td>
+              <td>
+                <div style="font-weight: 800; font-size: 15px; color: #FFFFFF; margin-bottom: 4px;">{{ report.campaign.title|truncatechars:36 }}</div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <a href="{% url 'campaigns:case_detail' report.campaign.id %}" target="_blank" style="font-size: 13px; font-weight: 600; color: #E4C071; text-decoration: underline;">
+                    View Live Story ↗
+                  </a>
+                  <span style="font-size: 12px; color: #AFA793;">({{ report.campaign.status }})</span>
                 </div>
               </td>
-              <td style="padding: 16px; font-size: 13px;">
-                {% if report.reporter %}
-                  <div style="font-weight: 600; color: var(--color-text-primary);">{{ report.reporter.get_full_name }}</div>
-                  <div style="color: var(--color-text-muted); font-size: 12px;">{{ report.reporter.email }}</div>
-                {% else %}
-                  <span style="color: var(--color-text-muted); font-style: italic;">Anonymous</span>
+              <td>
+                <span class="badge badge-danger" style="margin-bottom: 6px;">
+                  🚩 {{ report.get_reason_display }}
+                </span>
+                {% if report.details %}
+                  <div style="font-size: 13px; color: #D9CFB8; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: var(--radius-md); border: 1px solid rgba(228,192,113,0.15); line-height: 1.5; max-width: 320px;">
+                    {{ report.details }}
+                  </div>
                 {% endif %}
               </td>
-              <td style="padding: 16px;">
-                <span class="badge" style="padding: 4px 10px; font-size: 12px; font-weight: 600; border-radius: var(--radius-full); display: inline-block; background: {% if report.status == 'Pending Review' %}rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);{% elif report.status == 'Action Taken' %}rgba(220, 38, 38, 0.15); color: #ef4444; border: 1px solid rgba(220, 38, 38, 0.3);{% elif report.status == 'Dismissed' %}rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3);{% else %}rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);{% endif %}">
-                  {{ report.status }}
-                </span>
+              <td>
+                {% if report.reporter %}
+                  <strong style="color: #FFFFFF; font-size: 14px; display: block;">{{ report.reporter.get_full_name|default:report.reporter.email }}</strong>
+                  <span style="color: #AFA793; font-size: 12.5px;">{{ report.reporter.email }}</span>
+                {% else %}
+                  <span style="color: #AFA793; font-style: italic;">Anonymous Visitor</span>
+                {% endif %}
               </td>
-              <td style="padding: 16px; font-size: 13px; color: var(--color-text-muted); white-space: nowrap;">{{ report.created_at|date:"M d, Y" }}</td>
-              <td style="padding: 16px; text-align: right;">
-                <div style="display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; align-items: center;">
+              <td>
+                {% if report.status == 'Pending Review' %}
+                  <span class="badge badge-warning">⏳ Pending</span>
+                {% elif report.status == 'Action Taken' %}
+                  <span class="badge badge-danger">⚡ Action Taken</span>
+                {% elif report.status == 'Dismissed' %}
+                  <span class="badge badge-gray">✕ Dismissed</span>
+                {% else %}
+                  <span class="badge badge-success">✓ Reviewed</span>
+                {% endif %}
+              </td>
+              <td style="color: #AFA793; font-size: 13.5px; white-space: nowrap;">{{ report.created_at|date:"M d, Y" }}</td>
+              <td class="actions-col" style="text-align: right; padding-right: 24px;">
+                <div style="display: inline-flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; align-items: center;">
                   {% if report.status == 'Pending Review' %}
-                    <form method="post" action="{% url 'admin_report_action' report.id 'mark_reviewed' %}" style="display: inline-block; margin: 0; padding: 0;">
+                    <form method="post" action="{% url 'admin_report_action' report.id 'mark_reviewed' %}" style="display: inline; margin: 0; padding: 0;">
                       {% csrf_token %}
-                      <button type="submit" class="btn btn-sm btn-outline" title="Mark as Reviewed">Review</button>
+                      <button type="submit" class="btn btn-sm btn-outline" title="Mark as Reviewed">
+                        ✓ Review
+                      </button>
                     </form>
-                    <form method="post" action="{% url 'admin_report_action' report.id 'dismiss' %}" style="display: inline-block; margin: 0; padding: 0;">
+                    <form method="post" action="{% url 'admin_report_action' report.id 'dismiss' %}" style="display: inline; margin: 0; padding: 0;">
                       {% csrf_token %}
-                      <button type="submit" class="btn btn-sm btn-ghost" title="Dismiss Report">Dismiss</button>
+                      <button type="submit" class="btn btn-sm btn-ghost" title="Dismiss Report">
+                        ✕ Dismiss
+                      </button>
                     </form>
                     {% if report.campaign.status == 'Active' %}
-                      <form method="post" action="{% url 'admin_report_action' report.id 'cancel_campaign' %}" style="display: inline-block; margin: 0; padding: 0;" onsubmit="return confirm('Are you sure you want to CANCEL this campaign?');">
+                      <form method="post" action="{% url 'admin_report_action' report.id 'cancel_campaign' %}" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('⚠️ Are you sure you want to CANCEL this reported campaign?');">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-danger" title="Cancel Campaign">Cancel Campaign</button>
+                        <button type="submit" class="btn btn-sm btn-danger" title="Cancel Campaign">
+                          🚫 Cancel Case
+                        </button>
                       </form>
                     {% endif %}
                   {% else %}
-                    <span style="font-size: 12px; color: var(--color-text-muted);">No action pending</span>
+                    <span style="font-size: 13px; color: #AFA793;">Done</span>
                   {% endif %}
                 </div>
               </td>
@@ -96,10 +115,10 @@
       </table>
     </div>
   {% else %}
-    <div style="text-align: center; padding: 48px 24px; background: rgba(255,255,255,0.02); border-radius: var(--radius-lg); border: 1px dashed var(--color-border); margin-top: 12px;">
-      <div style="font-size: 32px; margin-bottom: 12px;">✅</div>
-      <h3 style="font-size: 18px; font-weight: 700; color: var(--color-text-primary); margin: 0 0 6px 0;">No Reports Found</h3>
-      <p style="font-size: 14px; color: var(--color-text-muted); margin: 0;">There are no campaign reports matching the selected filter status.</p>
+    <div class="admin-empty-state">
+      <div class="admin-empty-icon">✅</div>
+      <div class="admin-empty-title">No Reports Found</div>
+      <div style="font-size: 14.5px; color: #AFA793;">There are no campaign reports matching the selected filter status.</div>
     </div>
   {% endif %}
 </div>

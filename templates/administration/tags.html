@@ -5,65 +5,79 @@
 {% block page_title %}Tags Management{% endblock %}
 
 {% block admin_content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6);">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
   <div>
-    <h2 style="font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 4px;">Tags Management</h2>
-    <p style="color: var(--color-text-secondary); font-size: 14px;">Create, view, and manage tags for campaigns across the platform.</p>
+    <div class="section-title" style="margin-bottom: 6px;">
+      <span>🏷️ Tags &amp; Taxonomy Management</span>
+    </div>
+    <p style="color: #AFA793; font-size: 14px; margin: 0;">Create, organize, and manage categorization tags for stories across EgyStory.</p>
   </div>
 </div>
 
-<!-- Create New Tag Form -->
-<div class="admin-card" style="margin-bottom: var(--space-6); padding: var(--space-6);">
-  <h3 style="font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-    <span>➕</span> Add New Tag
-  </h3>
-  <form method="post" action="{% url 'admin_tags' %}" style="display: flex; gap: 12px; align-items: center; max-width: 600px;">
+<!-- Create New Tag Form Card -->
+<div class="admin-card" style="margin-bottom: 28px; padding: 24px 28px;">
+  <div style="font-size: 16px; font-weight: 800; color: #FFFFFF; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+    <span>➕</span> Add New Platform Tag
+  </div>
+  <form method="post" action="{% url 'admin_tags' %}" style="display: flex; gap: 14px; align-items: center; max-width: 620px; padding: 0; margin: 0;">
     {% csrf_token %}
-    <input type="text" name="name" placeholder="Enter tag name (e.g. Medical, Education, Relief)..." required class="form-control" style="flex: 1; padding: 10px 16px; border-radius: var(--radius-md); background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--color-border);">
-    <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-weight: 600;">Create Tag</button>
+    <input type="text" name="name" placeholder="Tag name (e.g. Medical Relief, Orphan Care, Education)..." required class="form-control" style="flex: 1; padding: 12px 18px; border-radius: var(--radius-lg); background: rgba(0, 0, 0, 0.4); color: #fff; border: 1px solid rgba(228, 192, 113, 0.25); font-size: 14.5px;">
+    <button type="submit" class="btn btn-primary" style="padding: 12px 24px; font-weight: 800; white-space: nowrap;">Create Tag</button>
   </form>
 </div>
 
-<!-- Tags List Table -->
-<div class="admin-card" style="padding: 0;">
+<!-- Tags List Table Card -->
+<div class="admin-card">
   {% if tags %}
-    <table class="table" style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr style="background: var(--color-bg-secondary); border-bottom: 1px solid var(--color-border); text-align: left;">
-          <th style="padding: var(--space-4);">Tag Name</th>
-          <th style="padding: var(--space-4);">Slug</th>
-          <th style="padding: var(--space-4);">Campaigns Count</th>
-          <th style="padding: var(--space-4);">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for tag in tags %}
-          <tr style="border-bottom: 1px solid var(--color-border);">
-            <td style="padding: var(--space-4); font-weight: 700; color: #fff;">
-              🏷️ {{ tag.name }}
-            </td>
-            <td style="padding: var(--space-4); color: var(--color-text-muted); font-family: monospace;">
-              {{ tag.slug }}
-            </td>
-            <td style="padding: var(--space-4);">
-              <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 4px; font-size: 13px; font-weight: 700;">
-                {{ tag.campaign_count }} campaign{{ tag.campaign_count|pluralize }}
-              </span>
-            </td>
-            <td style="padding: var(--space-4);">
-              <a href="{% url 'admin_edit_tag' tag.id %}" class="btn btn-outline btn-sm" style="padding: 6px 14px; font-size: 13px; margin-right: 8px; border-color: rgba(255,255,255,0.2); color: #fff;">Edit</a>
-              <form method="post" action="{% url 'admin_delete_tag' tag.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete tag \'{{ tag.name }}\'?');">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger btn-sm" style="padding: 6px 14px; font-size: 13px;">Delete</button>
-              </form>
-            </td>
+    <div style="overflow-x: auto; width: 100%;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Tag Name</th>
+            <th>URL Slug</th>
+            <th>Associated Campaigns</th>
+            <th class="actions-col" style="text-align: right; padding-right: 24px;">Actions</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for tag in tags %}
+            <tr>
+              <td>
+                <span style="font-weight: 800; font-size: 15px; color: #FFFFFF; display: inline-flex; align-items: center; gap: 6px;">
+                  🏷️ {{ tag.name }}
+                </span>
+              </td>
+              <td style="color: #AFA793; font-family: monospace; font-size: 13.5px;">
+                {{ tag.slug }}
+              </td>
+              <td>
+                <span class="badge badge-success" style="font-weight: 800;">
+                  {{ tag.campaign_count }} campaign{{ tag.campaign_count|pluralize }}
+                </span>
+              </td>
+              <td class="actions-col" style="text-align: right; padding-right: 24px;">
+                <div style="display: inline-flex; gap: 8px; align-items: center; justify-content: flex-end;">
+                  <a href="{% url 'admin_edit_tag' tag.id %}" class="btn btn-outline btn-sm">
+                    ✏️ Edit
+                  </a>
+                  <form method="post" action="{% url 'admin_delete_tag' tag.id %}" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('⚠️ Are you sure you want to delete tag \'{{ tag.name }}\'?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger-outline btn-sm">
+                      🗑️ Delete
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   {% else %}
-    <div style="padding: var(--space-8); text-align: center; color: var(--color-text-secondary);">
-      No tags created yet. Use the form above to add your first tag.
+    <div class="admin-empty-state">
+      <div class="admin-empty-icon">🏷️</div>
+      <div class="admin-empty-title">No Tags Created Yet</div>
+      <div style="font-size: 14.5px; color: #AFA793;">Use the input box above to add the platform's first tag.</div>
     </div>
   {% endif %}
 </div>

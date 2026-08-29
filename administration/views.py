@@ -68,12 +68,36 @@ def dashboard(request):
     
     pending_campaigns = Campaign.objects.filter(status=CampaignStatus.PENDING).order_by('created_at')
     active_campaigns = Campaign.objects.filter(status=CampaignStatus.ACTIVE).order_by('-created_at')
+    completed_campaigns = Campaign.objects.filter(status=CampaignStatus.COMPLETED).select_related('owner', 'category').order_by('-updated_at')
     
     return render(request, 'administration/dashboard.html', {
         'stats': stats,
         'pending_campaigns': pending_campaigns,
         'active_campaigns': active_campaigns,
+        'completed_campaigns': completed_campaigns,
     })
+
+@admin_required
+def delete_completed_campaign(request, campaign_id):
+    """
+    Safely delete a Completed campaign by an authorized Staff / Admin user.
+    Strictly verifies that the campaign status is 'Completed'.
+    """
+    if request.method != 'POST':
+        messages.error(request, 'Invalid request method for deletion.')
+        return redirect('admin_dashboard')
+
+    from campaigns.models import Campaign, CampaignStatus
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+
+    if campaign.status != CampaignStatus.COMPLETED:
+        messages.error(request, f'Cannot delete campaign "{campaign.title}" because it is not completed.')
+        return redirect('admin_dashboard')
+
+    campaign_title = campaign.title
+    campaign.delete()
+    messages.success(request, f'Completed campaign "{campaign_title}" has been permanently deleted.')
+    return redirect('admin_dashboard')
 
 @admin_required
 def campaign_moderation(request):
@@ -89,21 +113,20 @@ def campaign_moderation(request):
 
 @admin_required
 def campaign_action(request, campaign_id, action):
-
     from campaigns.models import Campaign, CampaignStatus
     campaign = get_object_or_404(Campaign, id=campaign_id)
     
-    if action == 'approve' and campaign.status == CampaignStatus.PENDING:
+    if action == 'approve':
         campaign.status = CampaignStatus.ACTIVE
         campaign.save(update_fields=['status'])
         messages.success(request, f'Campaign "{campaign.title}" approved and is now Active.')
     
-    elif action == 'reject' and campaign.status == CampaignStatus.PENDING:
+    elif action == 'reject':
         campaign.status = CampaignStatus.CANCELLED
         campaign.save(update_fields=['status'])
         messages.success(request, f'Campaign "{campaign.title}" rejected.')
         
-    elif action == 'cancel' and campaign.status == CampaignStatus.ACTIVE:
+    elif action == 'cancel':
         campaign.status = CampaignStatus.CANCELLED
         campaign.save(update_fields=['status'])
         messages.success(request, f'Campaign "{campaign.title}" cancelled.')
@@ -126,6 +149,25 @@ def toggle_manual_critical(request, campaign_id):
         messages.success(request, f'Campaign "{campaign.title}" manually set to Critical.')
     else:
         messages.success(request, f'Manual Critical override removed for "{campaign.title}".')
+        
+    return redirect('admin_dashboard')
+
+@admin_required
+def toggle_featured(request, campaign_id):
+    """Toggle Featured status for a campaign (Staff / Admin)."""
+    if request.method != 'POST':
+        messages.error(request, 'Invalid request method.')
+        return redirect('admin_dashboard')
+        
+    from campaigns.models import Campaign
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+    campaign.is_featured = not campaign.is_featured
+    campaign.save(update_fields=['is_featured'])
+    
+    if campaign.is_featured:
+        messages.success(request, f'Campaign "{campaign.title}" is now marked as Featured.')
+    else:
+        messages.success(request, f'Featured status removed from "{campaign.title}".')
         
     return redirect('admin_dashboard')
 
@@ -390,6 +432,8 @@ def admin_campaign_edit(request, campaign_id):
             campaign.case_type = case_type
         if status:
             campaign.status = status
+
+        campaign.is_featured = request.POST.get('is_featured') in ['on', 'true', '1', True]
 
         campaign.save()
         campaign.tags.set(selected_tag_ids)

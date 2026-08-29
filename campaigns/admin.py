@@ -19,8 +19,8 @@ class CampaignImageInline(admin.TabularInline):
 
 @admin.register(Campaign)
 class CampaignAdmin(admin.ModelAdmin):
-    list_display = ('title', 'owner', 'category', 'status', 'case_type', 'target_amount', 'raised_amount', 'created_at')
-    list_filter = ('status', 'case_type', 'category', 'tags')
+    list_display = ('title', 'owner', 'category', 'status', 'case_type', 'is_featured', 'target_amount', 'raised_amount', 'created_at')
+    list_filter = ('status', 'is_featured', 'case_type', 'category', 'tags')
     search_fields = ('title', 'story', 'tags__name')
     filter_horizontal = ('tags',)
     fieldsets = (
@@ -28,7 +28,7 @@ class CampaignAdmin(admin.ModelAdmin):
             'fields': ('title', 'owner', 'category', 'tags', 'story')
         }),
         ('Funding & Details', {
-            'fields': ('target_amount', 'initial_raised_amount', 'raised_amount', 'case_type', 'status', 'deadline', 'is_manual_critical')
+            'fields': ('target_amount', 'initial_raised_amount', 'raised_amount', 'case_type', 'status', 'deadline', 'is_manual_critical', 'is_featured')
         }),
         ('Media & Documents', {
             'fields': ('campaign_image', 'supporting_document')
