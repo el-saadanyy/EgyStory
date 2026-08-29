@@ -16,8 +16,9 @@ urlpatterns = [
     path('<int:campaign_id>/cancel/', views.cancel_campaign, name='cancel_campaign'),
     path('image/<int:image_id>/delete/', views.delete_campaign_image, name='delete_campaign_image'),
     
-    # مسارات التعليقات الجديدة
+    # مسارات التعليقات والردود
     path('<int:campaign_id>/comment/', views.add_comment, name='add_comment'),
+    path('<int:campaign_id>/comment/<int:parent_id>/reply/', views.add_comment, name='add_reply'),
     path('comment/<int:comment_id>/report/', views.report_comment, name='report_comment'),
 ]
 

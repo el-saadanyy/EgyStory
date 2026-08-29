@@ -506,4 +506,46 @@ def admin_report_action(request, report_id, action):
     return redirect('admin_reports')
 
 
+@admin_required
+def admin_comments(request):
+    """
+    Comment Moderation Page — lists all top-level comments and replies
+    so an authorized admin can review and delete inappropriate content.
+    """
+    from campaigns.models import Comment
+    comments = Comment.objects.select_related('user', 'campaign', 'parent').order_by('-created_at')
+    return render(request, 'administration/comments.html', {
+        'comments': comments,
+    })
+
+
+@admin_required
+def delete_comment(request, comment_id):
+    """
+    Permanently delete a comment (and its replies, via CASCADE).
+    Strictly POST-only and CSRF-protected.
+    """
+    if request.method != 'POST':
+        messages.error(request, 'Invalid request method for deletion.')
+        return redirect('admin_comments')
+
+    from campaigns.models import Comment
+    comment = get_object_or_404(Comment, id=comment_id)
+    campaign_id = comment.campaign_id
+    reply_count = comment.replies.count()
+
+    comment.delete()
+
+    if reply_count:
+        messages.success(
+            request,
+            f'Comment #{comment_id} and its {reply_count} reply(ies) have been permanently deleted.'
+        )
+    else:
+        messages.success(request, f'Comment #{comment_id} has been permanently deleted.')
+
+    return redirect('admin_comments')
+
+
+
 

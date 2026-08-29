@@ -44,6 +44,10 @@
         <span class="admin-nav-icon" aria-hidden="true">🚩</span> Campaign Reports
       </a>
 
+      <a href="{% url 'admin_comments' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_comments' %}active{% endif %}">
+        <span class="admin-nav-icon" aria-hidden="true">💬</span> Comment Moderation
+      </a>
+
       <div class="admin-nav-section" style="margin-top:14px;">Taxonomy &amp; Settings</div>
       <a href="{% url 'admin_tags' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_tags' or 'admin_edit_tag' in request.resolver_match.url_name %}active{% endif %}">
         <span class="admin-nav-icon" aria-hidden="true">🏷️</span> Tags Management

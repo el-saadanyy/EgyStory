@@ -1,65 +1,118 @@
 {% load static %}
-<article class="campaign-card" data-campaign-url="{% url 'campaigns:case_detail' campaign.id %}" tabindex="0" role="region" aria-label="{{ campaign.title }}" style="display: flex; flex-direction: column; background: var(--color-surface); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); transition: transform 0.2s, box-shadow 0.2s; height: 100%; border: 1px solid var(--color-border); cursor: pointer;">
+<article class="campaign-card"
+  data-campaign-url="{% url 'campaigns:case_detail' campaign.id %}"
+  tabindex="0"
+  role="region"
+  aria-label="{{ campaign.title }}"
+  style="display: flex; flex-direction: column; background: linear-gradient(135deg, rgba(38,36,30,0.92) 0%, rgba(26,25,22,0.98) 100%); border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.45); border: 1px solid rgba(228,192,113,0.15); cursor: pointer; height: 100%; transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; position: relative;">
 
-  <div class="campaign-image-wrapper" style="position: relative; height: 200px; width: 100%; flex-shrink: 0;">
+  <!-- Top gold line (hidden until hover via class) -->
+  <div class="card-top-line" style="position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #E4C071 50%, transparent); opacity: 0; transition: opacity 0.3s ease; z-index: 2;" aria-hidden="true"></div>
+
+  <!-- Image Wrapper -->
+  <div style="position: relative; height: 210px; width: 100%; flex-shrink: 0; overflow: hidden;">
     {% if campaign.campaign_image %}
-      <img src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+      <img src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
     {% else %}
-      <img src="{% static 'images/placeholder-campaign.jpg' %}" alt="{{ campaign.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+      <img src="{% static 'images/placeholder-campaign.jpg' %}" alt="{{ campaign.title }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
     {% endif %}
-    
+
+    <!-- Dark gradient overlay at bottom for badge readability -->
+    <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, transparent 40%, rgba(0,0,0,0.55) 100%);" aria-hidden="true"></div>
+
     <!-- Badges -->
-    <div class="campaign-badges" style="position: absolute; top: 12px; left: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+    <div style="position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 1;">
       {% if campaign.category %}
-        <span class="badge" style="background: rgba(228, 192, 113, 0.95); color: #1C1B18; padding: 4px 10px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.3);">{{ campaign.category.name }}</span>
-      {% endif %}
-      {% if campaign.tags.all %}
-        {% for tag in campaign.tags.all %}
-          <span class="badge" style="background: rgba(16, 185, 129, 0.9); color: white; padding: 4px 10px; border-radius: var(--radius-full); font-size: 12px; font-weight: 600; backdrop-filter: blur(4px);">{{ tag.name }}</span>
-        {% endfor %}
+        <span style="padding: 4px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 700; backdrop-filter: blur(8px); background: rgba(228,192,113,0.88); color: #1C1B18; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+          {{ campaign.category.name }}
+        </span>
       {% endif %}
       {% if campaign.case_type == 'Rare / Ultra-Rare & High-Cost' %}
-        <span class="badge" style="background: rgba(147, 51, 234, 0.9); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; backdrop-filter: blur(4px);">Rare Case</span>
+        <span style="padding: 4px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 700; backdrop-filter: blur(8px); background: rgba(147,51,234,0.88); color: #FFFFFF; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+          💎 Rare
+        </span>
       {% endif %}
       {% if campaign.is_critical %}
-        <span class="badge" style="background: rgba(220, 38, 38, 0.9); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; backdrop-filter: blur(4px);">Critical</span>
+        <span style="padding: 4px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 700; backdrop-filter: blur(8px); background: rgba(220,38,38,0.88); color: #FFFFFF; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+          🚨 Critical
+        </span>
+      {% endif %}
+      {% if campaign.is_featured %}
+        <span style="padding: 4px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 700; backdrop-filter: blur(8px); background: rgba(228,192,113,0.92); color: #1C1B18; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+          🌟 Featured
+        </span>
       {% endif %}
     </div>
+
+    <!-- Status badge (bottom right) -->
+    {% if campaign.status == 'Completed' %}
+      <div style="position: absolute; bottom: 12px; right: 12px; background: rgba(22,163,74,0.9); color: #fff; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-full); backdrop-filter: blur(6px);">✓ Funded</div>
+    {% endif %}
   </div>
 
-  <div class="campaign-content" style="padding: 24px; display: flex; flex-direction: column; flex-grow: 1;">
-    <h3 class="campaign-title" style="font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--color-text-primary); line-height: 1.3;">{{ campaign.title }}</h3>
-    <p class="campaign-description" style="color: var(--color-text-secondary); font-size: 14px; margin-bottom: 24px; line-height: 1.6; flex-grow: 1;">{{ campaign.story|truncatewords:18 }}</p>
+  <!-- Card Content -->
+  <div style="padding: 22px 24px; display: flex; flex-direction: column; flex-grow: 1;">
 
-    <div class="campaign-stats" style="margin-bottom: 20px;">
-      <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
-        <span style="font-weight: 700; color: var(--color-primary);">{{ campaign.get_total_raised }} EGP</span>
-        <span style="color: var(--color-text-muted);">of {{ campaign.target_amount }}</span>
+    <!-- Tags row -->
+    {% if campaign.tags.all %}
+      <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px;">
+        {% for tag in campaign.tags.all %}
+          <span style="font-size: 11px; font-weight: 600; color: #34d399; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); padding: 2px 8px; border-radius: var(--radius-full);">#{{ tag.name }}</span>
+        {% endfor %}
       </div>
-      
+    {% endif %}
+
+    <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 8px; color: #FFFFFF; line-height: 1.3; letter-spacing: -0.2px;">{{ campaign.title }}</h3>
+    <p style="color: #AFA793; font-size: 13.5px; margin-bottom: 20px; line-height: 1.65; flex-grow: 1;">{{ campaign.story|truncatewords:18 }}</p>
+
+    <!-- Stats -->
+    <div style="margin-bottom: 18px;">
+      <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 8px; align-items: baseline;">
+        <span style="font-weight: 800; color: #E4C071; font-size: 16px;">{{ campaign.get_total_raised }} <span style="font-size: 12px; font-weight: 600; color: #AFA793;">EGP</span></span>
+        <span style="color: #AFA793; font-size: 12px;">of {{ campaign.target_amount }} EGP</span>
+      </div>
+
       <!-- Progress Bar -->
-      <div class="progress-bar-container" style="background: rgba(255,255,255,0.1); border-radius: 99px; height: 6px; width: 100%; overflow: hidden; margin-bottom: 8px;">
-        <div class="progress-bar" style="background: var(--color-primary); height: 100%; width: calc({{ campaign.get_progress_percentage }} * 1%); border-radius: 99px;"></div>
+      <div style="background: rgba(255,255,255,0.08); border-radius: 99px; height: 5px; width: 100%; overflow: hidden; margin-bottom: 8px;">
+        <div style="background: {% if campaign.status == 'Completed' %}linear-gradient(90deg,#16a34a,#4ade80){% else %}linear-gradient(90deg,#c9a227,#E4C071){% endif %}; height: 100%; width: calc({{ campaign.get_progress_percentage }} * 1%); border-radius: 99px; box-shadow: 0 0 6px rgba(228,192,113,0.35);"></div>
       </div>
-      
-      <div style="display: flex; justify-content: space-between; font-size: 13px;">
-        <span style="font-weight: 600; color: var(--color-text-primary);">{{ campaign.get_progress_percentage }}% Funded</span>
+
+      <div style="display: flex; justify-content: space-between; font-size: 12.5px;">
+        <span style="font-weight: 700; color: #E4C071;">{{ campaign.get_progress_percentage }}% Funded</span>
         {% if campaign.deadline %}
-          <span style="color: var(--color-text-muted); display: flex; align-items: center; gap: 4px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span style="color: #AFA793; display: flex; align-items: center; gap: 4px;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             {{ campaign.get_days_remaining }} days left
           </span>
         {% endif %}
       </div>
     </div>
 
-    <div class="campaign-actions" style="display: flex; gap: 12px; margin-top: auto;">
-      <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline" style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 10px 16px;">View Story</a>
+    <!-- Actions -->
+    <div style="display: flex; gap: 10px; margin-top: auto;">
+      <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline" style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 10px 14px; font-size: 13.5px; font-weight: 700; border-radius: var(--radius-full);">View Story</a>
       {% if campaign.status == 'Active' %}
-        <a href="{% url 'campaigns:donate' campaign.id %}" class="btn btn-primary" style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 10px 16px;">Donate</a>
+        <a href="{% url 'campaigns:donate' campaign.id %}" class="btn btn-primary" style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 10px 14px; font-size: 13.5px; font-weight: 700; border-radius: var(--radius-full);">❤️ Donate</a>
       {% else %}
-        <button class="btn btn-secondary" disabled style="flex: 1; padding: 10px 16px; background: rgba(255,255,255,0.1); color: var(--color-text-muted); cursor: not-allowed; border: none; border-radius: 8px; font-weight: 600;">{{ campaign.status }}</button>
+        <button class="btn btn-secondary" disabled style="flex: 1; padding: 10px 14px; font-size: 13px; background: rgba(255,255,255,0.06); color: #AFA793; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-full); font-weight: 600;">{{ campaign.status }}</button>
       {% endif %}
     </div>
+
   </div>
 </article>
+
+<style>
+  .campaign-card:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 20px 56px rgba(0,0,0,0.65), 0 0 0 1px rgba(228,192,113,0.35) !important;
+    border-color: rgba(228,192,113,0.4) !important;
+  }
+  .campaign-card:hover .card-top-line {
+    opacity: 1 !important;
+  }
+  .campaign-card:hover img {
+    transform: scale(1.04);
+  }
+</style>
+
+
