@@ -1,3 +1,4 @@
+
 from django.urls import path
 from . import views
 
@@ -14,8 +15,11 @@ urlpatterns = [
     path('donate/', views.donate_general, name='donate_general'),
     path('<int:campaign_id>/cancel/', views.cancel_campaign, name='cancel_campaign'),
     path('image/<int:image_id>/delete/', views.delete_campaign_image, name='delete_campaign_image'),
+    
+    # مسارات التعليقات الجديدة
+    path('<int:campaign_id>/comment/', views.add_comment, name='add_comment'),
+    path('comment/<int:comment_id>/report/', views.report_comment, name='report_comment'),
 ]
-
 
 
 

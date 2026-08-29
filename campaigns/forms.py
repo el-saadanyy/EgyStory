@@ -1,6 +1,16 @@
 from django import forms
 from decimal import Decimal
-from .models import Campaign, Donation, CaseType, Category, Tag
+from .models import (
+    Campaign, 
+    Donation, 
+    CaseType, 
+    Category, 
+    Tag, 
+    CampaignRating, 
+    CampaignReport, 
+    Comment, 
+    CommentReport
+)
 
 class MultipleFileInput(forms.FileInput):
     allow_multiple_selected = True
@@ -87,8 +97,6 @@ class DonationForm(forms.ModelForm):
             raise forms.ValidationError("Donation amount must be greater than zero.")
         return amount
 
-from .models import CampaignRating, CampaignReport
-
 class RatingForm(forms.ModelForm):
     class Meta:
         model = CampaignRating
@@ -118,4 +126,32 @@ class ReportForm(forms.ModelForm):
             raise forms.ValidationError("Please provide a detailed explanation (at least 10 characters).")
         return details
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'class': 'form-input',
+                'rows': 3,
+                'placeholder': 'Write your comment here...'
+            }),
+        }
 
+    def clean_content(self):
+        content = self.cleaned_data.get('content', '').strip()
+        if not content:
+            raise forms.ValidationError("Comment content cannot be empty.")
+        return content
+
+class CommentReportForm(forms.ModelForm):
+    class Meta:
+        model = CommentReport
+        fields = ['reason']
+        widgets = {
+            'reason': forms.Textarea(attrs={
+                'class': 'form-input',
+                'rows': 2,
+                'placeholder': 'Reason for reporting (optional)...'
+            }),
+        }
