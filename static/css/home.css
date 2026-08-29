@@ -422,3 +422,418 @@
   box-shadow: 0 0 15px rgba(228, 192, 113, 0.4);
 }
 
+
+/* ================================================================
+   EgyStory — Homepage Campaign Section Redesign
+   All 4 sections: Critical, Rare, Normal, Success
+   ================================================================ */
+
+/* ── Shared: Campaigns Grid ───────────────────────────────────── */
+.campaigns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
+}
+
+/* ── Shared: Unified Section Panel Container ──────────────────── */
+.section-panel {
+  border-radius: var(--radius-xl);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+
+/* ── Shared: Section Banner / Integrated Header ────────────────── */
+.section-banner {
+  padding: 0 0 36px 0;
+  margin-bottom: 36px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  position: relative;
+  background: transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.section-banner__body {
+  flex: 1;
+  min-width: 260px;
+}
+
+/* ── Shared: Section Eyebrow pill ─────────────────────────────── */
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+  border: 1px solid transparent;
+}
+
+/* ── Shared: Section Title ────────────────────────────────────── */
+.section-title {
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+/* ── Shared: Section Description ─────────────────────────────── */
+.section-desc {
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  margin: 10px 0 0 0;
+  max-width: 580px;
+  line-height: 1.65;
+}
+
+/* ── Shared: CTA Button ───────────────────────────────────────── */
+.section-cta {
+  padding: 13px 28px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+/* ── Pulsing dot ──────────────────────────────────────────────── */
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.pulse-dot--red {
+  background: #dc2626;
+  animation: pulseRed 2s infinite;
+}
+@keyframes pulseRed {
+  0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+  70%  { transform: scale(1);    box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+/* ================================================================
+   SECTION: CRITICAL CASES — Danger Red (Horizontal Flare from Left to Right)
+   ================================================================ */
+.section-critical {
+  padding: 64px 0;
+  background: radial-gradient(circle at 90% 20%, rgba(220, 38, 38, 0.28) 0%, transparent 50%),
+              radial-gradient(circle at 10% 80%, rgba(228, 192, 113, 0.16) 0%, transparent 45%),
+              linear-gradient(90deg, #000000 0%, #160808 50%, #2a1210 100%) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-critical-glow {
+  position: absolute;
+  top: -80px;
+  left: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(ellipse at center, rgba(220, 38, 38, 0.18) 0%, transparent 68%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.section-panel--critical {
+  background: rgba(24, 16, 16, 0.86) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(220, 38, 38, 0.42);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 35px rgba(220, 38, 38, 0.15);
+}
+
+.section-panel--critical::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, #dc2626, #E4C071);
+  border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+}
+
+.section-eyebrow--critical {
+  background: rgba(169, 58, 46, 0.22);
+  color: #f87171;
+  border-color: rgba(220, 38, 38, 0.45);
+}
+
+.section-cta--critical {
+  background: #a93a2e;
+  color: #fff;
+  border: 2px solid #a93a2e;
+  box-shadow: 0 4px 16px rgba(169, 58, 46, 0.35);
+}
+.section-cta--critical:hover {
+  background: #c0392b;
+  border-color: #c0392b;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(169, 58, 46, 0.5);
+}
+
+/* Card hover inside Critical section */
+.section-critical .campaign-card:hover,
+.section-panel--critical .campaign-card:hover {
+  border-color: #dc2626 !important;
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.7), 0 0 25px rgba(220, 38, 38, 0.38) !important;
+}
+
+/* ================================================================
+   SECTION: RARE CASES — Purple / Violet (Reverse Diagonal Sweep: 215deg)
+   ================================================================ */
+.section-rare {
+  padding: 64px 0;
+  background: radial-gradient(circle at 15% 85%, rgba(147, 51, 234, 0.30) 0%, transparent 55%),
+              radial-gradient(circle at 85% 15%, rgba(228, 192, 113, 0.18) 0%, transparent 50%),
+              linear-gradient(215deg, #1f1228 0%, #0d0614 55%, #000000 100%) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-rare-glow {
+  position: absolute;
+  top: -60px;
+  right: -100px;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(ellipse at center, rgba(147, 51, 234, 0.14) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.section-panel--rare {
+  background: rgba(22, 16, 26, 0.86) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(147, 51, 234, 0.40);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 35px rgba(147, 51, 234, 0.15);
+}
+
+.section-panel--rare::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, #9333ea, #E4C071);
+  border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+}
+
+.section-eyebrow--rare {
+  background: rgba(147, 51, 234, 0.2);
+  color: #c084fc;
+  border-color: rgba(147, 51, 234, 0.4);
+}
+
+.section-cta--rare {
+  background: transparent;
+  color: #c084fc;
+  border: 2px solid rgba(147, 51, 234, 0.55);
+  box-shadow: 0 4px 16px rgba(147, 51, 234, 0.15);
+}
+.section-cta--rare:hover {
+  background: rgba(147, 51, 234, 0.22);
+  border-color: #9333ea;
+  color: #e9d5ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(147, 51, 234, 0.35);
+}
+
+/* Card hover inside Rare section */
+.section-rare .campaign-card:hover,
+.section-panel--rare .campaign-card:hover {
+  border-color: #9333ea !important;
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.7), 0 0 25px rgba(147, 51, 234, 0.38) !important;
+}
+
+/* ================================================================
+   SECTION: NORMAL CASES — Gold (Diagonal Sweep: 135deg with Radial Gold Halo)
+   ================================================================ */
+.section-normal {
+  padding: 64px 0;
+  background: radial-gradient(ellipse 70% 60% at 80% 15%, rgba(228, 192, 113, 0.24) 0%, transparent 65%),
+              linear-gradient(135deg, #000000 0%, #161410 45%, rgba(228, 192, 113, 0.16) 75%, #C8A355 100%) !important;
+  position: relative;
+}
+
+.section-panel--normal {
+  background: rgba(24, 22, 18, 0.86) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(228, 192, 113, 0.35);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(228, 192, 113, 0.25), 0 0 35px rgba(228, 192, 113, 0.12);
+}
+
+.section-panel--normal::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, #E4C071, #C8A355);
+  border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+}
+
+.section-eyebrow--normal {
+  background: rgba(228, 192, 113, 0.18);
+  color: #E4C071;
+  border-color: rgba(228, 192, 113, 0.35);
+}
+
+.section-cta--normal {
+  background: #E4C071;
+  color: #1C1B18;
+  border: 2px solid #E4C071;
+  box-shadow: 0 4px 16px rgba(228, 192, 113, 0.3);
+}
+.section-cta--normal:hover {
+  background: #C8A355;
+  border-color: #C8A355;
+  color: #1C1B18;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(228, 192, 113, 0.45);
+}
+
+/* Card hover inside Normal section */
+.section-normal .campaign-card:hover,
+.section-panel--normal .campaign-card:hover {
+  border-color: #E4C071 !important;
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.7), 0 0 25px rgba(228, 192, 113, 0.35) !important;
+}
+
+/* ================================================================
+   SECTION: SUCCESS STORIES — Emerald Green (Ascending Sunrise: 315deg)
+   ================================================================ */
+.section-success {
+  padding: 64px 0;
+  background: radial-gradient(ellipse 80% 60% at 85% 85%, rgba(22, 163, 74, 0.28) 0%, transparent 60%),
+              radial-gradient(circle at 15% 15%, rgba(228, 192, 113, 0.16) 0%, transparent 45%),
+              linear-gradient(315deg, #0f2415 0%, #061209 50%, #000000 100%) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-success-glow {
+  position: absolute;
+  bottom: -80px;
+  right: -80px;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(ellipse at center, rgba(22, 163, 74, 0.18) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.section-panel--success {
+  background: rgba(16, 24, 18, 0.86) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(22, 163, 74, 0.40);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 35px rgba(22, 163, 74, 0.15);
+}
+
+.section-panel--success::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, #16a34a, #E4C071);
+  border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+}
+
+.section-eyebrow--success {
+  background: rgba(22, 163, 74, 0.2);
+  color: #4ade80;
+  border-color: rgba(22, 163, 74, 0.4);
+}
+
+.section-cta--success {
+  background: transparent;
+  color: #4ade80;
+  border: 2px solid rgba(22, 163, 74, 0.55);
+  box-shadow: 0 4px 16px rgba(22, 163, 74, 0.15);
+}
+.section-cta--success:hover {
+  background: rgba(22, 163, 74, 0.22);
+  border-color: #16a34a;
+  color: #bbf7d0;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(22, 163, 74, 0.35);
+}
+
+/* Card hover inside Success section */
+.section-success .campaign-card:hover,
+.section-panel--success .campaign-card:hover {
+  border-color: #16a34a !important;
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.7), 0 0 25px rgba(22, 163, 74, 0.38) !important;
+}
+
+/* ================================================================
+   RESPONSIVE — All Campaign Sections
+   ================================================================ */
+@media (max-width: 768px) {
+  .section-critical,
+  .section-rare,
+  .section-normal,
+  .section-success { padding: 36px 0; }
+
+  .section-panel {
+    padding: 28px 20px;
+    border-radius: var(--radius-lg);
+  }
+
+  .section-banner {
+    padding: 0 0 24px 0;
+    margin-bottom: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .section-title  { font-size: 26px; }
+  .section-desc   { font-size: 15px; }
+
+  .section-cta {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .campaigns-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-critical,
+  .section-rare,
+  .section-normal,
+  .section-success { padding: 28px 0; }
+
+  .section-panel {
+    padding: 22px 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .section-banner  { padding: 0 0 20px 0; margin-bottom: 20px; }
+  .section-title   { font-size: 22px; }
+}

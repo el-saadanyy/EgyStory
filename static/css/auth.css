@@ -160,8 +160,9 @@ textarea:-webkit-autofill:focus {
   background: var(--color-bg);
 }
 .avatar-upload-area:hover {
-  border-color: var(--color-primary);
-  background: rgba(198,40,40,0.1);
+  border-color: #E4C071 !important;
+  background: rgba(228, 192, 113, 0.08) !important;
+  box-shadow: 0 0 16px rgba(228, 192, 113, 0.2);
 }
 .avatar-preview {
   width: 80px;

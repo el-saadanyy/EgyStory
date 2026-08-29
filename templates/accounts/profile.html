@@ -5,69 +5,72 @@
 {% block meta_description %}Your EgyStory profile.{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/profile.css' %}?v=100.0">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}?v=250.0">
 {% endblock %}
 
 {% block content %}
+<main style="background-color: var(--color-bg); min-height: calc(100vh - var(--navbar-height)); padding-top: 48px; padding-bottom: 80px; position: relative;">
+  <!-- Ambient lighting -->
+  <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 800px; height: 350px; background: radial-gradient(ellipse at center, rgba(228, 192, 113, 0.1) 0%, transparent 70%); pointer-events: none;" aria-hidden="true"></div>
 
-<!-- Profile Header -->
-<div class="profile-header">
-  <div class="container">
-    <div class="profile-header-inner">
-      <div class="profile-avatar-wrap">
-        {% if user.profile_picture %}
-          <img src="{{ user.profile_picture.url }}" alt="{{ user.get_full_name }}" class="profile-avatar">
-        {% else %}
-          <img src="{% static 'images/default-avatar.svg' %}" alt="Default avatar" class="profile-avatar">
-        {% endif %}
-        {% if user.is_active %}
-          <div class="profile-avatar-badge" title="Active account" aria-label="Active"></div>
-        {% endif %}
-      </div>
+  <div class="container" style="position: relative; z-index: 1;">
 
-      <div class="profile-info-header">
-        <h1 class="profile-name">{{ user.get_full_name }}</h1>
-        <div class="profile-email">{{ user.email }}</div>
-        <div class="profile-meta">
-          <span class="profile-meta-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 15z"/></svg>
-            {{ user.phone }}
-          </span>
-          <span class="profile-meta-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            Member since {{ user.date_joined|date:"F Y" }}
-          </span>
+    <!-- ── Profile Header Card with Border Radius & Rich Gradient ── -->
+    <div class="profile-header-card">
+      <div class="profile-header-inner">
+        <div class="profile-avatar-wrap">
+          {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="{{ user.get_full_name }}" class="profile-avatar">
+          {% else %}
+            <img src="{% static 'images/default-avatar.svg' %}" alt="Default avatar" class="profile-avatar">
+          {% endif %}
+          {% if user.is_active %}
+            <div class="profile-avatar-badge" title="Active account" aria-label="Active"></div>
+          {% endif %}
+        </div>
+
+        <div class="profile-info-header">
+          <h1 class="profile-name">{{ user.get_full_name }}</h1>
+          <div class="profile-email">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E4C071" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            {{ user.email }}
+          </div>
+          <div class="profile-meta">
+            <span class="profile-meta-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 15z"/></svg>
+              {{ user.phone }}
+            </span>
+            <span class="profile-meta-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Member since {{ user.date_joined|date:"F Y" }}
+            </span>
+          </div>
+        </div>
+
+        <div class="profile-header-actions">
+          <a href="{% url 'profile_edit' %}" class="btn" id="edit-profile-btn">
+            ✏️ Edit Profile
+          </a>
         </div>
       </div>
-
-      <div class="profile-header-actions">
-        <a href="{% url 'profile_edit' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,0.3);color:#fff;" id="edit-profile-btn">
-          Edit Profile
-        </a>
-      </div>
     </div>
-  </div>
-</div>
 
-<!-- Profile Body -->
-<div class="profile-page">
-  <div class="container">
-    <div class="profile-body">
-      <div class="profile-grid">
+    <!-- ── Profile Body Grid ── -->
+    <div class="profile-grid">
 
         <!-- Sidebar: Personal Info -->
         <div>
           <div class="profile-sidebar-card">
-            <div class="profile-sidebar-section" style="padding:16px 24px 12px;">
+            <div class="profile-sidebar-section" style="padding:18px 24px;">
               <div class="profile-info-label">Account Status</div>
               {% if user.is_active %}
-                <span class="badge badge-success">✓ Activated</span>
+                <span class="badge" style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.35); padding: 4px 12px; font-weight: 700; border-radius: var(--radius-full);">✓ Verified Account</span>
               {% else %}
-                <span class="badge badge-warning">⏳ Pending Activation</span>
+                <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); padding: 4px 12px; font-weight: 700; border-radius: var(--radius-full);">⏳ Pending Activation</span>
               {% endif %}
             </div>
             <div class="profile-sidebar-section">
-              <div class="profile-info-label">Email</div>
+              <div class="profile-info-label">Email Address</div>
               <div class="profile-info-value">{{ user.email }}</div>
             </div>
             <div class="profile-sidebar-section">
@@ -83,14 +86,14 @@
             {% if user.country %}
             <div class="profile-sidebar-section">
               <div class="profile-info-label">Country</div>
-              <div class="profile-info-value">{{ user.country }}</div>
+              <div class="profile-info-value">🇪🇬 {{ user.country }}</div>
             </div>
             {% endif %}
             {% if user.facebook %}
             <div class="profile-sidebar-section">
               <div class="profile-info-label">Facebook</div>
               <div class="profile-info-value">
-                <a href="{{ user.facebook }}" target="_blank" rel="noopener noreferrer" style="color:var(--color-primary);text-decoration:underline;">Facebook Profile</a>
+                <a href="{{ user.facebook }}" target="_blank" rel="noopener noreferrer" style="color: #E4C071; text-decoration: underline; font-weight: 600;">View Profile ↗</a>
               </div>
             </div>
             {% endif %}
@@ -98,34 +101,40 @@
               <div class="profile-info-label">Member Since</div>
               <div class="profile-info-value">{{ user.date_joined|date:"d M Y" }}</div>
             </div>
-            <div class="profile-sidebar-section" style="border-bottom:none;">
-              <a href="{% url 'delete_account' %}" class="btn btn-ghost btn-sm" style="color:var(--color-danger);padding-left:0;" id="delete-account-link">
-                Delete Account
+            <div class="profile-sidebar-section" style="border-bottom:none; padding-top: 14px;">
+              <a href="{% url 'delete_account' %}" class="btn btn-ghost btn-sm" style="color: #f87171; font-weight: 600; padding: 6px 0; font-size: 13px;" id="delete-account-link">
+                🗑️ Delete Account
               </a>
             </div>
           </div>
         </div>
 
-        <!-- Main: Placeholder sections -->
+        <!-- Main: Campaigns & Donations sections -->
         <div>
           <!-- My Campaigns -->
           <div class="profile-content-card">
             <div class="profile-content-header">
-              <div class="profile-content-title">My Campaigns</div>
+              <div class="profile-content-title">
+                <span>📁 My Campaigns</span>
+                {% if user_campaigns %}
+                  <span class="badge" style="background: rgba(228, 192, 113, 0.15); color: #E4C071; font-size: 12px; font-weight: 700; border: 1px solid rgba(228, 192, 113, 0.3);">{{ user_campaigns|length }}</span>
+                {% endif %}
+              </div>
+              <a href="{% url 'campaigns:case_create' %}" class="btn btn-primary btn-sm" style="border-radius: var(--radius-full); padding: 6px 18px; font-size: 13px; font-weight: 700;">+ Start a Story</a>
             </div>
-            <div class="profile-content-body" style="padding: var(--space-4);">
+            <div class="profile-content-body">
               {% if user_campaigns %}
-                <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+                <div style="display: flex; flex-direction: column; gap: 16px;">
                   {% for campaign in user_campaigns %}
-                    <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-4); display: flex; justify-content: space-between; align-items: center;">
+                    <div class="profile-campaign-item">
                       <div>
-                        <h4 style="margin-bottom: var(--space-1);">{{ campaign.title }}</h4>
-                        <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">
-                          Status: <strong>{{ campaign.status }}</strong> | 
-                          Raised: {{ campaign.get_total_raised }} / {{ campaign.target_amount }} EGP ({{ campaign.get_progress_percentage }}%)
+                        <h4 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 800; color: #FFFFFF;">{{ campaign.title }}</h4>
+                        <div style="font-size: 13.5px; color: #D9CFB8;">
+                          Status: <strong style="color: {% if campaign.status == 'Active' %}#4ade80{% elif campaign.status == 'Completed' %}#60a5fa{% else %}#fbbf24{% endif %};">{{ campaign.status }}</strong> &bull; 
+                          Raised: <strong style="color: #E4C071;">{{ campaign.get_total_raised }}</strong> / {{ campaign.target_amount }} EGP ({{ campaign.get_progress_percentage }}%)
                         </div>
                       </div>
-                      <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline btn-sm">View Story</a>
+                      <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline btn-sm" style="border-radius: var(--radius-full); font-weight: 700; border-color: rgba(228, 192, 113, 0.35); color: #E4C071; white-space: nowrap;">View Story</a>
                     </div>
                   {% endfor %}
                 </div>
@@ -133,9 +142,9 @@
                 <div class="coming-soon-placeholder">
                   <div class="coming-soon-icon" aria-hidden="true">📋</div>
                   <div class="coming-soon-text">
-                    You haven't created any campaigns yet.
+                    You haven't created any campaigns yet. Have a meaningful story that needs support?
                   </div>
-                  <a href="{% url 'campaigns:case_create' %}" class="btn btn-primary" style="margin-top: var(--space-4);">Start a Story</a>
+                  <a href="{% url 'campaigns:case_create' %}" class="btn btn-primary" style="margin-top: 20px; border-radius: var(--radius-full); padding: 10px 24px; font-weight: 700;">Start a Story</a>
                 </div>
               {% endif %}
             </div>
@@ -144,18 +153,25 @@
           <!-- Donation History -->
           <div class="profile-content-card">
             <div class="profile-content-header">
-              <div class="profile-content-title">My Donations</div>
+              <div class="profile-content-title">
+                <span>💳 My Donations</span>
+                {% if user_donations %}
+                  <span class="badge" style="background: rgba(228, 192, 113, 0.15); color: #E4C071; font-size: 12px; font-weight: 700; border: 1px solid rgba(228, 192, 113, 0.3);">{{ user_donations|length }}</span>
+                {% endif %}
+              </div>
             </div>
-            <div class="profile-content-body" style="padding: var(--space-4);">
+            <div class="profile-content-body">
               {% if user_donations %}
-                <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
                   {% for donation in user_donations %}
-                    <div style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">
+                    <div class="profile-donation-item">
                       <div>
-                        <div><strong>{{ donation.amount }} EGP</strong> to {{ donation.campaign.title }}</div>
-                        <small style="color: var(--color-text-secondary);">{{ donation.created_at|date }}</small>
+                        <div style="color: #FFFFFF; font-size: 15px;">
+                          <strong style="color: #E4C071; font-weight: 800;">{{ donation.amount }} EGP</strong> to <span style="font-weight: 600;">{{ donation.campaign.title }}</span>
+                        </div>
+                        <small style="color: #AFA793; font-size: 12.5px;">{{ donation.created_at|date:"d M Y, h:i A" }}</small>
                       </div>
-                      <a href="{% url 'campaigns:case_detail' donation.campaign.id %}" class="btn btn-ghost btn-sm">View Campaign</a>
+                      <a href="{% url 'campaigns:case_detail' donation.campaign.id %}" class="btn btn-ghost btn-sm" style="color: #E4C071; font-weight: 700; border: 1px solid rgba(228, 192, 113, 0.2); border-radius: var(--radius-full); padding: 6px 16px;">View Campaign</a>
                     </div>
                   {% endfor %}
                 </div>
@@ -163,17 +179,16 @@
                 <div class="coming-soon-placeholder">
                   <div class="coming-soon-icon" aria-hidden="true">💳</div>
                   <div class="coming-soon-text">
-                    You haven't made any donations yet.
+                    You haven't made any donations yet. Discover stories and make a lasting impact today.
                   </div>
+                  <a href="{% url 'campaigns:case_list' %}" class="btn btn-primary" style="margin-top: 20px; border-radius: var(--radius-full); padding: 10px 24px; font-weight: 700;">Explore Campaigns</a>
                 </div>
               {% endif %}
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
-</div>
-
+</main>
 {% endblock %}

@@ -1,6 +1,10 @@
 {% load static %}
 <footer class="footer" role="contentinfo">
-  <div class="container">
+  <!-- Decorative top ambient glow line -->
+  <div class="footer-top-accent" aria-hidden="true"></div>
+  <div class="footer-glow" aria-hidden="true"></div>
+
+  <div class="container" style="position: relative; z-index: 1;">
     <div class="footer-grid">
 
       <!-- Brand column -->
@@ -12,6 +16,9 @@
           EgyStory is Egypt's crowdfunding platform — connecting generous hearts
           with real people who need real help. Every story matters.
         </p>
+        <div class="footer-trust-badge">
+          <span>🇪🇬 100% Egyptian Crowdfunding</span>
+        </div>
       </div>
 
       <!-- Platform links -->
@@ -43,8 +50,9 @@
 
     <!-- Bottom bar -->
     <div class="footer-bottom">
-      <span>&copy; {% now "Y" %} EgyStory. Made with ❤️ in Egypt.</span>
-      <span>For Egyptians, by Egyptians.</span>
+      <span>&copy; {% now "Y" %} EgyStory. Made with <span class="heart-pulse">❤️</span> in Egypt.</span>
+      <span style="color: #E4C071; font-weight: 700;">For Egyptians, by Egyptians 🇪🇬</span>
     </div>
   </div>
 </footer>
+

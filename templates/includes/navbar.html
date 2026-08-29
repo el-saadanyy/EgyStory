@@ -24,14 +24,14 @@
           <a href="{% url 'campaigns:donate_general' %}" class="btn btn-outline btn-sm" style="margin-right: var(--space-3);">Donate</a>
           <a href="{% url 'campaigns:case_create' %}" class="btn btn-primary btn-sm" style="margin-right: var(--space-4);">Start a Story</a>
           <div class="user-menu" id="user-menu">
-            <button class="user-menu-trigger" id="user-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="user-menu-dropdown" style="display: flex; align-items: center; gap: 8px; background: transparent; border: none; cursor: pointer; font-family: inherit; font-weight: 600;">
+            <button class="user-menu-trigger" id="user-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="user-menu-dropdown">
               {% if user.profile_picture %}
-                <img src="{{ user.profile_picture.url }}" class="avatar avatar-sm" alt="{{ user.get_full_name }}" style="border: 2px solid var(--color-border);">
+                <img src="{{ user.profile_picture.url }}" class="user-avatar" alt="{{ user.get_full_name }}">
               {% else %}
-                <img src="{% static 'images/default-avatar.svg' %}" class="avatar avatar-sm" alt="Avatar" style="border: 2px solid var(--color-border);">
+                <img src="{% static 'images/default-avatar.svg' %}" class="user-avatar" alt="Avatar">
               {% endif %}
-              <span style="color: var(--color-text-primary);">{{ user.first_name }}</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-secondary)" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              <span class="user-name">{{ user.first_name }}</span>
+              <svg class="chevron-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
 
             <div class="user-menu-dropdown" id="user-menu-dropdown" role="menu">

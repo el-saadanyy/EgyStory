@@ -39,34 +39,65 @@
             <h1 style="font-size: 40px; font-weight: 800; color: var(--color-text-primary); line-height: 1.2; margin-bottom: 16px;">{{ campaign.title }}</h1>
           </div>
 
-          <!-- Main Image -->
-          <div class="project-slider" style="width: 100%; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: 24px; background: #000;">
-            {% if campaign.campaign_image %}
-              <img src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block; opacity: 0.95;">
-            {% else %}
-              <img src="{% static 'images/placeholder-campaign.jpg' %}" alt="{{ campaign.title }}" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block;">
+          <!-- Main Image Slider -->
+          <div class="project-slider-wrapper" style="position: relative; width: 100%; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: 24px; background: #000;">
+            <div class="project-slider" style="display: flex; transition: transform 0.4s ease-in-out; height: 100%;">
+              <!-- First slide: Main image or placeholder -->
+              <div class="slider-slide" style="min-width: 100%; height: 100%; flex-shrink: 0; position: relative;">
+                {% if campaign.campaign_image %}
+                  <img src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: auto; max-height: 500px; object-fit: contain; display: block; margin: 0 auto; opacity: 0.95;">
+                {% else %}
+                  <img src="{% static 'images/placeholder-campaign.jpg' %}" alt="{{ campaign.title }}" style="width: 100%; height: auto; max-height: 500px; object-fit: contain; display: block; margin: 0 auto;">
+                {% endif %}
+              </div>
+              
+              <!-- Additional slides -->
+              {% for img_obj in campaign.images.all %}
+                <div class="slider-slide" style="min-width: 100%; height: 100%; flex-shrink: 0; position: relative;">
+                  <img src="{{ img_obj.image.url }}" alt="Additional picture" style="width: 100%; height: auto; max-height: 500px; object-fit: contain; display: block; margin: 0 auto;">
+                </div>
+              {% endfor %}
+            </div>
+
+            <!-- Navigation Controls (only show if there are additional images) -->
+            {% if campaign.images.all %}
+              <button class="slider-btn slider-prev" aria-label="Previous image" style="position: absolute; top: 50%; left: 16px; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: background 0.2s;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button class="slider-btn slider-next" aria-label="Next image" style="position: absolute; top: 50%; right: 16px; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: background 0.2s;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+
+              <div class="slider-indicators" style="position: absolute; bottom: 16px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; z-index: 10;">
+                <button class="slider-dot active" data-index="0" style="width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.9); border: none; padding: 0; cursor: pointer; transition: opacity 0.2s;"></button>
+                {% for img_obj in campaign.images.all %}
+                  <button class="slider-dot" data-index="{{ forloop.counter }}" style="width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.4); border: none; padding: 0; cursor: pointer; transition: opacity 0.2s;"></button>
+                {% endfor %}
+              </div>
             {% endif %}
           </div>
 
-
-          <!-- Additional Pictures Gallery (Non-slider) -->
+          <!-- Additional Pictures Management -->
           {% if campaign.images.all %}
-            <div style="margin-bottom: 32px;">
-              <h3 style="font-size: 18px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 16px;">Additional Pictures</h3>
-              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px;">
-                {% for img_obj in campaign.images.all %}
-                  <div style="position: relative; border-radius: var(--radius-md); overflow: hidden; height: 120px; border: 1px solid var(--color-border); background: #000;">
-                    <img src="{{ img_obj.image.url }}" alt="Campaign picture" style="width: 100%; height: 100%; object-fit: cover;">
-                    {% if user == campaign.owner or user.is_staff %}
-                      <form method="post" action="{% url 'campaigns:delete_campaign_image' img_obj.id %}" style="position: absolute; top: 6px; right: 6px;" onsubmit="return confirm('Delete this picture?');">
+            {% if user == campaign.owner or user.is_staff %}
+              <div style="margin-bottom: 32px; padding: 16px; background: rgba(255,255,255,0.02); border: 1px dashed var(--color-border); border-radius: var(--radius-lg);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                  <h3 style="font-size: 16px; font-weight: 700; color: var(--color-text-primary); margin: 0;">Manage Additional Pictures</h3>
+                  <span class="badge" style="background: rgba(255,255,255,0.1); font-size: 11px;">Owner/Admin Only</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px;">
+                  {% for img_obj in campaign.images.all %}
+                    <div style="position: relative; border-radius: var(--radius-sm); overflow: hidden; height: 80px; border: 1px solid var(--color-border); background: #000;">
+                      <img src="{{ img_obj.image.url }}" alt="Campaign picture" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+                      <form method="post" action="{% url 'campaigns:delete_campaign_image' img_obj.id %}" style="position: absolute; top: 4px; right: 4px;" onsubmit="return confirm('Delete this picture?');">
                         {% csrf_token %}
-                        <button type="submit" title="Delete image" style="background: rgba(220, 38, 38, 0.85); color: white; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center;">✕</button>
+                        <button type="submit" title="Delete image" style="background: rgba(220, 38, 38, 0.9); color: white; border: none; border-radius: 4px; padding: 4px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
                       </form>
-                    {% endif %}
-                  </div>
-                {% endfor %}
+                    </div>
+                  {% endfor %}
+                </div>
               </div>
-            </div>
+            {% endif %}
           {% endif %}
 
           <!-- The Story Section -->
@@ -263,3 +294,63 @@
 
 {% endblock %}
 
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const track = document.querySelector('.project-slider');
+    const slides = document.querySelectorAll('.slider-slide');
+    if (!track || slides.length <= 1) return;
+
+    const prevBtn = document.querySelector('.slider-prev');
+    const nextBtn = document.querySelector('.slider-next');
+    const dots = document.querySelectorAll('.slider-dot');
+    
+    let currentIndex = 0;
+    
+    function updateSlider() {
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+      dots.forEach((dot, index) => {
+        dot.style.background = index === currentIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)';
+      });
+    }
+
+    if (prevBtn && nextBtn) {
+      prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        updateSlider();
+      });
+
+      nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateSlider();
+      });
+    }
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        currentIndex = index;
+        updateSlider();
+      });
+    });
+
+    // Touch swipe support
+    let startX = 0;
+    track.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+    }, {passive: true});
+    
+    track.addEventListener('touchend', (e) => {
+      const endX = e.changedTouches[0].clientX;
+      const diffX = startX - endX;
+      if (Math.abs(diffX) > 50) {
+        if (diffX > 0) {
+          currentIndex = (currentIndex + 1) % slides.length;
+        } else {
+          currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        }
+        updateSlider();
+      }
+    }, {passive: true});
+  });
+</script>
+{% endblock %}

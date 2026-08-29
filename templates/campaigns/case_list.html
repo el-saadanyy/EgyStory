@@ -1,81 +1,378 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Cases - EgyStory{% endblock %}
+{% block title %}Browse Campaigns - EgyStory{% endblock %}
+{% block meta_description %}Discover real stories from real people across Egypt. Find a campaign that touches your heart and help them reach their goal.{% endblock %}
 
 {% block content %}
-<main style="background-color: var(--color-bg); padding-bottom: 64px; min-height: calc(100vh - var(--navbar-height));">
-  <!-- Header -->
-  <div style="background-color: var(--color-surface); border-bottom: 1px solid var(--color-border); padding: 48px 0; margin-bottom: 32px; text-align: center;">
-    <div class="container">
-      <h1 style="font-size: 36px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 12px; letter-spacing: -0.5px;">Browse Campaigns</h1>
-      <p style="color: var(--color-text-secondary); font-size: 16px; max-width: 600px; margin: 0 auto;">Discover real stories from real people across Egypt. Find a campaign that touches your heart and help them reach their goal.</p>
+<main style="background-color: var(--color-bg); padding-bottom: 80px; min-height: calc(100vh - var(--navbar-height)); position: relative;">
+
+  <!-- ── Hero Banner ────────────────────────────────────────────── -->
+  <div style="background: linear-gradient(135deg, #161512 0%, #2A2823 50%, #1C1B18 100%); border-bottom: 1px solid rgba(228, 192, 113, 0.22); padding: 56px 0 48px; margin-bottom: 40px; text-align: center; position: relative; overflow: hidden;">
+    <!-- Ambient Radial Glow -->
+    <div style="position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 700px; height: 350px; background: radial-gradient(ellipse at center, rgba(228, 192, 113, 0.12) 0%, transparent 70%); pointer-events: none;" aria-hidden="true"></div>
+
+    <div class="container" style="position: relative; z-index: 1;">
+      <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: var(--radius-full); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; background: rgba(228, 192, 113, 0.12); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.3); backdrop-filter: blur(6px);">
+        🇪🇬 Verified Egyptian Campaigns • 100% Secure
+      </div>
+
+      <h1 style="font-size: 42px; font-weight: 900; color: #FFFFFF; margin-bottom: 14px; letter-spacing: -0.8px; line-height: 1.15; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);">
+        Browse <span style="color: #E4C071;">Campaigns</span>
+      </h1>
+
+      <p style="color: #F5EDD5; font-size: 17px; max-width: 640px; margin: 0 auto; line-height: 1.65; opacity: 0.92; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);">
+        Discover real stories from real people across Egypt. Find a campaign that touches your heart and help them reach their goal.
+      </p>
     </div>
   </div>
 
   <section class="container">
-    <!-- Filters and Sort -->
-    <div style="background: var(--color-surface); padding: 24px; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border); margin-bottom: 32px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between;">
-      
-      <!-- Search -->
-      <form method="get" style="display: flex; gap: 8px; flex: 1; min-width: 250px;">
-        <div style="position: relative; flex: 1;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" name="q" placeholder="Search campaigns by title, story, or tag..." value="{{ query|default:'' }}" class="form-control" style="padding-left: 40px; border-radius: var(--radius-full);">
+    
+    <!-- ── Filter & Search Control Panel ───────────────────────── -->
+    <div id="cases-control-panel" style="background: var(--color-surface); padding: 28px; border-radius: var(--radius-xl); box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35); border: 1px solid rgba(228, 192, 113, 0.2); margin-bottom: 36px; position: relative; overflow: hidden; backdrop-filter: blur(8px);">
+      <!-- Subtle top decorative gold line -->
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071, transparent);" aria-hidden="true"></div>
+
+      <!-- Top Row: Search & Sort -->
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+        
+        <!-- Search Input -->
+        <form method="get" id="case-search-form" style="display: flex; gap: 10px; flex: 1; min-width: 280px;">
+          <div style="position: relative; flex: 1;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E4C071" stroke-width="2" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); opacity: 0.85;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" name="q" placeholder="Search by title, story details, or tags..." value="{{ query|default:'' }}" class="form-control" style="padding-left: 46px; border-radius: var(--radius-full); background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); color: #FFFFFF; font-size: 15px; height: 48px; transition: all 0.25s ease;">
+          </div>
+          <input type="hidden" name="filter" value="{{ current_filter }}">
+          <input type="hidden" name="sort" value="{{ current_sort }}">
+          {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+          {% if selected_tag %}<input type="hidden" name="tag" value="{{ selected_tag }}">{% endif %}
+          <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-full); padding: 0 24px; font-weight: 700; height: 48px; box-shadow: 0 4px 14px rgba(228, 192, 113, 0.3);">
+            Search
+          </button>
+        </form>
+
+        <!-- Sort Select -->
+        <form method="get" id="case-sort-form" style="display: flex; align-items: center; gap: 12px;">
+          <input type="hidden" name="filter" value="{{ current_filter }}">
+          <input type="hidden" name="q" value="{{ query|default:'' }}">
+          {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+          {% if selected_tag %}<input type="hidden" name="tag" value="{{ selected_tag }}">{% endif %}
+          <label style="font-size: 14px; font-weight: 700; color: #E4C071; white-space: nowrap;">⚡ Sort by:</label>
+          <div style="position: relative;">
+            <select name="sort" id="case-sort-select" class="form-control" style="border-radius: var(--radius-full); padding: 10px 36px 10px 18px; font-size: 14px; font-weight: 600; min-width: 180px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(228, 192, 113, 0.3); color: #FFFFFF; appearance: none; cursor: pointer; height: 48px;">
+              <option value="newest" {% if current_sort == 'newest' %}selected{% endif %} style="background: #2A2823; color: #fff;">Newest First</option>
+              <option value="most_urgent" {% if current_sort == 'most_urgent' %}selected{% endif %} style="background: #2A2823; color: #fff;">🚨 Most Urgent</option>
+              <option value="almost_funded" {% if current_sort == 'almost_funded' %}selected{% endif %} style="background: #2A2823; color: #fff;">🔥 Almost Funded</option>
+              <option value="recently_completed" {% if current_sort == 'recently_completed' %}selected{% endif %} style="background: #2A2823; color: #fff;">🎉 Recently Completed</option>
+            </select>
+            <div style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #E4C071;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+        </form>
+
+      </div>
+
+      <!-- Bottom Row: Filter Pills -->
+      <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 20px;">
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+          <span style="font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px;">Status:</span>
+
+          <!-- All -->
+          <a href="?filter=all&sort={{ current_sort }}&q={{ query|default:'' }}" class="filter-pill {% if current_filter == 'all' and not selected_category and not selected_tag %}filter-pill--active-gold{% endif %}">
+            All Campaigns
+          </a>
+
+          <!-- Critical -->
+          <a href="?filter=critical&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="filter-pill {% if current_filter == 'critical' %}filter-pill--active-red{% endif %}">
+            🚨 Critical
+          </a>
+
+          <!-- Rare -->
+          <a href="?filter=rare&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="filter-pill {% if current_filter == 'rare' %}filter-pill--active-purple{% endif %}">
+            💜 Rare Cases
+          </a>
+
+          <!-- Active -->
+          <a href="?filter=active&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="filter-pill {% if current_filter == 'active' %}filter-pill--active-gold{% endif %}">
+            🤝 Active
+          </a>
+
+          <!-- Almost Funded -->
+          <a href="?filter=almost_funded&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="filter-pill {% if current_filter == 'almost_funded' %}filter-pill--active-amber{% endif %}">
+            ⚡ Almost Funded
+          </a>
+
+          <!-- Completed -->
+          <a href="?filter=completed&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="filter-pill {% if current_filter == 'completed' %}filter-pill--active-green{% endif %}">
+            🎉 Completed
+          </a>
         </div>
-        <input type="hidden" name="filter" value="{{ current_filter }}">
-        <input type="hidden" name="sort" value="{{ current_sort }}">
-        <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-full); padding-left: 20px; padding-right: 20px;">Search</button>
-      </form>
 
-      <!-- Sort -->
-      <form method="get" style="display: flex; align-items: center; gap: 12px;">
-        <input type="hidden" name="filter" value="{{ current_filter }}">
-        <input type="hidden" name="q" value="{{ query|default:'' }}">
-        <label style="font-size: 14px; font-weight: 600; color: var(--color-text-secondary); white-space: nowrap;">Sort by:</label>
-        <select name="sort" class="form-control" onchange="this.form.submit()" style="border-radius: var(--radius-full); padding-top: 8px; padding-bottom: 8px; font-size: 14px; min-width: 160px;">
-          <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Newest First</option>
-          <option value="most_urgent" {% if current_sort == 'most_urgent' %}selected{% endif %}>Most Urgent</option>
-          <option value="almost_funded" {% if current_sort == 'almost_funded' %}selected{% endif %}>Almost Funded</option>
-          <option value="recently_completed" {% if current_sort == 'recently_completed' %}selected{% endif %}>Recently Completed</option>
-        </select>
-      </form>
+        <!-- Categories & Tags Row -->
+        {% if categories or tags %}
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(255, 255, 255, 0.08);">
+          <span style="font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px;">Explore:</span>
+          
+          {% for cat in categories %}
+            <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&category={{ cat.slug }}" class="tag-chip {% if selected_category == cat.slug %}tag-chip--active{% endif %}">
+              📁 {{ cat.name }}
+            </a>
+          {% endfor %}
+
+          {% for tag in tags %}
+            <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&tag={{ tag.slug }}" class="tag-chip {% if selected_tag == tag.slug %}tag-chip--active{% endif %}">
+              🏷️ {{ tag.name }}
+            </a>
+          {% endfor %}
+
+          {% if selected_category or selected_tag or query or current_filter != 'all' %}
+            <a href="{% url 'campaigns:case_list' %}" class="reset-filters-btn" style="margin-left: auto; color: #E4C071; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: var(--radius-full); background: rgba(228, 192, 113, 0.1); border: 1px solid rgba(228, 192, 113, 0.25); transition: all 0.2s ease;">
+              ✕ Reset Filters
+            </a>
+          {% endif %}
+        </div>
+        {% endif %}
+
+      </div>
+
     </div>
 
-    <!-- Filter Pills -->
-    <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; justify-content: center;">
-      <a href="?filter=all&sort={{ current_sort }}&q={{ query|default:'' }}" class="badge {% if current_filter == 'all' and not selected_category and not selected_tag %}badge-primary{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none;">All Campaigns</a>
-      <a href="?filter=critical&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="badge {% if current_filter == 'critical' %}badge-danger{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none;">Critical</a>
-      <a href="?filter=rare&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="badge {% if current_filter != 'rare' %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none; {% if current_filter == 'rare' %}background: rgba(147, 51, 234, 0.1); color: rgb(147, 51, 234);{% endif %}">Rare Cases</a>
-      <a href="?filter=active&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="badge {% if current_filter == 'active' %}badge-primary{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none;">Active</a>
-      <a href="?filter=almost_funded&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="badge {% if current_filter == 'almost_funded' %}badge-warning{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none;">Almost Funded</a>
-      <a href="?filter=completed&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="badge {% if current_filter == 'completed' %}badge-success{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none;">Completed</a>
-      
-      {% if categories %}
-        {% for cat in categories %}
-          <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&category={{ cat.slug }}" class="badge {% if selected_category == cat.slug %}badge-primary{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none; {% if selected_category == cat.slug %}background: #E4C071; color: #1C1B18; font-weight: 700; box-shadow: 0 0 12px rgba(228, 192, 113, 0.4);{% endif %}">📁 {{ cat.name }}</a>
-        {% endfor %}
-      {% endif %}
-      {% if tags %}
-        {% for tag in tags %}
-          <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&tag={{ tag.slug }}" class="badge {% if selected_tag == tag.slug %}badge-primary{% else %}badge-gray{% endif %}" style="padding: 8px 16px; font-size: 14px; text-decoration: none; {% if selected_tag == tag.slug %}background: #E4C071; color: #1C1B18; font-weight: 700; box-shadow: 0 0 12px rgba(228, 192, 113, 0.4);{% endif %}">🏷️ {{ tag.name }}</a>
-        {% endfor %}
-      {% endif %}
-    </div>
-
-    <!-- Cases Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px;">
+    <!-- ── Cases Grid ──────────────────────────────────────────── -->
+    <div id="campaigns-grid-container" class="campaigns-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px; transition: opacity 0.2s ease;">
       {% for campaign in campaigns %}
         {% include 'includes/campaign_card.html' %}
       {% empty %}
-        <div class="empty-state" style="grid-column: 1 / -1; background: var(--color-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px dashed var(--color-border); padding: 64px 24px;">
-          <div class="empty-state-icon" style="font-size: 32px; width: 64px; height: 64px; margin: 0 auto 16px;">🔍</div>
-          <h2 class="empty-state-title" style="margin-bottom: 8px;">No campaigns found</h2>
-          <p class="empty-state-text" style="color: var(--color-text-secondary); margin-bottom: 24px;">We couldn't find any campaigns matching your current filters and search query.</p>
-          <a href="{% url 'campaigns:case_list' %}" class="btn btn-outline">Clear all filters</a>
+        <div class="empty-state" style="grid-column: 1 / -1; background: var(--color-surface); border-radius: var(--radius-xl); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35); border: 1px dashed rgba(228, 192, 113, 0.3); padding: 72px 24px; text-align: center;">
+          <div style="width: 72px; height: 72px; margin: 0 auto 20px; background: rgba(228, 192, 113, 0.12); border: 1px solid rgba(228, 192, 113, 0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px;">
+            🔍
+          </div>
+          <h2 style="font-size: 26px; font-weight: 800; color: #FFFFFF; margin-bottom: 10px;">No campaigns found</h2>
+          <p style="color: #F5EDD5; opacity: 0.85; font-size: 16px; max-width: 500px; margin: 0 auto 28px; line-height: 1.6;">
+            We couldn't find any campaigns matching your current filters or search terms. Try searching with different keywords or clearing active filters.
+          </p>
+          <a href="{% url 'campaigns:case_list' %}" class="btn btn-primary reset-filters-btn" style="padding: 12px 32px; font-weight: 700; border-radius: var(--radius-full); box-shadow: 0 4px 16px rgba(228, 192, 113, 0.3);">
+            Clear all filters
+          </a>
         </div>
       {% endfor %}
     </div>
+
   </section>
 </main>
+
+<style>
+  /* ── Filter Pills ────────────────────────────────────────────── */
+  .filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: all 0.22s ease;
+    cursor: pointer;
+  }
+  .filter-pill:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+  }
+
+  /* Active State: Gold */
+  .filter-pill--active-gold {
+    background: #E4C071 !important;
+    color: #1C1B18 !important;
+    font-weight: 700 !important;
+    border-color: #E4C071 !important;
+    box-shadow: 0 0 16px rgba(228, 192, 113, 0.45) !important;
+  }
+
+  /* Active State: Red (Critical) */
+  .filter-pill--active-red {
+    background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    border-color: #dc2626 !important;
+    box-shadow: 0 0 16px rgba(220, 38, 38, 0.5) !important;
+  }
+
+  /* Active State: Purple (Rare) */
+  .filter-pill--active-purple {
+    background: linear-gradient(135deg, #9333ea, #7e22ce) !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    border-color: #9333ea !important;
+    box-shadow: 0 0 16px rgba(147, 51, 234, 0.5) !important;
+  }
+
+  /* Active State: Amber (Almost Funded) */
+  .filter-pill--active-amber {
+    background: linear-gradient(135deg, #d97706, #b45309) !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    border-color: #d97706 !important;
+    box-shadow: 0 0 16px rgba(217, 119, 6, 0.5) !important;
+  }
+
+  /* Active State: Green (Completed) */
+  .filter-pill--active-green {
+    background: linear-gradient(135deg, #16a34a, #15803d) !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    border-color: #16a34a !important;
+    box-shadow: 0 0 16px rgba(22, 163, 74, 0.5) !important;
+  }
+
+  /* ── Tag / Category Chips ────────────────────────────────────── */
+  .tag-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: #F5EDD5;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .tag-chip:hover {
+    background: rgba(228, 192, 113, 0.15);
+    border-color: #E4C071;
+    color: #E4C071;
+    transform: translateY(-2px);
+  }
+  .tag-chip--active {
+    background: #E4C071 !important;
+    color: #1C1B18 !important;
+    font-weight: 700 !important;
+    border-color: #E4C071 !important;
+    box-shadow: 0 0 14px rgba(228, 192, 113, 0.4) !important;
+  }
+
+  .reset-filters-btn:hover {
+    background: rgba(228, 192, 113, 0.22) !important;
+    border-color: #E4C071 !important;
+    transform: scale(1.03);
+  }
+</style>
+
+<!-- ── Seamless Instant Dynamic AJAX Filtering ────────────────── -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  let isFetching = false;
+
+  async function loadDynamicCases(targetUrl, pushState = true) {
+    if (isFetching) return;
+    isFetching = true;
+
+    const controlPanel = document.getElementById('cases-control-panel');
+    const gridContainer = document.getElementById('campaigns-grid-container');
+
+    if (gridContainer) {
+      gridContainer.style.opacity = '0.35';
+      gridContainer.style.pointerEvents = 'none';
+    }
+
+    try {
+      const response = await fetch(targetUrl, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to load campaigns');
+      }
+
+      const htmlContent = await response.text();
+      const domParser = new DOMParser();
+      const newDocument = domParser.parseFromString(htmlContent, 'text/html');
+
+      const updatedPanel = newDocument.getElementById('cases-control-panel');
+      const updatedGrid = newDocument.getElementById('campaigns-grid-container');
+
+      if (updatedPanel && controlPanel) {
+        controlPanel.innerHTML = updatedPanel.innerHTML;
+      }
+      if (updatedGrid && gridContainer) {
+        gridContainer.innerHTML = updatedGrid.innerHTML;
+      }
+
+      if (pushState) {
+        window.history.pushState({ url: targetUrl }, '', targetUrl);
+      }
+    } catch (error) {
+      console.warn('AJAX load failed, redirecting normally:', error);
+      window.location.href = targetUrl;
+    } finally {
+      if (gridContainer) {
+        gridContainer.style.opacity = '1';
+        gridContainer.style.pointerEvents = 'auto';
+      }
+      isFetching = false;
+    }
+  }
+
+  // Intercept click on filter pills, tag chips, and reset buttons
+  document.addEventListener('click', function (e) {
+    const trigger = e.target.closest('a.filter-pill, a.tag-chip, a.reset-filters-btn');
+    if (trigger) {
+      const href = trigger.getAttribute('href');
+      if (href && !href.startsWith('#') && !trigger.hasAttribute('target')) {
+        e.preventDefault();
+        loadDynamicCases(trigger.href, true);
+      }
+    }
+  });
+
+  // Intercept search form submission
+  document.addEventListener('submit', function (e) {
+    const searchForm = e.target.closest('#case-search-form');
+    if (searchForm) {
+      e.preventDefault();
+      const actionUrl = new URL(searchForm.action || window.location.href, window.location.origin);
+      const formData = new FormData(searchForm);
+
+      for (const [key, value] of formData.entries()) {
+        if (value && value.trim() !== '') {
+          actionUrl.searchParams.set(key, value.trim());
+        } else {
+          actionUrl.searchParams.delete(key);
+        }
+      }
+
+      loadDynamicCases(actionUrl.toString(), true);
+    }
+  });
+
+  // Intercept Sort dropdown change
+  document.addEventListener('change', function (e) {
+    const sortSelect = e.target.closest('#case-sort-select');
+    if (sortSelect) {
+      e.preventDefault();
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('sort', sortSelect.value);
+      loadDynamicCases(currentUrl.toString(), true);
+    }
+  });
+
+  // Handle browser Back / Forward buttons seamlessly
+  window.addEventListener('popstate', function () {
+    loadDynamicCases(window.location.href, false);
+  });
+});
+</script>
+
 {% endblock %}
+

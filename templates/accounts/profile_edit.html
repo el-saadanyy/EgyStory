@@ -1,147 +1,162 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Edit Profile{% endblock %}
+{% block title %}Edit Profile - EgyStory{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/profile.css' %}?v=100.0">
-<link rel="stylesheet" href="{% static 'css/auth.css' %}?v=100.0">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}?v=250.0">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}?v=200.0">
 {% endblock %}
 
 {% block content %}
-<div class="profile-edit-page">
-  <div class="container">
-    <div class="profile-edit-container">
+<main style="background-color: var(--color-bg); padding: 50px 0 90px; min-height: calc(100vh - var(--navbar-height)); position: relative;">
+  <!-- Ambient background glow -->
+  <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 800px; height: 350px; background: radial-gradient(ellipse at center, rgba(228, 192, 113, 0.12) 0%, transparent 70%); pointer-events: none;" aria-hidden="true"></div>
 
-      <!-- Page heading -->
-      <div style="margin-bottom:32px;">
-        <a href="{% url 'profile' %}" class="text-secondary text-sm" style="display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-          Back to Profile
-        </a>
-        <h1 class="page-title">Edit Profile</h1>
-        <p class="page-subtitle">Update your personal information below.</p>
-      </div>
+  <div class="container" style="max-width: 740px; position: relative; z-index: 1;">
 
-      <div class="card">
-        <form method="post" enctype="multipart/form-data" novalidate id="profile-edit-form">
-          {% csrf_token %}
-
-          <!-- Avatar row -->
-          <div class="card-body" style="border-bottom:1px solid var(--color-border);padding-bottom:24px;">
-            <div class="profile-edit-avatar-row">
-              {% if user.profile_picture %}
-                <img src="{{ user.profile_picture.url }}" class="profile-edit-avatar" id="avatar-preview" alt="Current avatar">
-              {% else %}
-                <img src="{% static 'images/default-avatar.svg' %}" class="profile-edit-avatar" id="avatar-preview" alt="Default avatar">
-              {% endif %}
-              <div>
-                <div class="form-label" style="margin-bottom:8px;">Profile Picture</div>
-                <div class="avatar-upload-area" id="avatar-upload-area" style="padding:12px 16px;" role="button" tabindex="0" aria-label="Upload new profile picture">
-                  <div class="avatar-upload-label">Click to change photo</div>
-                  <div class="avatar-upload-hint">JPEG, PNG, WebP — max 5MB</div>
-                </div>
-                {{ form.profile_picture }}
-                {% for error in form.profile_picture.errors %}
-                  <span class="form-error" role="alert">{{ error }}</span>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-
-          <div class="card-body">
-
-            <!-- Email (read-only) -->
-            <div class="form-group">
-              <label class="form-label">Email Address</label>
-              <input type="email" class="form-control" value="{{ user.email }}" readonly aria-describedby="email-notice">
-              <div class="email-readonly-notice" id="email-notice">
-                📧 Your email address cannot be changed for security reasons.
-              </div>
-            </div>
-
-            <!-- Name row -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-              <div class="form-group">
-                <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name <span class="required">*</span></label>
-                <input type="text" name="{{ form.first_name.html_name }}" id="{{ form.first_name.id_for_label }}"
-                  class="form-control {% if form.first_name.errors %}is-invalid{% endif %}"
-                  value="{{ form.first_name.value|default_if_none:'' }}" required>
-                {% for error in form.first_name.errors %}
-                  <span class="form-error" role="alert">{{ error }}</span>
-                {% endfor %}
-              </div>
-              <div class="form-group">
-                <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name <span class="required">*</span></label>
-                <input type="text" name="{{ form.last_name.html_name }}" id="{{ form.last_name.id_for_label }}"
-                  class="form-control {% if form.last_name.errors %}is-invalid{% endif %}"
-                  value="{{ form.last_name.value|default_if_none:'' }}" required>
-                {% for error in form.last_name.errors %}
-                  <span class="form-error" role="alert">{{ error }}</span>
-                {% endfor %}
-              </div>
-            </div>
-
-            <!-- Phone -->
-            <div class="form-group">
-              <label for="{{ form.phone.id_for_label }}" class="form-label">Egyptian Mobile Number <span class="required">*</span></label>
-              <input type="tel" name="{{ form.phone.html_name }}" id="{{ form.phone.id_for_label }}"
-                class="form-control {% if form.phone.errors %}is-invalid{% endif %}"
-                value="{{ form.phone.value|default_if_none:'' }}"
-                pattern="01[0125][0-9]{8}" placeholder="01012345678" required>
-              <span class="form-hint">Format: 01XXXXXXXXX</span>
-              {% for error in form.phone.errors %}
-                <span class="form-error" role="alert">{{ error }}</span>
-              {% endfor %}
-            </div>
-
-            <!-- Birthdate & Country row -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-              <div class="form-group">
-                <label for="{{ form.birthdate.id_for_label }}" class="form-label">Birthdate <span style="color:var(--color-text-muted);font-weight:400;">(optional)</span></label>
-                <input type="date" name="{{ form.birthdate.html_name }}" id="{{ form.birthdate.id_for_label }}"
-                  class="form-control {% if form.birthdate.errors %}is-invalid{% endif %}"
-                  value="{{ form.birthdate.value|date:'Y-m-d'|default:'' }}">
-                {% for error in form.birthdate.errors %}
-                  <span class="form-error" role="alert">{{ error }}</span>
-                {% endfor %}
-              </div>
-              <div class="form-group">
-                <label for="{{ form.country.id_for_label }}" class="form-label">Country <span style="color:var(--color-text-muted);font-weight:400;">(optional)</span></label>
-                <input type="text" name="{{ form.country.html_name }}" id="{{ form.country.id_for_label }}"
-                  class="form-control {% if form.country.errors %}is-invalid{% endif %}"
-                  placeholder="e.g. Egypt" value="{{ form.country.value|default_if_none:'' }}">
-                {% for error in form.country.errors %}
-                  <span class="form-error" role="alert">{{ error }}</span>
-                {% endfor %}
-              </div>
-            </div>
-
-            <!-- Facebook -->
-            <div class="form-group">
-              <label for="{{ form.facebook.id_for_label }}" class="form-label">Facebook Profile <span style="color:var(--color-text-muted);font-weight:400;">(optional)</span></label>
-              <input type="url" name="{{ form.facebook.html_name }}" id="{{ form.facebook.id_for_label }}"
-                class="form-control {% if form.facebook.errors %}is-invalid{% endif %}"
-                placeholder="https://facebook.com/yourprofile" value="{{ form.facebook.value|default_if_none:'' }}">
-              <span class="form-hint">Enter your Facebook profile URL</span>
-              {% for error in form.facebook.errors %}
-                <span class="form-error" role="alert">{{ error }}</span>
-              {% endfor %}
-            </div>
-
-            <!-- Buttons -->
-            <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
-              <a href="{% url 'profile' %}" class="btn btn-ghost" id="cancel-edit">Cancel</a>
-              <button type="submit" class="btn btn-primary" id="save-profile-btn">Save Changes</button>
-            </div>
-
-          </div>
-        </form>
-      </div>
-
+    <!-- Back Navigation -->
+    <div style="margin-bottom: 24px;">
+      <a href="{% url 'profile' %}" style="display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; color: #E4C071; background: rgba(228, 192, 113, 0.1); border: 1px solid rgba(228, 192, 113, 0.3); padding: 8px 20px; border-radius: var(--radius-full); text-decoration: none; transition: all 0.2s ease;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to Profile
+      </a>
     </div>
+
+    <!-- Main Card -->
+    <div style="background: linear-gradient(135deg, rgba(38, 36, 30, 0.90) 0%, rgba(24, 23, 20, 0.98) 100%); border-radius: 36px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(228, 192, 113, 0.25); overflow: hidden; border: 1px solid rgba(228, 192, 113, 0.32); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
+
+      <!-- ── Header Area ─────────────────────────────────────────── -->
+      <div style="background: radial-gradient(ellipse 75% 65% at 85% 15%, rgba(228, 192, 113, 0.28) 0%, transparent 65%), radial-gradient(circle at 12% 85%, rgba(228, 192, 113, 0.14) 0%, transparent 50%), linear-gradient(135deg, #000000 0%, #181612 45%, rgba(228, 192, 113, 0.18) 78%, rgba(228, 192, 113, 0.38) 100%); border-bottom: 1px solid rgba(228, 192, 113, 0.28); color: white; padding: 44px 40px 36px; position: relative;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071 50%, transparent);" aria-hidden="true"></div>
+
+        <h1 style="font-size: 34px; font-weight: 900; margin-bottom: 8px; line-height: 1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.7);">
+          Edit <span style="color: #E4C071;">Profile</span>
+        </h1>
+        <p style="color: #D9CFB8; font-size: 15.5px; margin: 0; opacity: 0.9;">Update your personal details and account settings below.</p>
+      </div>
+
+      <form method="post" enctype="multipart/form-data" novalidate id="profile-edit-form" style="padding: 40px 44px;">
+        {% csrf_token %}
+
+        <!-- ── Avatar Upload Section ─────────────────────────────── -->
+        <div style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(228, 192, 113, 0.22); border-radius: 26px; padding: 24px; margin-bottom: 32px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
+          {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" class="profile-edit-avatar" id="avatar-preview" alt="Current avatar" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3.5px solid #E4C071; box-shadow: 0 0 20px rgba(228, 192, 113, 0.35); background: #1C1B18;">
+          {% else %}
+            <img src="{% static 'images/default-avatar.svg' %}" class="profile-edit-avatar" id="avatar-preview" alt="Default avatar" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3.5px solid #E4C071; box-shadow: 0 0 20px rgba(228, 192, 113, 0.35); background: #1C1B18;">
+          {% endif %}
+          <div style="flex: 1; min-width: 220px;">
+            <div style="font-size: 15px; font-weight: 800; color: #FFFFFF; margin-bottom: 6px;">Profile Photo</div>
+            <div class="avatar-upload-area" id="avatar-upload-area" style="padding: 12px 18px; border: 1.5px dashed rgba(228, 192, 113, 0.35); border-radius: var(--radius-lg); cursor: pointer; background: rgba(255, 255, 255, 0.03); transition: all 0.2s ease;" role="button" tabindex="0" aria-label="Upload new profile picture">
+              <div style="font-weight: 700; font-size: 13.5px; color: #E4C071;">📷 Click to select a new photo</div>
+              <div style="font-size: 12px; color: #AFA793; margin-top: 2px;">JPEG, PNG, WebP — max 5MB</div>
+            </div>
+            {{ form.profile_picture }}
+            {% for error in form.profile_picture.errors %}
+              <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ error }}</div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- ── Email (read-only) ─────────────────────────────────── -->
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label class="form-label" style="font-size: 14.5px; font-weight: 700; color: #D9CFB8; margin-bottom: 8px; display: block;">Email Address</label>
+          <input type="email" class="form-control" value="{{ user.email }}" readonly aria-describedby="email-notice" style="width: 100%; padding: 14px 18px; font-size: 15px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-lg); background: rgba(0, 0, 0, 0.45); color: #AFA793; cursor: not-allowed;">
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-md); padding: 10px 14px; font-size: 12.5px; color: #AFA793; margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+            <span>🔒</span> Your email address is protected and cannot be modified.
+          </div>
+        </div>
+
+        <!-- ── Name Row ──────────────────────────────────────────── -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 24px;">
+          <div class="form-group">
+            <label for="{{ form.first_name.id_for_label }}" class="form-label" style="font-size: 14.5px; font-weight: 700; color: #D9CFB8; margin-bottom: 8px; display: block;">First Name <span style="color: #f87171;">*</span></label>
+            <input type="text" name="{{ form.first_name.html_name }}" id="{{ form.first_name.id_for_label }}"
+              class="form-control {% if form.first_name.errors %}is-invalid{% endif %}"
+              value="{{ form.first_name.value|default_if_none:'' }}" required
+              style="width: 100%; padding: 14px 18px; font-size: 15px; border: 1px solid rgba(228, 192, 113, 0.25); border-radius: var(--radius-lg); background: rgba(0, 0, 0, 0.35); color: #FFFFFF;">
+            {% for error in form.first_name.errors %}
+              <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.last_name.id_for_label }}" class="form-label" style="font-size: 14.5px; font-weight: 700; color: #D9CFB8; margin-bottom: 8px; display: block;">Last Name <span style="color: #f87171;">*</span></label>
+            <input type="text" name="{{ form.last_name.html_name }}" id="{{ form.last_name.id_for_label }}"
+              class="form-control {% if form.last_name.errors %}is-invalid{% endif %}"
+              value="{{ form.last_name.value|default_if_none:'' }}" required
+              style="width: 100%; padding: 14px 18px; font-size: 15px; border: 1px solid rgba(228, 192, 113, 0.25); border-radius: var(--radius-lg); background: rgba(0, 0, 0, 0.35); color: #FFFFFF;">
+            {% for error in form.last_name.errors %}
+              <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ error }}</div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- ── Phone ─────────────────────────────────────────────── -->
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label for="{{ form.phone.id_for_label }}" class="form-label" style="font-size: 14.5px; font-weight: 700; color: #D9CFB8; margin-bottom: 8px; display: block;">Egyptian Mobile Number <span style="color: #f87171;">*</span></label>
+          <input type="tel" name="{{ form.phone.html_name }}" id="{{ form.phone.id_for_label }}"
+            class="form-control {% if form.phone.errors %}is-invalid{% endif %}"
+            value="{{ form.phone.value|default_if_none:'' }}"
+            pattern="01[0125][0-9]{8}" placeholder="01012345678" required
+            style="width: 100%; padding: 14px 18px; font-size: 15px; border: 1px solid rgba(228, 192, 113, 0.25); border-radius: var(--radius-lg); background: rgba(0, 0, 0, 0.35); color: #FFFFFF;">
+          <small style="color: #AFA793; display: block; margin-top: 6px; font-size: 12.5px;">Format: 01XXXXXXXXX (Vodafone, Orange, Etisalat, WE)</small>
+          {% for error in form.phone.errors %}
+            <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <!-- ── Birthdate & Country Row ───────────────────────────── -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 24px;">
+          <div class="form-group">
+            <label for="{{ form.birthdate.id_for_label }}" class="form-label" style="font-size: 14.5px; font-weight: 700; color: #D9CFB8; margin-bottom: 8px; display: block;">Birthdate <span style="color:#AFA793;font-weight:400;">(optional)</span></label>
+            <input type="date" name="{{ form.birthdate.html_name }}" id="{{ form.birthdate.id_for_label }}"
+              class="form-control {% if form.birthdate.errors %}is-invalid{% endif %}"
+              value="{{ form.birthdate.value|date:'Y-m-d'|default:'' }}"
+              style="width: 100%; padding: 14px 18px; font-size: 15px; border: 1px solid rgba(228, 192, 113, 0.25); border-radius: var(--radius-lg); background: rgba(0, 0, 0, 0.35); color: #FFFFFF;">
+            {% for error in form.birthdate.errors %}
+              <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.country.id_for_label }}" class="form-label" style="font-size: 14.5px; font-weight: 700; color: #D9CFB8; margin-bottom: 8px; display: block;">Country <span style="color:#AFA793;font-weight:400;">(optional)</span></label>
+            <input type="text" name="{{ form.country.html_name }}" id="{{ form.country.id_for_label }}"
+              class="form-control {% if form.country.errors %}is-invalid{% endif %}"
+              placeholder="e.g. Egypt" value="{{ form.country.value|default_if_none:'' }}"
+              style="width: 100%; padding: 14px 18px; font-size: 15px; border: 1px solid rgba(228, 192, 113, 0.25); border-radius: var(--radius-lg); background: rgba(0, 0, 0, 0.35); color: #FFFFFF;">
+            {% for error in form.country.errors %}
+              <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ error }}</div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- ── Facebook Profile ──────────────────────────────────── -->
+        <div class="form-group" style="margin-bottom: 36px;">
+          <label for="{{ form.facebook.id_for_label }}" class="form-label" style="font-size: 14.5px; font-weight: 700; color: #D9CFB8; margin-bottom: 8px; display: block;">Facebook Profile URL <span style="color:#AFA793;font-weight:400;">(optional)</span></label>
+          <input type="url" name="{{ form.facebook.html_name }}" id="{{ form.facebook.id_for_label }}"
+            class="form-control {% if form.facebook.errors %}is-invalid{% endif %}"
+            placeholder="https://facebook.com/yourprofile" value="{{ form.facebook.value|default_if_none:'' }}"
+            style="width: 100%; padding: 14px 18px; font-size: 15px; border: 1px solid rgba(228, 192, 113, 0.25); border-radius: var(--radius-lg); background: rgba(0, 0, 0, 0.35); color: #FFFFFF;">
+          {% for error in form.facebook.errors %}
+            <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <!-- ── Buttons ───────────────────────────────────────────── -->
+        <div style="display: flex; gap: 14px; justify-content: flex-end; align-items: center; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+          <a href="{% url 'profile' %}" class="btn btn-outline" style="border-radius: var(--radius-full); padding: 12px 28px; font-weight: 700; font-size: 14.5px; border-color: rgba(255, 255, 255, 0.2); color: #D9CFB8;" id="cancel-edit">
+            Cancel
+          </a>
+          <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-full); padding: 12px 32px; font-weight: 800; font-size: 15.5px; box-shadow: 0 6px 24px rgba(228, 192, 113, 0.45); border: none;" id="save-profile-btn">
+            💾 Save Changes
+          </button>
+        </div>
+
+      </form>
+    </div>
+
   </div>
-</div>
+</main>
 {% endblock %}
 
 {% block extra_js %}

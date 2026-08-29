@@ -5,82 +5,91 @@
 {% block page_title %}{{ title }}{% endblock %}
 
 {% block admin_content %}
-<div class="admin-card" style="max-width: 600px;">
+<div class="admin-card" style="max-width: 680px; margin: 0 auto; border-radius: 32px !important;">
+  <!-- Form Header -->
+  <div style="padding: 28px 36px 20px; border-bottom: 1px solid rgba(228, 192, 113, 0.18); background: rgba(0, 0, 0, 0.2);">
+    <h3 style="font-size: 22px; font-weight: 800; color: #FFFFFF; margin: 0 0 6px 0;">{{ title }}</h3>
+    <p style="color: #AFA793; font-size: 14px; margin: 0;">Configure administrator credentials and permissions.</p>
+  </div>
+
   <form method="post">
     {% csrf_token %}
     
     {% if form.non_field_errors %}
-      <div class="alert alert-danger" style="margin-bottom: 16px;">
+      <div style="background: rgba(220, 38, 38, 0.15); color: #f87171; border: 1px solid rgba(220, 38, 38, 0.35); padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 20px; font-weight: 600; font-size: 14px;">
         {{ form.non_field_errors }}
       </div>
     {% endif %}
 
-    <div class="form-group" style="margin-bottom: var(--space-4);">
-      <label class="form-label">Email Address</label>
+    <div class="form-group">
+      <label class="form-label">Email Address <span style="color: #f87171;">*</span></label>
       {{ form.email }}
       {% if form.email.errors %}
-        <div style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ form.email.errors }}</div>
+        <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ form.email.errors }}</div>
       {% endif %}
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
-      <div class="form-group">
-        <label class="form-label">First Name</label>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label">First Name <span style="color: #f87171;">*</span></label>
         {{ form.first_name }}
         {% if form.first_name.errors %}
-          <div style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ form.first_name.errors }}</div>
+          <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ form.first_name.errors }}</div>
         {% endif %}
       </div>
-      <div class="form-group">
-        <label class="form-label">Last Name</label>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label">Last Name <span style="color: #f87171;">*</span></label>
         {{ form.last_name }}
         {% if form.last_name.errors %}
-          <div style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ form.last_name.errors }}</div>
+          <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ form.last_name.errors }}</div>
         {% endif %}
       </div>
     </div>
 
-    <div class="form-group" style="margin-bottom: var(--space-4);">
+    <div class="form-group">
       <label class="form-label">Phone Number</label>
       {{ form.phone }}
       {% if form.phone.errors %}
-        <div style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ form.phone.errors }}</div>
+        <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ form.phone.errors }}</div>
       {% endif %}
     </div>
 
-    <div style="display: flex; gap: var(--space-6); margin-bottom: var(--space-4);">
-      <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #d1d5db;">
+    <!-- Permissions checkboxes -->
+    <div style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(228, 192, 113, 0.2); border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 28px; display: flex; gap: 28px; flex-wrap: wrap;">
+      <label style="display: inline-flex; align-items: center; gap: 10px; cursor: pointer; color: #FFFFFF; font-weight: 600; font-size: 14.5px;">
         {{ form.is_active }} Active Account
       </label>
-      <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #d1d5db;">
+      <label style="display: inline-flex; align-items: center; gap: 10px; cursor: pointer; color: #FFFFFF; font-weight: 600; font-size: 14.5px;">
         {{ form.is_superuser }} Superuser Permissions
       </label>
     </div>
 
-    <hr style="border-color: var(--color-border); margin: var(--space-6) 0;">
+    {% if form.password %}
+      <hr style="border-color: rgba(255, 255, 255, 0.08); margin: 28px 0;">
 
-    <div class="form-group" style="margin-bottom: var(--space-4);">
-      <label class="form-label">Password</label>
-      {{ form.password }}
-      {% if form.password.help_text %}
-        <div style="color: #9ca3af; font-size: 12px; margin-top: 4px;">{{ form.password.help_text }}</div>
-      {% endif %}
-      {% if form.password.errors %}
-        <div style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ form.password.errors }}</div>
-      {% endif %}
-    </div>
+      <div class="form-group">
+        <label class="form-label">Password <span style="color: #f87171;">*</span></label>
+        {{ form.password }}
+        {% if form.password.help_text %}
+          <div style="color: #AFA793; font-size: 12.5px; margin-top: 6px;">{{ form.password.help_text }}</div>
+        {% endif %}
+        {% if form.password.errors %}
+          <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ form.password.errors }}</div>
+        {% endif %}
+      </div>
 
-    <div class="form-group" style="margin-bottom: var(--space-6);">
-      <label class="form-label">Confirm Password</label>
-      {{ form.confirm_password }}
-      {% if form.confirm_password.errors %}
-        <div style="color: #ef4444; font-size: 12px; margin-top: 4px;">{{ form.confirm_password.errors }}</div>
-      {% endif %}
-    </div>
+      <div class="form-group" style="margin-bottom: 32px;">
+        <label class="form-label">Confirm Password <span style="color: #f87171;">*</span></label>
+        {{ form.confirm_password }}
+        {% if form.confirm_password.errors %}
+          <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ form.confirm_password.errors }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
 
-    <div style="display: flex; gap: var(--space-3);">
-      <button type="submit" class="btn btn-primary">Save Admin</button>
-      <a href="{% url 'admin_management' %}" class="btn btn-outline" style="border-color: rgba(255,255,255,0.2); color: #fff;">Cancel</a>
+    <div style="display: flex; gap: 14px; justify-content: flex-end; margin-top: 12px;">
+      <a href="{% url 'admin_management' %}" class="btn btn-outline" style="border-radius: var(--radius-full); padding: 10px 24px;">Cancel</a>
+      <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-full); padding: 10px 28px; font-weight: 800;">Save Administrator</button>
     </div>
   </form>
 </div>

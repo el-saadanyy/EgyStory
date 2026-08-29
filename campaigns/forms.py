@@ -28,7 +28,7 @@ class CampaignForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'e.g., Medical treatment for a child'}),
             'category': forms.Select(attrs={'class': 'form-input'}),
-            'tags': forms.SelectMultiple(attrs={'class': 'form-input', 'style': 'min-height: 100px;'}),
+            'tags': forms.CheckboxSelectMultiple(),
             'story': forms.Textarea(attrs={'class': 'form-input', 'rows': 6, 'placeholder': 'Tell your story...'}),
             'target_amount': forms.NumberInput(attrs={'class': 'form-input', 'step': '0.01'}),
             'initial_raised_amount': forms.NumberInput(attrs={'class': 'form-input', 'step': '0.01'}),
