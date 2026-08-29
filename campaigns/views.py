@@ -190,7 +190,7 @@ def case_detail(request, campaign_id):
     can_creator_cancel = campaign.can_creator_cancel(request.user)
     similar_campaigns = get_similar_campaigns(campaign)
     
-    comments = campaign.comments.select_related('user').all().order_by('-created_at') if hasattr(campaign, 'comments') else []
+    comments = campaign.comments.filter(parent__isnull=True).select_related('user').prefetch_related('replies__user').order_by('-created_at') if hasattr(campaign, 'comments') else []
 
     return render(request, 'campaigns/case_detail.html', {
         'campaign': campaign,
@@ -206,16 +206,34 @@ def case_detail(request, campaign_id):
 
 
 @login_required
-def add_comment(request, campaign_id):
+def add_comment(request, campaign_id, parent_id=None):
     campaign = get_object_or_404(Campaign, id=campaign_id)
     if request.method == 'POST':
         form = CommentForm(request.POST)
+        req_parent_id = parent_id or request.POST.get('parent_id')
+        parent_comment = None
+
+        if req_parent_id:
+            try:
+                parent_comment = Comment.objects.get(id=req_parent_id)
+                # Verify that parent belongs to the same campaign
+                if parent_comment.campaign_id != campaign.id:
+                    messages.error(request, 'Cannot reply to a comment from a different campaign.')
+                    return redirect('campaigns:case_detail', campaign_id=campaign.id)
+            except (Comment.DoesNotExist, ValueError):
+                messages.error(request, 'The comment you are replying to does not exist.')
+                return redirect('campaigns:case_detail', campaign_id=campaign.id)
+
         if form.is_valid():
             comment = form.save(commit=False)
             comment.campaign = campaign
             comment.user = request.user
+            comment.parent = parent_comment
             comment.save()
-            messages.success(request, 'Your comment has been added successfully.')
+            if parent_comment:
+                messages.success(request, 'Your reply has been posted successfully.')
+            else:
+                messages.success(request, 'Your comment has been added successfully.')
         else:
             messages.error(request, 'Failed to post comment. Please check your text.')
     return redirect('campaigns:case_detail', campaign_id=campaign.id)

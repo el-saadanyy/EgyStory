@@ -1,0 +1,191 @@
+﻿{% extends 'administration/base.html' %}
+{% load static humanize %}
+
+{% block title %}Comment Moderation{% endblock %}
+{% block page_title %}Comment Moderation{% endblock %}
+
+{% block admin_content %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px;">
+  <div>
+    <div class="section-title" style="margin-bottom: 6px;">
+      <span>All Comments &amp; Replies</span>
+    </div>
+    <p style="color: #AFA793; font-size: 14px; margin: 0;">
+      Review, identify, and permanently delete inappropriate comments or replies. Deleting a parent comment also removes all its replies (CASCADE).
+    </p>
+  </div>
+  <span class="badge" style="font-size: 14px; font-weight: 800; background: rgba(228, 192, 113, 0.15); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.3); padding: 6px 16px; border-radius: var(--radius-full);">
+    {{ comments.count|intcomma }} Total
+  </span>
+</div>
+
+<div class="admin-card" style="border-color: rgba(228, 192, 113, 0.2);">
+  {% if comments %}
+    <div style="overflow-x: auto;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Author</th>
+            <th>Campaign</th>
+            <th>Type</th>
+            <th>Content</th>
+            <th>Reports</th>
+            <th>Posted</th>
+            <th class="actions-col" style="text-align: right; padding-right: 24px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for comment in comments %}
+            <tr>
+              <td style="color: #AFA793; font-size: 13px; font-weight: 700;">{{ comment.id }}</td>
+              <td>
+                <strong style="color: #FFFFFF; font-size: 14px; display: block;">
+                  {{ comment.user.get_full_name|default:comment.user.email }}
+                </strong>
+                <span style="color: #AFA793; font-size: 12px;">{{ comment.user.email }}</span>
+              </td>
+              <td>
+                <a href="{% url 'campaigns:case_detail' comment.campaign.id %}" target="_blank"
+                   style="color: #E4C071; font-weight: 700; font-size: 13px; text-decoration: underline;">
+                  {{ comment.campaign.title|truncatechars:40 }} &#x2197;
+                </a>
+              </td>
+              <td>
+                {% if comment.parent %}
+                  <span class="badge badge-gray" style="font-weight: 700; font-size: 12px;">&#x21B3; Reply</span>
+                  <div style="font-size: 11.5px; color: #AFA793; margin-top: 3px;">to #{{ comment.parent.id }}</div>
+                {% else %}
+                  <span class="badge" style="background: rgba(228, 192, 113, 0.15); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.3); font-weight: 700; font-size: 12px;">Comment</span>
+                  {% with reply_count=comment.replies.count %}
+                    {% if reply_count %}
+                      <div style="font-size: 11.5px; color: #AFA793; margin-top: 3px;">{{ reply_count }} repl{{ reply_count|pluralize:"y,ies" }}</div>
+                    {% endif %}
+                  {% endwith %}
+                {% endif %}
+              </td>
+              <td style="max-width: 320px;">
+                <p style="color: #D9CFB8; font-size: 13.5px; line-height: 1.5; margin: 0; word-break: break-word;">
+                  {{ comment.content|truncatechars:200 }}
+                </p>
+              </td>
+              <td>
+                {% with report_count=comment.reports.count %}
+                  {% if report_count %}
+                    <span class="badge badge-danger" style="font-weight: 800; font-size: 12px;">
+                      {{ report_count }} report{{ report_count|pluralize }}
+                    </span>
+                  {% else %}
+                    <span style="color: #AFA793; font-size: 12px;">—</span>
+                  {% endif %}
+                {% endwith %}
+              </td>
+              <td style="color: #AFA793; font-size: 12.5px; white-space: nowrap;">
+                {{ comment.created_at|date:"M d, Y" }}<br>
+                <span style="font-size: 11px;">{{ comment.created_at|date:"H:i" }}</span>
+              </td>
+              <td class="actions-col" style="text-align: right; padding-right: 24px;">
+                <button type="button"
+                        class="btn btn-danger-outline btn-sm btn-delete-comment"
+                        data-comment-id="{{ comment.id }}"
+                        data-delete-url="{% url 'admin_delete_comment' comment.id %}"
+                        data-is-parent="{% if not comment.parent and comment.replies.count %}true{% else %}false{% endif %}"
+                        data-reply-count="{{ comment.replies.count }}">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div style="padding: 64px; text-align: center; color: #AFA793; font-size: 15px;">
+      No comments found yet.
+    </div>
+  {% endif %}
+</div>
+
+<div id="delete-comment-modal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-labelledby="delete-comment-modal-title">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 id="delete-comment-modal-title" class="modal-title" style="color: #f87171;">
+        Permanently Delete Comment?
+      </h3>
+      <button type="button" class="modal-close" id="delete-comment-modal-close" aria-label="Close modal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <form id="delete-comment-form" method="post" action="">
+      {% csrf_token %}
+      <div class="modal-body">
+        <div style="background: rgba(220, 38, 38, 0.12); border: 1px solid rgba(220, 38, 38, 0.35); padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 14px;">
+          <strong style="color: #f87171; display: block; font-size: 14px; margin-bottom: 4px;">Permanent Deletion Warning</strong>
+          <p id="delete-comment-modal-message" style="color: #D9CFB8; line-height: 1.5; font-size: 13.5px; margin: 0;">
+            Are you sure you want to permanently delete this comment?
+          </p>
+        </div>
+        <div id="delete-comment-cascade-warning" style="display: none; background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.3); padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 14px;">
+          <strong style="color: #facc15; font-size: 13.5px;">Cascade Notice:</strong>
+          <p id="delete-comment-cascade-message" style="color: #D9CFB8; font-size: 13px; margin: 6px 0 0 0; line-height: 1.5;">
+            This is a parent comment with replies. All replies will also be permanently deleted.
+          </p>
+        </div>
+        <p style="color: #AFA793; font-size: 13px; line-height: 1.5; margin: 0;">
+          This action cannot be undone. Existing reports on this comment will also be removed.
+        </p>
+      </div>
+      <div class="modal-footer" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+        <button type="button" class="btn btn-ghost" id="delete-comment-modal-cancel" style="padding: 8px 18px;">Cancel</button>
+        <button type="submit" class="btn btn-danger" style="background: #dc2626; border: none; border-radius: var(--radius-full); padding: 9px 24px; font-weight: 700; color: #fff;">
+          Delete Permanently
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('delete-comment-modal');
+    var form = document.getElementById('delete-comment-form');
+    var msgEl = document.getElementById('delete-comment-modal-message');
+    var cascadeWarning = document.getElementById('delete-comment-cascade-warning');
+    var cascadeMsg = document.getElementById('delete-comment-cascade-message');
+    var closeBtn = document.getElementById('delete-comment-modal-close');
+    var cancelBtn = document.getElementById('delete-comment-modal-cancel');
+
+    function openModal(deleteUrl, isParent, replyCount) {
+      if (form) form.action = deleteUrl;
+      if (isParent && replyCount > 0) {
+        if (cascadeWarning) cascadeWarning.style.display = 'block';
+        if (cascadeMsg) cascadeMsg.textContent =
+          'This is a parent comment with ' + replyCount + ' repl' + (replyCount === 1 ? 'y' : 'ies') +
+          '. All replies will also be permanently deleted.';
+      } else {
+        if (cascadeWarning) cascadeWarning.style.display = 'none';
+      }
+      if (modal) { modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false'); }
+    }
+
+    function closeModal() {
+      if (modal) { modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true'); }
+    }
+
+    document.querySelectorAll('.btn-delete-comment').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        openModal(this.dataset.deleteUrl, this.dataset.isParent === 'true', parseInt(this.dataset.replyCount || '0', 10));
+      });
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+    if (modal) { modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); }); }
+  });
+</script>
+{% endblock %}

@@ -303,15 +303,22 @@ class CampaignReport(models.Model):
 class Comment(models.Model):
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='campaign_comments')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['created_at']
 
     def __str__(self):
+        if self.parent:
+            return f"Reply by {self.user} on comment #{self.parent.id}"
         return f"Comment by {self.user} on {self.campaign.title}"
+
+    @property
+    def is_reply(self):
+        return self.parent is not None
 
 
 class CommentReport(models.Model):

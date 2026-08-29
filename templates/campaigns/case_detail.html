@@ -2,43 +2,89 @@
 {% load static %}
 
 {% block title %}{{ campaign.title }} | EgyStory{% endblock %}
+{% block meta_description %}{{ campaign.story|truncatechars:150 }}{% endblock %}
 
 {% block content %}
-<main style="padding: 40px 0; background-color: var(--color-bg); min-height: calc(100vh - 160px);">
-  <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-    
-    <!-- Breadcrumb & Top Details -->
-    <nav style="margin-bottom: 24px; font-size: 14px; color: var(--color-text-secondary); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <a href="{% url 'campaigns:case_list' %}" style="color: var(--color-text-muted); text-decoration: none;">Campaigns</a>
-        <span>/</span>
-        <span style="color: var(--color-text-primary); font-weight: 500;">{{ campaign.title|truncatechars:40 }}</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span class="badge" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600; padding: 4px 12px; border-radius: 99px;">{{ campaign.category.name }}</span>
-        {% if campaign.case_type == 'Rare / Ultra-Rare & High-Cost' %}
-          <span class="badge" style="background: rgba(239, 68, 68, 0.1); color: var(--color-danger); border: 1px solid rgba(239, 68, 68, 0.2); font-weight: 700; padding: 4px 12px; border-radius: 99px;">Rare Condition</span>
+<main style="background-color: var(--color-bg); min-height: calc(100vh - var(--navbar-height)); padding-bottom: 80px;">
+
+  <!-- ── Hero Banner (Premium Dark/Gold) ──────────────────────── -->
+  <div style="background: linear-gradient(160deg, #111009 0%, #1E1C17 40%, #2A2720 70%, #1A1815 100%); border-bottom: 1px solid rgba(228,192,113,0.22); padding: 52px 0 48px; position: relative; overflow: hidden;">
+
+    <!-- Radial gold glow — large ambient -->
+    <div style="position: absolute; top: -120px; left: 50%; transform: translateX(-50%); width: 900px; height: 500px; background: radial-gradient(ellipse at center, rgba(228,192,113,0.13) 0%, rgba(228,192,113,0.04) 45%, transparent 70%); pointer-events: none;" aria-hidden="true"></div>
+    <!-- Secondary glow left -->
+    <div style="position: absolute; bottom: -60px; left: -80px; width: 400px; height: 300px; background: radial-gradient(ellipse at center, rgba(228,192,113,0.07) 0%, transparent 65%); pointer-events: none;" aria-hidden="true"></div>
+    <!-- Gold line top -->
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(228,192,113,0.55) 30%, rgba(228,192,113,0.85) 50%, rgba(228,192,113,0.55) 70%, transparent 100%);" aria-hidden="true"></div>
+
+    <div class="container" style="position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+
+
+
+
+      <!-- Badges Row -->
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; align-items: center;">
+        {% if campaign.category %}
+          <span style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; border-radius: var(--radius-full); font-size: 12.5px; font-weight: 700; background: rgba(228,192,113,0.14); color: #E4C071; border: 1px solid rgba(228,192,113,0.32);">
+            📁 {{ campaign.category.name }}
+          </span>
         {% endif %}
-      </div>
-    </nav>
-
-    <!-- Main Title -->
-    <h1 style="font-size: 32px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 12px; line-height: 1.25;">
-      {{ campaign.title }}
-    </h1>
-
-    <!-- Tags Row -->
-    {% if campaign.tags.all %}
-      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;">
+        {% if campaign.case_type == 'Rare / Ultra-Rare & High-Cost' %}
+          <span style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; border-radius: var(--radius-full); font-size: 12.5px; font-weight: 700; background: rgba(147,51,234,0.15); color: #c084fc; border: 1px solid rgba(147,51,234,0.35);">
+            💎 Rare Condition
+          </span>
+        {% endif %}
+        {% if campaign.is_critical %}
+          <span style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; border-radius: var(--radius-full); font-size: 12.5px; font-weight: 700; background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.35);">
+            🚨 Critical Case
+          </span>
+        {% endif %}
+        {% if campaign.is_featured %}
+          <span style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; border-radius: var(--radius-full); font-size: 12.5px; font-weight: 700; background: rgba(228,192,113,0.18); color: #E4C071; border: 1px solid rgba(228,192,113,0.45);">
+            🌟 Featured
+          </span>
+        {% endif %}
         {% for tag in campaign.tags.all %}
-          <a href="{% url 'campaigns:case_list' %}?tag={{ tag.name }}" class="tag-badge" style="background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary); padding: 4px 10px; border-radius: 12px; font-size: 12px; text-decoration: none;">
-            #{{ tag.name }}
-          </a>
+          <a href="{% url 'campaigns:case_list' %}?tag={{ tag.slug }}" style="display: inline-flex; align-items: center; padding: 5px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; background: rgba(228,192,113,0.13); color: #E4C071; border: 1px solid rgba(228,192,113,0.32); text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='rgba(228,192,113,0.24)'" onmouseout="this.style.background='rgba(228,192,113,0.13)'">#{{ tag.name }}</a>
         {% endfor %}
       </div>
-    {% endif %}
 
-    <!-- Content Grid -->
+      <!-- Two-column: Title + Stats mini-bar -->
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap;">
+
+        <!-- Title -->
+        <h1 style="font-size: clamp(26px, 4vw, 42px); font-weight: 900; color: #FFFFFF; margin: 0; line-height: 1.15; text-shadow: 0 2px 16px rgba(0,0,0,0.5); letter-spacing: -0.5px; max-width: 700px; flex: 1;">
+          {{ campaign.title }}
+        </h1>
+
+        <!-- Quick Stats Chips -->
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; flex-shrink: 0; align-items: flex-end;">
+          <!-- Raised -->
+          <div style="background: rgba(228,192,113,0.1); border: 1px solid rgba(228,192,113,0.28); border-radius: var(--radius-xl); padding: 14px 20px; text-align: center; min-width: 110px;">
+            <div style="font-size: 20px; font-weight: 900; color: #E4C071; line-height: 1; margin-bottom: 5px;">{{ campaign.raised_amount|floatformat:"0" }}</div>
+            <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #AFA793;">EGP Raised</div>
+          </div>
+          <!-- Progress -->
+          <div style="background: rgba(228,192,113,0.08); border: 1px solid rgba(228,192,113,0.2); border-radius: var(--radius-xl); padding: 14px 20px; text-align: center; min-width: 90px;">
+            <div style="font-size: 20px; font-weight: 900; color: #E4C071; line-height: 1; margin-bottom: 5px;">{{ campaign.get_progress_percentage }}%</div>
+            <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #AFA793;">Funded</div>
+          </div>
+          <!-- Days -->
+          {% if campaign.deadline %}
+          <div style="background: rgba(228,192,113,0.08); border: 1px solid rgba(228,192,113,0.2); border-radius: var(--radius-xl); padding: 14px 20px; text-align: center; min-width: 90px;">
+            <div style="font-size: 20px; font-weight: 900; color: {% if campaign.get_days_remaining <= 3 %}#f87171{% elif campaign.get_days_remaining <= 7 %}#fbbf24{% else %}#E4C071{% endif %}; line-height: 1; margin-bottom: 5px;">{{ campaign.get_days_remaining }}</div>
+            <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #AFA793;">Days Left</div>
+          </div>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ── Main Content ─────────────────────────────────────────── -->
+  <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px 0;">
     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px; align-items: start;">
       
       <!-- Main Content Column -->
@@ -108,9 +154,10 @@
         {% endif %}
 
         <!-- The Story Section -->
-        <div style="background: var(--color-surface); padding: 40px; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
-          <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 24px; border-bottom: 2px solid var(--color-border); padding-bottom: 12px;">The Story</h2>
-          <div style="font-size: 17px; line-height: 1.8; color: var(--color-text-primary); white-space: pre-wrap;">{{ campaign.story }}</div>
+        <div style="background: linear-gradient(135deg, rgba(38,36,30,0.92) 0%, rgba(24,23,20,0.98) 100%); padding: 40px; border-radius: var(--radius-xl); border: 1px solid rgba(228,192,113,0.18); box-shadow: 0 16px 48px rgba(0,0,0,0.45); position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071 50%, transparent);" aria-hidden="true"></div>
+          <h2 style="font-size: 22px; font-weight: 800; color: #FFFFFF; margin-bottom: 24px; border-bottom: 1px solid rgba(228,192,113,0.2); padding-bottom: 14px; letter-spacing: -0.3px;">📖 The Story</h2>
+          <div style="font-size: 16.5px; line-height: 1.9; color: #D9CFB8; white-space: pre-wrap;">{{ campaign.story }}</div>
           
           {% if campaign.updates.all %}
           <div style="margin-top: 48px; border-top: 1px solid var(--color-border); padding-top: 32px;">
@@ -146,10 +193,10 @@
             {% endif %}
           </div>
 
-          <!-- Campaign Comments Section (Requirement #4 & #6) -->
-          <div style="margin-top: 48px; border-top: 1px solid var(--color-border); padding-top: 32px;">
-            <h3 style="font-size: 20px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 20px;">
-              Comments ({{ campaign.comments.count }})
+          <!-- Campaign Comments Section -->
+          <div style="margin-top: 48px; border-top: 1px solid rgba(228,192,113,0.15); padding-top: 32px;">
+            <h3 style="font-size: 20px; font-weight: 800; color: #FFFFFF; margin-bottom: 20px; letter-spacing: -0.3px;">
+              💬 Comments <span style="font-size: 15px; font-weight: 600; color: #AFA793;">({{ campaign.comments.count }})</span>
             </h3>
 
             <!-- Add Comment Form -->
@@ -157,7 +204,7 @@
               <form method="post" action="{% url 'campaigns:add_comment' campaign.id %}" style="margin-bottom: 32px;">
                 {% csrf_token %}
                 <div style="margin-bottom: 12px;">
-                  <textarea name="content" rows="3" class="form-input" placeholder="Write your comment here..." style="width: 100%; padding: 12px; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text-primary); border: 1px solid var(--color-border); font-size: 14px;" required></textarea>
+                  <textarea name="content" rows="3" class="form-input comment-textarea-enter" placeholder="Write your comment here... (Enter to submit, Shift+Enter for new line)" style="width: 100%; padding: 12px; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text-primary); border: 1px solid var(--color-border); font-size: 14px;" required></textarea>
                 </div>
                 <div style="text-align: right;">
                   <button type="submit" class="btn btn-primary btn-sm" style="padding: 8px 20px;">Post Comment</button>
@@ -171,27 +218,50 @@
 
             <!-- Comments List -->
             <div style="display: flex; flex-direction: column; gap: 16px;">
-              {% for comment in campaign.comments.all %}
-                <div style="background: var(--color-bg); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--color-border); position: relative;">
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <div style="font-weight: 700; font-size: 15px; color: var(--color-text-primary);">
-                      {{ comment.user.first_name }} {{ comment.user.last_name }} <span style="font-size: 13px; font-weight: 400; color: var(--color-text-muted);">({{ comment.user.email }})</span>
+              {% for comment in comments %}
+                <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,0.08); border-left: 3px solid rgba(228,192,113,0.35); position: relative;">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                    <div style="font-weight: 700; font-size: 14.5px; color: #FFFFFF;">
+                      {{ comment.user.first_name }} {{ comment.user.last_name }} <span style="font-size: 12.5px; font-weight: 400; color: #AFA793;">({{ comment.user.email }})</span>
                     </div>
-                    <div style="font-size: 12px; color: var(--color-text-muted);">
-                      {{ comment.created_at|date:"M d, Y H:i" }}
+                    <div style="font-size: 12px; color: #AFA793; white-space: nowrap; margin-left: 12px;">
+                      {{ comment.created_at|date:"M d, Y" }}
                     </div>
                   </div>
-                  <p style="font-size: 15px; line-height: 1.6; color: var(--color-text-secondary); margin: 0; white-space: pre-wrap;">{{ comment.content }}</p>
+                  <p style="font-size: 15px; line-height: 1.65; color: #D9CFB8; margin: 0; white-space: pre-wrap;">{{ comment.content }}</p>
 
-                  <!-- Report Comment Action -->
-                  {% if user.is_authenticated and comment.user != user %}
-                    <div style="margin-top: 12px; text-align: right;">
+                  <!-- Actions Row: Reply & Report -->
+                  <div style="margin-top: 14px; display: flex; justify-content: flex-end; gap: 12px; align-items: center;">
+                    {% if user.is_authenticated %}
+                      <button type="button" class="btn btn-ghost btn-sm" onclick="toggleReplyBox('replyBox{{ comment.id }}')" style="color: var(--color-primary); font-size: 13px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 5px;">
+                        💬 Reply
+                      </button>
+                    {% endif %}
+                    {% if user.is_authenticated and comment.user != user %}
                       <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('reportCommentModal{{ comment.id }}').style.display='flex';" style="color: var(--color-danger); font-size: 12px; padding: 4px 8px;">
                         🚩 Report Comment
                       </button>
-                    </div>
+                    {% endif %}
+                  </div>
 
-                    <!-- Report Comment Modal -->
+                  <!-- Inline Reply Box -->
+                  {% if user.is_authenticated %}
+                    <div id="replyBox{{ comment.id }}" style="display: none; margin-top: 14px; padding: 14px; background: rgba(228,192,113,0.05); border-radius: var(--radius-md); border: 1px solid rgba(228,192,113,0.2);">
+                      <form method="post" action="{% url 'campaigns:add_reply' campaign.id comment.id %}">
+                        {% csrf_token %}
+                        <div style="margin-bottom: 8px;">
+                          <textarea name="content" rows="2" class="form-input comment-textarea-enter" placeholder="Write a reply to {{ comment.user.first_name|default:comment.user.email }}... (Enter to submit, Shift+Enter for new line)" style="width: 100%; padding: 10px; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text-primary); border: 1px solid var(--color-border); font-size: 13.5px;" required></textarea>
+                        </div>
+                        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                          <button type="button" class="btn btn-ghost btn-sm" onclick="toggleReplyBox('replyBox{{ comment.id }}')">Cancel</button>
+                          <button type="submit" class="btn btn-primary btn-sm" style="padding: 6px 16px; font-size: 13px;">Post Reply</button>
+                        </div>
+                      </form>
+                    </div>
+                  {% endif %}
+
+                  <!-- Report Comment Modal -->
+                  {% if user.is_authenticated and comment.user != user %}
                     <div id="reportCommentModal{{ comment.id }}" class="modal" role="dialog" aria-hidden="true" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
                       <div class="modal-content" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 24px; max-width: 450px; width: 90%; text-align: left; position: relative;">
                         <button type="button" onclick="document.getElementById('reportCommentModal{{ comment.id }}').style.display='none';" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; font-size: 18px; color: var(--color-text-muted); cursor: pointer;">✕</button>
@@ -208,9 +278,58 @@
                       </div>
                     </div>
                   {% endif %}
+
+                  <!-- Nested Replies List -->
+                  {% if comment.replies.all %}
+                    <div style="margin-top: 16px; margin-left: 18px; border-left: 2px solid rgba(228, 192, 113, 0.4); padding-left: 14px; display: flex; flex-direction: column; gap: 10px;">
+                      {% for reply in comment.replies.all %}
+                        <div style="background: var(--color-surface); padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid rgba(228, 192, 113, 0.18);">
+                          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <div style="font-weight: 700; font-size: 14px; color: var(--color-primary);">
+                              ↳ {{ reply.user.first_name }} {{ reply.user.last_name }} <span style="font-size: 12px; font-weight: 400; color: var(--color-text-muted);">({{ reply.user.email }})</span>
+                            </div>
+                            <div style="font-size: 11.5px; color: var(--color-text-muted);">
+                              {{ reply.created_at|date:"M d, Y H:i" }}
+                            </div>
+                          </div>
+                          <p style="font-size: 14px; line-height: 1.5; color: var(--color-text-secondary); margin: 0; white-space: pre-wrap;">{{ reply.content }}</p>
+
+                          <!-- Report Reply Action -->
+                          {% if user.is_authenticated and reply.user != user %}
+                            <div style="margin-top: 8px; text-align: right;">
+                              <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('reportCommentModal{{ reply.id }}').style.display='flex';" style="color: var(--color-danger); font-size: 11.5px; padding: 2px 6px;">
+                                🚩 Report Reply
+                              </button>
+                            </div>
+
+                            <!-- Report Reply Modal -->
+                            <div id="reportCommentModal{{ reply.id }}" class="modal" role="dialog" aria-hidden="true" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
+                              <div class="modal-content" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 24px; max-width: 450px; width: 90%; text-align: left; position: relative;">
+                                <button type="button" onclick="document.getElementById('reportCommentModal{{ reply.id }}').style.display='none';" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; font-size: 18px; color: var(--color-text-muted); cursor: pointer;">✕</button>
+                                <h4 style="font-size: 18px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 8px;">Report Reply</h4>
+                                <p style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 16px;">Please state the reason for reporting this reply:</p>
+                                <form method="post" action="{% url 'campaigns:report_comment' reply.id %}">
+                                  {% csrf_token %}
+                                  <textarea name="reason" rows="3" placeholder="Provide details on why this reply is inappropriate..." style="width: 100%; padding: 10px; border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text-primary); border: 1px solid var(--color-border); font-size: 14px; margin-bottom: 16px;" required></textarea>
+                                  <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                                    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('reportCommentModal{{ reply.id }}').style.display='none';">Cancel</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">Submit Report</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          {% endif %}
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+
                 </div>
               {% empty %}
-                <p style="font-size: 14px; color: var(--color-text-muted); text-align: center; margin: 16px 0;">No comments yet. Be the first to share your thoughts!</p>
+                <div style="padding: 40px; text-align: center; background: rgba(255,255,255,0.02); border-radius: var(--radius-lg); border: 1px dashed rgba(228,192,113,0.2);">
+                  <div style="font-size: 32px; margin-bottom: 12px;">💬</div>
+                  <p style="font-size: 14px; color: #AFA793; margin: 0;">No comments yet. Be the first to share your thoughts!</p>
+                </div>
               {% endfor %}
             </div>
           </div>
@@ -219,13 +338,15 @@
       </div>
 
       <!-- Sidebar / Action Card -->
-      <div style="grid-column: span 1;">
-        <div style="background: var(--color-surface); padding: 32px; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); border: 1px solid var(--color-border); position: sticky; top: calc(var(--navbar-height) + 32px);">
+      <div>
+        <div style="background: linear-gradient(135deg, rgba(38,36,30,0.95) 0%, rgba(24,23,20,0.99) 100%); padding: 32px; border-radius: var(--radius-xl); border: 1px solid rgba(228,192,113,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(228,192,113,0.2); position: sticky; top: calc(var(--navbar-height) + 24px); overflow: hidden;">
+          <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071 50%, transparent);" aria-hidden="true"></div>
           
           <!-- Amount Raised -->
           <div style="margin-bottom: 24px;">
+            <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #AFA793; margin-bottom: 8px;">Total Raised</div>
             <div style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;">
-              <span style="font-size: 36px; font-weight: 800; color: var(--color-primary); line-height: 1;">{{ campaign.raised_amount }} EGP</span>
+              <span style="font-size: 38px; font-weight: 900; color: #E4C071; line-height: 1; text-shadow: 0 0 24px rgba(228,192,113,0.35);">{{ campaign.raised_amount }} <span style="font-size: 18px; font-weight: 700; color: #D9CFB8;">EGP</span></span>
               <span style="font-size: 16px; color: var(--color-text-muted); font-weight: 500;">
                 {% if campaign.initial_raised_amount and campaign.initial_raised_amount > 0 %}
                   (includes {{ campaign.initial_raised_amount }} EGP initial)
@@ -236,12 +357,12 @@
           </div>
 
           <!-- Progress Bar -->
-          <div style="background: rgba(255,255,255,0.1); border-radius: 99px; height: 10px; width: 100%; overflow: hidden; margin-bottom: 12px;">
-            <div style="background: {% if campaign.status == 'Completed' %}#16a34a{% else %}var(--color-primary){% endif %}; height: 100%; width: calc({{ campaign.get_progress_percentage }} * 1%); border-radius: 99px;"></div>
+          <div style="background: rgba(255,255,255,0.08); border-radius: 99px; height: 8px; width: 100%; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.06);">
+            <div style="background: {% if campaign.status == 'Completed' %}linear-gradient(90deg, #16a34a, #4ade80){% else %}linear-gradient(90deg, #c9a227, #E4C071){% endif %}; height: 100%; width: calc({{ campaign.get_progress_percentage }} * 1%); border-radius: 99px; box-shadow: 0 0 8px rgba(228,192,113,0.4);"></div>
           </div>
           
-          <div style="display: flex; justify-content: space-between; font-size: 15px; margin-bottom: 32px; font-weight: 600;">
-            <span style="color: var(--color-text-primary);">{{ campaign.get_progress_percentage }}% Funded</span>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 28px; font-weight: 700;">
+            <span style="color: #E4C071;">{{ campaign.get_progress_percentage }}% Funded</span>
             {% if campaign.deadline %}
               <span style="color: var(--color-text-secondary); display: flex; align-items: center; gap: 6px;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -252,26 +373,26 @@
 
           <!-- Action Button -->
           {% if campaign.status == 'Active' %}
-            <a href="{% url 'campaigns:donate' campaign.id %}" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 18px; font-weight: 700; border-radius: var(--radius-lg); box-shadow: 0 4px 14px rgba(198, 40, 40, 0.3);">Donate Now</a>
+            <a href="{% url 'campaigns:donate' campaign.id %}" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 17px; font-weight: 800; border-radius: var(--radius-full); box-shadow: 0 6px 24px rgba(228,192,113,0.45); letter-spacing: 0.03em;">❤️ Donate Now</a>
             <p style="text-align: center; font-size: 13px; color: var(--color-text-muted); margin-top: 16px;">100% secure payment</p>
           {% elif campaign.status == 'Completed' %}
-            <div style="width: 100%; padding: 16px; background: rgba(22, 163, 74, 0.1); color: rgb(22, 163, 74); border-radius: var(--radius-lg); text-align: center; font-weight: 700; font-size: 18px; border: 1px solid rgba(22, 163, 74, 0.2);">
+            <div style="width: 100%; padding: 16px; background: linear-gradient(135deg, rgba(22,163,74,0.15), rgba(74,222,128,0.08)); color: #4ade80; border-radius: var(--radius-full); text-align: center; font-weight: 800; font-size: 17px; border: 1px solid rgba(22,163,74,0.3); box-shadow: 0 0 20px rgba(22,163,74,0.15);">
               🎉 Target Reached!
             </div>
-            <p style="text-align: center; font-size: 14px; color: var(--color-text-secondary); margin-top: 12px;">This campaign has been successfully funded.</p>
+            <p style="text-align: center; font-size: 13px; color: #AFA793; margin-top: 12px;">This campaign has been successfully funded.</p>
           {% else %}
-            <button class="btn btn-secondary" style="width: 100%; padding: 16px; font-size: 18px; font-weight: 700; border-radius: var(--radius-lg); background: rgba(255,255,255,0.1); color: var(--color-text-muted); border: none; cursor: not-allowed;" disabled>Campaign {{ campaign.status }}</button>
+            <button class="btn btn-secondary" style="width: 100%; padding: 16px; font-size: 16px; font-weight: 700; border-radius: var(--radius-full); background: rgba(255,255,255,0.06); color: #AFA793; border: 1px solid rgba(255,255,255,0.1); cursor: not-allowed;" disabled>Campaign {{ campaign.status }}</button>
           {% endif %}
 
           <!-- Organizer Info -->
-          <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--color-border); display: flex; align-items: center; gap: 16px;">
-            <div style="width: 48px; height: 48px; background: var(--color-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--color-text-muted);">
+          <div style="margin-top: 28px; padding-top: 22px; border-top: 1px solid rgba(228,192,113,0.15); display: flex; align-items: center; gap: 14px;">
+            <div style="width: 44px; height: 44px; background: rgba(228,192,113,0.1); border: 1px solid rgba(228,192,113,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
               👤
             </div>
             <div>
-              <div style="font-size: 13px; color: var(--color-text-muted);">Organized by</div>
-              <div style="font-weight: 700; color: var(--color-text-primary);">{{ campaign.owner.first_name }} {{ campaign.owner.last_name }}</div>
-              <div style="font-size: 13px; color: var(--color-text-secondary);">Created on {{ campaign.created_at|date }}</div>
+              <div style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #AFA793; margin-bottom: 3px;">Organized by</div>
+              <div style="font-weight: 800; color: #FFFFFF; font-size: 14.5px;">{{ campaign.owner.first_name }} {{ campaign.owner.last_name }}</div>
+              <div style="font-size: 12px; color: #AFA793;">{{ campaign.created_at|date }}</div>
             </div>
           </div>
 
@@ -300,15 +421,17 @@
         </div>
       </div>
 
-      <!-- Similar Projects Section (Feature #11) -->
+      <!-- Similar Projects Section -->
       {% if similar_campaigns %}
-        <section class="similar-projects-section" style="margin-top: 64px; padding-top: 48px; border-top: 1px solid var(--color-border); grid-column: span 2;">
-          <div style="margin-bottom: 32px;">
-            <h2 style="font-size: 26px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 8px;">Similar Projects</h2>
-            <p style="font-size: 15px; color: var(--color-text-secondary);">Other active campaigns related by category and topic that may interest you.</p>
+        <section style="margin-top: 64px; padding-top: 48px; border-top: 1px solid rgba(228,192,113,0.15); grid-column: 1 / -1;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+            <div>
+              <h2 style="font-size: 26px; font-weight: 900; color: #FFFFFF; margin-bottom: 6px; letter-spacing: -0.3px;">Similar Projects</h2>
+              <p style="font-size: 15px; color: #AFA793; margin: 0;">Other campaigns you might want to support.</p>
+            </div>
+            <a href="{% url 'campaigns:case_list' %}" class="btn btn-outline btn-sm" style="border-radius: var(--radius-full); padding: 8px 22px; font-weight: 700; white-space: nowrap;">Browse All →</a>
           </div>
-          
-          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
             {% for campaign in similar_campaigns %}
               {% include 'includes/campaign_card.html' with campaign=campaign %}
             {% endfor %}
@@ -433,6 +556,34 @@
         updateSlider();
       }
     }, {passive: true});
+  });
+
+  function toggleReplyBox(boxId) {
+    const box = document.getElementById(boxId);
+    if (box) {
+      box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'block' : 'none';
+      if (box.style.display === 'block') {
+        const textarea = box.querySelector('textarea');
+        if (textarea) textarea.focus();
+      }
+    }
+  }
+
+  // Enter-to-submit for comment and reply textareas.
+  // Shift+Enter inserts a newline (default textarea behavior).
+  // Guards: empty content won't submit; prevents duplicate submissions.
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter' || e.shiftKey) return;
+    const ta = e.target;
+    if (!ta || !ta.classList.contains('comment-textarea-enter')) return;
+    if (ta.value.trim() === '') return; // don't submit empty
+    e.preventDefault();
+    const form = ta.closest('form');
+    if (!form) return;
+    const submitBtn = form.querySelector('[type="submit"]');
+    if (submitBtn && submitBtn.disabled) return; // prevent duplicate
+    if (submitBtn) submitBtn.disabled = true;
+    form.submit();
   });
 </script>
 {% endblock %}

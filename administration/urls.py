@@ -25,6 +25,10 @@ urlpatterns = [
     path('tags/<int:tag_id>/delete/', views.delete_tag, name='admin_delete_tag'),
     path('reports/', views.admin_reports, name='admin_reports'),
     path('reports/<int:report_id>/<str:action>/', views.admin_report_action, name='admin_report_action'),
+
+    # Comment Moderation
+    path('comments/', views.admin_comments, name='admin_comments'),
+    path('comments/<int:comment_id>/delete/', views.delete_comment, name='admin_delete_comment'),
 ]
 
 

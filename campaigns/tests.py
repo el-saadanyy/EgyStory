@@ -1294,6 +1294,165 @@ class HomepageTagIntegrationTests(TestCase):
         self.assertIn('Search campaigns by title or tag...', content)
 
 
+from campaigns.models import Comment, CommentReport
+
+class CommentAndReplyTests(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(
+            email='commenter1@egystory.com',
+            password='Password123!',
+            first_name='Commenter',
+            last_name='One',
+            is_active=True
+        )
+        self.user2 = User.objects.create_user(
+            email='commenter2@egystory.com',
+            password='Password123!',
+            first_name='Commenter',
+            last_name='Two',
+            is_active=True
+        )
+        self.campaign1 = Campaign.objects.create(
+            title='Campaign One',
+            story='Story One',
+            target_amount=10000,
+            owner=self.user1,
+            status=CampaignStatus.ACTIVE
+        )
+        self.campaign2 = Campaign.objects.create(
+            title='Campaign Two',
+            story='Story Two',
+            target_amount=20000,
+            owner=self.user2,
+            status=CampaignStatus.ACTIVE
+        )
+
+    def test_authenticated_user_can_create_top_level_comment(self):
+        self.client.force_login(self.user1)
+        response = self.client.post(
+            reverse('campaigns:add_comment', args=[self.campaign1.id]),
+            {'content': 'This is a top-level comment.'},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign1.id]))
+        self.assertEqual(Comment.objects.filter(campaign=self.campaign1).count(), 1)
+        comment = Comment.objects.get(campaign=self.campaign1)
+        self.assertEqual(comment.content, 'This is a top-level comment.')
+        self.assertEqual(comment.user, self.user1)
+        self.assertIsNone(comment.parent)
+        self.assertFalse(comment.is_reply)
+
+    def test_authenticated_user_can_reply_to_existing_comment_via_post(self):
+        parent_comment = Comment.objects.create(
+            campaign=self.campaign1,
+            user=self.user1,
+            content='Original parent comment'
+        )
+        self.client.force_login(self.user2)
+        response = self.client.post(
+            reverse('campaigns:add_reply', args=[self.campaign1.id, parent_comment.id]),
+            {'content': 'This is a reply to the parent comment.'},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign1.id]))
+        self.assertEqual(Comment.objects.filter(campaign=self.campaign1).count(), 2)
+        reply = Comment.objects.filter(parent=parent_comment).first()
+        self.assertIsNotNone(reply)
+        self.assertEqual(reply.content, 'This is a reply to the parent comment.')
+        self.assertEqual(reply.user, self.user2)
+        self.assertEqual(reply.parent, parent_comment)
+        self.assertTrue(reply.is_reply)
+
+    def test_parent_comment_can_have_multiple_replies(self):
+        parent = Comment.objects.create(
+            campaign=self.campaign1,
+            user=self.user1,
+            content='Parent with multiple replies'
+        )
+        self.client.force_login(self.user1)
+        self.client.post(
+            reverse('campaigns:add_reply', args=[self.campaign1.id, parent.id]),
+            {'content': 'Reply 1'}
+        )
+        self.client.force_login(self.user2)
+        self.client.post(
+            reverse('campaigns:add_reply', args=[self.campaign1.id, parent.id]),
+            {'content': 'Reply 2'}
+        )
+        self.assertEqual(parent.replies.count(), 2)
+        reply_texts = list(parent.replies.values_list('content', flat=True))
+        self.assertIn('Reply 1', reply_texts)
+        self.assertIn('Reply 2', reply_texts)
+
+    def test_anonymous_user_cannot_create_comment_or_reply(self):
+        # Anonymous post to add_comment
+        response1 = self.client.post(
+            reverse('campaigns:add_comment', args=[self.campaign1.id]),
+            {'content': 'Anonymous comment'}
+        )
+        self.assertEqual(response1.status_code, 302)
+        self.assertIn(reverse('login'), response1.url)
+
+        parent = Comment.objects.create(campaign=self.campaign1, user=self.user1, content='Parent')
+        response2 = self.client.post(
+            reverse('campaigns:add_reply', args=[self.campaign1.id, parent.id]),
+            {'content': 'Anonymous reply'}
+        )
+        self.assertEqual(response2.status_code, 302)
+        self.assertIn(reverse('login'), response2.url)
+        self.assertEqual(parent.replies.count(), 0)
+
+    def test_invalid_or_nonexistent_parent_rejected_safely(self):
+        self.client.force_login(self.user1)
+        response = self.client.post(
+            reverse('campaigns:add_reply', args=[self.campaign1.id, 999999]),
+            {'content': 'Reply to ghost comment'},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign1.id]))
+        self.assertEqual(Comment.objects.filter(campaign=self.campaign1).count(), 0)
+        messages_list = list(response.context['messages'])
+        self.assertTrue(any('does not exist' in str(m) for m in messages_list))
+
+    def test_cannot_reply_to_comment_belonging_to_different_campaign(self):
+        parent_on_camp2 = Comment.objects.create(
+            campaign=self.campaign2,
+            user=self.user2,
+            content='Comment on Campaign Two'
+        )
+        self.client.force_login(self.user1)
+        # Attempt to post a reply on Campaign 1 targeting parent from Campaign 2
+        response = self.client.post(
+            reverse('campaigns:add_reply', args=[self.campaign1.id, parent_on_camp2.id]),
+            {'content': 'Cross-campaign reply attack'},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign1.id]))
+        self.assertEqual(Comment.objects.filter(campaign=self.campaign1).count(), 0)
+        self.assertEqual(parent_on_camp2.replies.count(), 0)
+        messages_list = list(response.context['messages'])
+        self.assertTrue(any('different campaign' in str(m) for m in messages_list))
+
+    def test_get_request_does_not_create_comment_or_reply(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(reverse('campaigns:add_comment', args=[self.campaign1.id]))
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign1.id]))
+        self.assertEqual(Comment.objects.filter(campaign=self.campaign1).count(), 0)
+
+    def test_comment_reporting_works_for_replies(self):
+        parent = Comment.objects.create(campaign=self.campaign1, user=self.user1, content='Parent')
+        reply = Comment.objects.create(campaign=self.campaign1, user=self.user2, parent=parent, content='Offensive reply')
+        self.client.force_login(self.user1)
+        response = self.client.post(
+            reverse('campaigns:report_comment', args=[reply.id]),
+            {'reason': 'Inappropriate language in reply'},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign1.id]))
+        self.assertTrue(CommentReport.objects.filter(comment=reply, reporter=self.user1).exists())
+
+
+
 
 
 

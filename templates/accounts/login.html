@@ -45,7 +45,10 @@
 
         <!-- Password -->
         <div class="form-group">
-          <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+            <label for="{{ form.password.id_for_label }}" class="form-label" style="margin-bottom: 0;">Password</label>
+            <a href="{% url 'password_reset' %}" style="font-size: var(--font-size-xs); color: var(--color-primary); text-decoration: none; font-weight: 600;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Forgot Password?</a>
+          </div>
           <div class="password-field">
             <input type="password" name="{{ form.password.html_name }}" id="{{ form.password.id_for_label }}"
               class="form-control {% if form.password.errors %}is-invalid{% endif %}"
