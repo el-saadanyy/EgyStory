@@ -19,9 +19,9 @@
       <!-- Main Content Column -->
       <div>
         <!-- Media Gallery Header -->
-        <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); overflow: hidden; margin-bottom: 32px; box-shadow: var(--shadow-sm);">
-          {% if campaign.cover_image %}
-            <img src="{{ campaign.cover_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: 400px; object-fit: cover;">
+        <div class="project-slider" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); overflow: hidden; margin-bottom: 32px; box-shadow: var(--shadow-sm);">
+          {% if campaign.campaign_image %}
+            <img src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: 400px; object-fit: cover;">
           {% else %}
             <div style="width: 100%; height: 350px; background: var(--color-bg); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted);">
               <span style="font-size: 48px;">🖼️</span>
@@ -48,11 +48,11 @@
           <!-- User Info Header -->
           <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--color-border);">
             <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--color-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px;">
-              {{ campaign.user.first_name|first|default:campaign.user.username|first|upper }}
+              {{ campaign.owner.first_name|first|default:campaign.owner.email|first|upper }}
             </div>
             <div>
               <div style="font-weight: 600; font-size: 15px; color: var(--color-text-primary);">
-                {{ campaign.user.first_name }} {{ campaign.user.last_name }}
+                {{ campaign.owner.first_name }} {{ campaign.owner.last_name }}
               </div>
               <div style="font-size: 12px; color: var(--color-text-muted);">
                 Campaign Organizer
@@ -60,10 +60,21 @@
             </div>
           </div>
 
-          <!-- Description -->
+          <!-- Description / Story -->
           <div style="font-size: 16px; line-height: 1.8; color: var(--color-text-secondary); white-space: pre-line; margin-bottom: 32px;">
-            {{ campaign.description }}
+            {{ campaign.story }}
           </div>
+
+          <!-- Tags -->
+          {% if campaign.tags.all %}
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;">
+              {% for tag in campaign.tags.all %}
+                <a href="{% url 'campaigns:case_list' %}?tag={{ tag.name }}" class="tag-badge" style="background: var(--color-bg); border: 1px solid var(--color-border); color: var(--color-text-secondary); padding: 4px 10px; border-radius: 12px; font-size: 12px; text-decoration: none;">
+                  #{{ tag.name }}
+                </a>
+              {% endfor %}
+            </div>
+          {% endif %}
 
           <!-- Extra Images Grid -->
           {% if campaign.images.all %}
@@ -138,7 +149,7 @@
                 <div style="background: var(--color-bg); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--color-border); position: relative;">
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <div style="font-weight: 700; font-size: 15px; color: var(--color-text-primary);">
-                      {{ comment.user.first_name }} {{ comment.user.last_name }} <span style="font-size: 13px; font-weight: 400; color: var(--color-text-muted);">(@{{ comment.user.username }})</span>
+                      {{ comment.user.first_name }} {{ comment.user.last_name }} <span style="font-size: 13px; font-weight: 400; color: var(--color-text-muted);">({{ comment.user.email }})</span>
                     </div>
                     <div style="font-size: 12px; color: var(--color-text-muted);">
                       {{ comment.created_at|date:"M d, Y H:i" }}
@@ -199,17 +210,17 @@
 
           <!-- Action Buttons -->
           {% if user.is_authenticated %}
-            <a href="{% url 'donations:donate' campaign.id %}" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 700; text-align: center; display: block; margin-bottom: 12px; border-radius: var(--radius-md);">
+            <a href="{% url 'campaigns:donate' campaign.id %}" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 700; text-align: center; display: block; margin-bottom: 12px; border-radius: var(--radius-md);">
               Donate Now
             </a>
           {% else %}
-            <a href="{% url 'login' %}?next={% url 'donations:donate' campaign.id %}" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 700; text-align: center; display: block; margin-bottom: 12px; border-radius: var(--radius-md);">
+            <a href="{% url 'login' %}?next={% url 'campaigns:donate' campaign.id %}" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 700; text-align: center; display: block; margin-bottom: 12px; border-radius: var(--radius-md);">
               Log in to Donate
             </a>
           {% endif %}
 
           <!-- Report Campaign Button -->
-          {% if user.is_authenticated and campaign.user != user %}
+          {% if user.is_authenticated and campaign.owner != user %}
             <button type="button" class="btn btn-outline" onclick="document.getElementById('reportCampaignModal').style.display='flex';" style="width: 100%; padding: 10px; font-size: 13px; text-align: center; color: var(--color-danger); border-color: rgba(239, 68, 68, 0.3);">
               🚩 Report Campaign
             </button>
@@ -224,7 +235,7 @@
 </main>
 
 <!-- Report Campaign Modal -->
-{% if user.is_authenticated and campaign.user != user %}
+{% if user.is_authenticated and campaign.owner != user %}
 <div id="reportCampaignModal" class="modal" role="dialog" aria-hidden="true" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
   <div class="modal-content" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 28px; max-width: 480px; width: 90%; text-align: left; position: relative;">
     <button type="button" onclick="document.getElementById('reportCampaignModal').style.display='none';" style="position: absolute; top: 18px; right: 18px; background: transparent; border: none; font-size: 20px; color: var(--color-text-muted); cursor: pointer;">✕</button>
