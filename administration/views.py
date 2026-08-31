@@ -1,8 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.http import JsonResponse
 from accounts.models import User
 from .decorators import admin_required, superuser_required
+
+
+def is_ajax_request(request):
+    """Check whether incoming HTTP request is an AJAX / Fetch API request."""
+    return (
+        request.headers.get('x-requested-with') == 'XMLHttpRequest' or
+        request.headers.get('accept', '').find('application/json') != -1 or
+        request.POST.get('ajax') == '1' or
+        request.GET.get('ajax') == '1'
+    )
 
 
 def admin_login(request):
@@ -84,19 +95,28 @@ def delete_completed_campaign(request, campaign_id):
     Strictly verifies that the campaign status is 'Completed'.
     """
     if request.method != 'POST':
-        messages.error(request, 'Invalid request method for deletion.')
+        msg = 'Invalid request method for deletion.'
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': msg}, status=400)
+        messages.error(request, msg)
         return redirect('admin_dashboard')
 
     from campaigns.models import Campaign, CampaignStatus
     campaign = get_object_or_404(Campaign, id=campaign_id)
 
     if campaign.status != CampaignStatus.COMPLETED:
-        messages.error(request, f'Cannot delete campaign "{campaign.title}" because it is not completed.')
+        msg = f'Cannot delete campaign "{campaign.title}" because it is not completed.'
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': msg}, status=400)
+        messages.error(request, msg)
         return redirect('admin_dashboard')
 
     campaign_title = campaign.title
     campaign.delete()
-    messages.success(request, f'Completed campaign "{campaign_title}" has been permanently deleted.')
+    msg = f'Completed campaign "{campaign_title}" has been permanently deleted.'
+    if is_ajax_request(request):
+        return JsonResponse({'success': True, 'message': msg, 'campaign_id': campaign_id})
+    messages.success(request, msg)
     return redirect('admin_dashboard')
 
 @admin_required
@@ -116,20 +136,34 @@ def campaign_action(request, campaign_id, action):
     from campaigns.models import Campaign, CampaignStatus
     campaign = get_object_or_404(Campaign, id=campaign_id)
     
+    msg = ''
     if action == 'approve':
         campaign.status = CampaignStatus.ACTIVE
         campaign.save(update_fields=['status'])
-        messages.success(request, f'Campaign "{campaign.title}" approved and is now Active.')
+        msg = f'Campaign "{campaign.title}" approved and is now Active.'
+        messages.success(request, msg)
     
     elif action == 'reject':
         campaign.status = CampaignStatus.CANCELLED
         campaign.save(update_fields=['status'])
-        messages.success(request, f'Campaign "{campaign.title}" rejected.')
+        msg = f'Campaign "{campaign.title}" rejected.'
+        messages.success(request, msg)
         
     elif action == 'cancel':
         campaign.status = CampaignStatus.CANCELLED
         campaign.save(update_fields=['status'])
-        messages.success(request, f'Campaign "{campaign.title}" cancelled.')
+        msg = f'Campaign "{campaign.title}" cancelled.'
+        messages.success(request, msg)
+    
+    if is_ajax_request(request):
+        return JsonResponse({
+            'success': True,
+            'message': msg,
+            'action': action,
+            'status': campaign.status,
+            'campaign_id': campaign.id,
+            'campaign_title': campaign.title
+        })
         
     return redirect('admin_dashboard')
 
@@ -137,6 +171,8 @@ def campaign_action(request, campaign_id, action):
 def toggle_manual_critical(request, campaign_id):
     """Toggle manual Critical classification override for a campaign (Superuser only)."""
     if request.method != 'POST':
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=400)
         messages.error(request, 'Invalid request method.')
         return redirect('admin_dashboard')
         
@@ -146,9 +182,20 @@ def toggle_manual_critical(request, campaign_id):
     campaign.save(update_fields=['is_manual_critical'])
     
     if campaign.is_manual_critical:
-        messages.success(request, f'Campaign "{campaign.title}" manually set to Critical.')
+        msg = f'Campaign "{campaign.title}" manually set to Critical.'
+        messages.success(request, msg)
     else:
-        messages.success(request, f'Manual Critical override removed for "{campaign.title}".')
+        msg = f'Manual Critical override removed for "{campaign.title}".'
+        messages.success(request, msg)
+
+    if is_ajax_request(request):
+        return JsonResponse({
+            'success': True,
+            'message': msg,
+            'campaign_id': campaign.id,
+            'is_manual_critical': campaign.is_manual_critical,
+            'is_auto_critical': campaign.is_auto_critical
+        })
         
     return redirect('admin_dashboard')
 
@@ -156,6 +203,8 @@ def toggle_manual_critical(request, campaign_id):
 def toggle_featured(request, campaign_id):
     """Toggle Featured status for a campaign (Staff / Admin)."""
     if request.method != 'POST':
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=400)
         messages.error(request, 'Invalid request method.')
         return redirect('admin_dashboard')
         
@@ -165,10 +214,20 @@ def toggle_featured(request, campaign_id):
     campaign.save(update_fields=['is_featured'])
     
     if campaign.is_featured:
-        messages.success(request, f'Campaign "{campaign.title}" is now marked as Featured.')
+        msg = f'Campaign "{campaign.title}" is now marked as Featured.'
+        messages.success(request, msg)
     else:
-        messages.success(request, f'Featured status removed from "{campaign.title}".')
+        msg = f'Featured status removed from "{campaign.title}".'
+        messages.success(request, msg)
         
+    if is_ajax_request(request):
+        return JsonResponse({
+            'success': True,
+            'message': msg,
+            'campaign_id': campaign.id,
+            'is_featured': campaign.is_featured
+        })
+
     return redirect('admin_dashboard')
 
 @admin_required
@@ -194,6 +253,8 @@ def delete_user(request, user_id):
     from accounts.models import User
     
     if request.method != 'POST':
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': 'Invalid method for deletion.'}, status=400)
         messages.error(request, 'Invalid method for deletion.')
         return redirect('admin_users')
         
@@ -201,18 +262,29 @@ def delete_user(request, user_id):
     
     # Protection rules
     if user_to_delete.is_staff or user_to_delete.is_superuser:
-        messages.error(request, 'Cannot delete staff or superuser accounts.')
+        msg = 'Cannot delete staff or superuser accounts.'
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': msg}, status=403)
+        messages.error(request, msg)
         return redirect('admin_users')
         
     # Prevent self-deletion just in case
     if user_to_delete == request.user:
-        messages.error(request, 'You cannot delete your own account.')
+        msg = 'You cannot delete your own account.'
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': msg}, status=403)
+        messages.error(request, msg)
         return redirect('admin_users')
         
     # Perform deletion
+    user_name = user_to_delete.get_full_name() or user_to_delete.email
     user_to_delete.delete()
-    messages.success(request, f'User {user_to_delete.get_full_name()} (and their related data) has been successfully deleted.')
+    msg = f'User {user_name} (and their related data) has been successfully deleted.'
     
+    if is_ajax_request(request):
+        return JsonResponse({'success': True, 'message': msg, 'user_id': user_id})
+        
+    messages.success(request, msg)
     return redirect('admin_users')
 
 # ── Admin Management (Superuser Only) ──────────────────────────────────────
@@ -279,6 +351,8 @@ def admin_edit(request, admin_id):
 def admin_toggle_status(request, admin_id):
     """Toggle is_active for an admin."""
     if request.method != 'POST':
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': 'Invalid method.'}, status=400)
         messages.error(request, 'Invalid method.')
         return redirect('admin_management')
         
@@ -286,13 +360,26 @@ def admin_toggle_status(request, admin_id):
     admin_obj = get_object_or_404(User, id=admin_id, is_staff=True)
     
     if admin_obj == request.user:
-        messages.error(request, 'You cannot deactivate your own account.')
+        msg = 'You cannot deactivate your own account.'
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': msg}, status=403)
+        messages.error(request, msg)
         return redirect('admin_management')
         
     admin_obj.is_active = not admin_obj.is_active
     admin_obj.save(update_fields=['is_active'])
     status_str = "activated" if admin_obj.is_active else "deactivated"
-    messages.success(request, f'Admin account {status_str} successfully.')
+    msg = f'Admin account {status_str} successfully.'
+    
+    if is_ajax_request(request):
+        return JsonResponse({
+            'success': True,
+            'message': msg,
+            'admin_id': admin_id,
+            'is_active': admin_obj.is_active
+        })
+
+    messages.success(request, msg)
     return redirect('admin_management')
 
 @superuser_required
@@ -320,6 +407,8 @@ def admin_reset_password(request, admin_id):
 def admin_delete(request, admin_id):
     """Delete an admin account."""
     if request.method != 'POST':
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': 'Invalid method.'}, status=400)
         messages.error(request, 'Invalid method.')
         return redirect('admin_management')
         
@@ -327,11 +416,18 @@ def admin_delete(request, admin_id):
     admin_obj = get_object_or_404(User, id=admin_id, is_staff=True)
     
     if admin_obj == request.user:
-        messages.error(request, 'You cannot delete your own account.')
+        msg = 'You cannot delete your own account.'
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': msg}, status=403)
+        messages.error(request, msg)
         return redirect('admin_management')
         
     admin_obj.delete()
-    messages.success(request, 'Admin account has been permanently deleted.')
+    msg = 'Admin account has been permanently deleted.'
+    if is_ajax_request(request):
+        return JsonResponse({'success': True, 'message': msg, 'admin_id': admin_id})
+
+    messages.success(request, msg)
     return redirect('admin_management')
 
 
@@ -370,14 +466,19 @@ def delete_tag(request, tag_id):
     from campaigns.models import Tag
 
     if request.method != 'POST':
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': 'Invalid method for deletion.'}, status=400)
         messages.error(request, 'Invalid method for deletion.')
         return redirect('admin_tags')
 
     tag = get_object_or_404(Tag, id=tag_id)
     tag_name = tag.name
     tag.delete()
-    messages.success(request, f'Tag "{tag_name}" has been successfully deleted.')
+    msg = f'Tag "{tag_name}" has been successfully deleted.'
+    if is_ajax_request(request):
+        return JsonResponse({'success': True, 'message': msg, 'tag_id': tag_id})
 
+    messages.success(request, msg)
     return redirect('admin_tags')
 
 @admin_required
@@ -487,21 +588,34 @@ def admin_report_action(request, report_id, action):
     from campaigns.models import CampaignReport, ReportStatus, CampaignStatus
     report = get_object_or_404(CampaignReport, id=report_id)
     
+    msg = ''
     if action == 'dismiss':
         report.status = ReportStatus.DISMISSED
         report.save(update_fields=['status'])
-        messages.success(request, f'Report #{report.id} dismissed.')
+        msg = f'Report #{report.id} dismissed.'
+        messages.success(request, msg)
     elif action == 'mark_reviewed':
         report.status = ReportStatus.REVIEWED
         report.save(update_fields=['status'])
-        messages.success(request, f'Report #{report.id} marked as Reviewed.')
+        msg = f'Report #{report.id} marked as Reviewed.'
+        messages.success(request, msg)
     elif action == 'cancel_campaign':
         report.status = ReportStatus.ACTION_TAKEN
         report.save(update_fields=['status'])
         campaign = report.campaign
         campaign.status = CampaignStatus.CANCELLED
         campaign.save(update_fields=['status'])
-        messages.warning(request, f'Campaign "{campaign.title}" has been cancelled due to report #{report.id}.')
+        msg = f'Campaign "{campaign.title}" has been cancelled due to report #{report.id}.'
+        messages.warning(request, msg)
+
+    if is_ajax_request(request):
+        return JsonResponse({
+            'success': True,
+            'message': msg,
+            'report_id': report_id,
+            'action': action,
+            'status': report.status
+        })
 
     return redirect('admin_reports')
 
@@ -526,26 +640,24 @@ def delete_comment(request, comment_id):
     Strictly POST-only and CSRF-protected.
     """
     if request.method != 'POST':
+        if is_ajax_request(request):
+            return JsonResponse({'success': False, 'message': 'Invalid request method for deletion.'}, status=400)
         messages.error(request, 'Invalid request method for deletion.')
         return redirect('admin_comments')
 
     from campaigns.models import Comment
     comment = get_object_or_404(Comment, id=comment_id)
-    campaign_id = comment.campaign_id
     reply_count = comment.replies.count()
 
     comment.delete()
 
     if reply_count:
-        messages.success(
-            request,
-            f'Comment #{comment_id} and its {reply_count} reply(ies) have been permanently deleted.'
-        )
+        msg = f'Comment #{comment_id} and its {reply_count} reply(ies) have been permanently deleted.'
     else:
-        messages.success(request, f'Comment #{comment_id} has been permanently deleted.')
+        msg = f'Comment #{comment_id} has been permanently deleted.'
 
+    if is_ajax_request(request):
+        return JsonResponse({'success': True, 'message': msg, 'comment_id': comment_id})
+
+    messages.success(request, msg)
     return redirect('admin_comments')
-
-
-
-

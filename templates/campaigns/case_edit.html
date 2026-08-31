@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Campaign — {{ campaign.title }} | EgyStory{% endblock %}
+{% block meta_description %}Manage and update your campaign story, main image, and progress updates.{% endblock %}
+
+{% block content %}
+<style>
+.form-textarea-story {
+  width: 100% !important;
+  min-height: 240px !important;
+  padding: 18px 20px !important;
+  font-size: 15.5px !important;
+  line-height: 1.85 !important;
+  font-family: inherit !important;
+  border-radius: var(--radius-lg) !important;
+  background: var(--color-bg) !important;
+  color: var(--color-text-primary) !important;
+  border: 1.5px solid var(--color-border) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.2s ease !important;
+  direction: auto !important;
+  unicode-bidi: plaintext !important;
+  text-align: start !important;
+  resize: vertical !important;
+  box-sizing: border-box !important;
+}
+.form-textarea-story:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3.5px rgba(228, 192, 113, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+  outline: none !important;
+}
+
+.form-input-update-title {
+  width: 100% !important;
+  padding: 14px 18px !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  font-family: inherit !important;
+  border-radius: var(--radius-lg) !important;
+  background: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+  border: 1.5px solid var(--color-border) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.2s ease !important;
+  direction: auto !important;
+  unicode-bidi: plaintext !important;
+  box-sizing: border-box !important;
+}
+.form-input-update-title:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3.5px rgba(228, 192, 113, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+  outline: none !important;
+}
+
+.form-textarea-update-content {
+  width: 100% !important;
+  min-height: 140px !important;
+  padding: 16px 18px !important;
+  font-size: 15px !important;
+  line-height: 1.75 !important;
+  font-family: inherit !important;
+  border-radius: var(--radius-lg) !important;
+  background: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+  border: 1.5px solid var(--color-border) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.2s ease !important;
+  direction: auto !important;
+  unicode-bidi: plaintext !important;
+  text-align: start !important;
+  resize: vertical !important;
+  box-sizing: border-box !important;
+}
+.form-textarea-update-content:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3.5px rgba(228, 192, 113, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+  outline: none !important;
+}
+</style>
+
+<main style="background-color: var(--color-bg); min-height: calc(100vh - var(--navbar-height)); padding-top: 40px; padding-bottom: 80px; position: relative;">
+  <!-- Ambient Gold Glow -->
+  <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 800px; height: 350px; background: radial-gradient(ellipse at center, rgba(228, 192, 113, 0.08) 0%, transparent 70%); pointer-events: none;" aria-hidden="true"></div>
+
+  <div class="container" style="position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 0 20px;">
+
+    <!-- Navigation Breadcrumb -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+      <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline btn-sm" style="border-radius: var(--radius-full); font-weight: 700; border-color: rgba(228, 192, 113, 0.35); color: var(--color-primary); display: inline-flex; align-items: center; gap: 6px;">
+        ← Back to Story Page
+      </a>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 13px; color: var(--color-text-muted);">Status:</span>
+        <span class="badge" style="padding: 4px 12px; border-radius: var(--radius-full); font-weight: 700; font-size: 12.5px;
+          {% if campaign.status == 'Active' %}background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.35);
+          {% elif campaign.status == 'Completed' %}background: rgba(96, 165, 250, 0.15); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.35);
+          {% else %}background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35);{% endif %}">
+          {{ campaign.status }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Header Card -->
+    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 28px 32px; margin-bottom: 32px; box-shadow: var(--shadow-md); position: relative; overflow: hidden;">
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071 50%, transparent);" aria-hidden="true"></div>
+      <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-primary); margin-bottom: 8px;">
+        Campaign Owner Control Panel
+      </div>
+      <h1 style="font-size: clamp(22px, 3vw, 32px); font-weight: 900; color: var(--color-text-primary); margin: 0 0 12px 0; line-height: 1.25;">
+        {{ campaign.title }}
+      </h1>
+      <div style="display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: var(--color-text-secondary);">
+        <div>Raised: <strong style="color: var(--color-primary);">{{ campaign.get_total_raised }} EGP</strong> of {{ campaign.target_amount }} EGP ({{ campaign.get_progress_percentage }}%)</div>
+        <div>Created: <strong>{{ campaign.created_at|date:"d M Y" }}</strong></div>
+        {% if campaign.deadline %}
+          <div>Deadline: <strong>{{ campaign.deadline|date:"d M Y" }}</strong> ({{ campaign.get_days_remaining }} days left)</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- ── SECTION 1 & 2: Story & Main Image Form ── -->
+    <form method="post" enctype="multipart/form-data" action="{% url 'campaigns:case_edit' campaign.id %}">
+      {% csrf_token %}
+
+      <!-- SECTION 1: Story -->
+      <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 28px 32px; margin-bottom: 32px; box-shadow: var(--shadow-md);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid var(--color-border); padding-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <h2 style="font-size: 19px; font-weight: 800; color: var(--color-text-primary); margin: 0 0 4px 0;">
+              1. Edit Campaign Story
+            </h2>
+            <p style="font-size: 13.5px; color: var(--color-text-muted); margin: 0;">
+              Keep your campaign description accurate, engaging, and up to date.
+            </p>
+          </div>
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <span class="badge" style="background: rgba(228, 192, 113, 0.12); color: var(--color-primary); border: 1px solid rgba(228, 192, 113, 0.25); font-size: 11.5px; padding: 4px 10px; border-radius: var(--radius-full);">Owner Editable</span>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label for="id_story" style="font-weight: 700; font-size: 14px; color: var(--color-text-primary); margin: 0;">
+              Campaign Story Content
+            </label>
+            <span style="font-size: 12px; color: var(--color-text-muted);">يدعم النصوص العربية والإنجليزية تلقائياً (Auto RTL / LTR)</span>
+          </div>
+          {{ form.story }}
+          {% if form.story.errors %}
+            <div style="color: var(--color-danger); font-size: 13px; margin-top: 6px;">{{ form.story.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- SECTION 2: Main Campaign Image -->
+      <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 28px 32px; margin-bottom: 32px; box-shadow: var(--shadow-md);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid var(--color-border); padding-bottom: 14px;">
+          <div>
+            <h2 style="font-size: 19px; font-weight: 800; color: var(--color-text-primary); margin: 0 0 4px 0;">
+              2. Main Campaign Cover Image
+            </h2>
+            <p style="font-size: 13.5px; color: var(--color-text-muted); margin: 0;">
+              Replace the main cover image shown across the website, cards, and story page.
+            </p>
+          </div>
+          <span class="badge" style="background: rgba(228, 192, 113, 0.12); color: var(--color-primary); border: 1px solid rgba(228, 192, 113, 0.25); font-size: 11.5px; padding: 4px 10px; border-radius: var(--radius-full);">Image Replacement</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 240px 1fr; gap: 24px; align-items: start;">
+          <!-- Current Image Preview -->
+          <div>
+            <div style="font-size: 12.5px; font-weight: 700; color: var(--color-text-muted); margin-bottom: 8px; text-transform: uppercase;">Current Cover</div>
+            <div style="width: 100%; height: 160px; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--color-border); background: #000; position: relative;">
+              {% if campaign.campaign_image %}
+                <img id="current-cover-preview" src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+              {% else %}
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 13px;">No image</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Upload New Image -->
+          <div>
+            <label for="id_campaign_image" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--color-text-primary);">
+              Select New Image File
+            </label>
+            {{ form.campaign_image }}
+            {% if form.campaign_image.errors %}
+              <div style="color: var(--color-danger); font-size: 13px; margin-top: 6px;">{{ form.campaign_image.errors.0 }}</div>
+            {% endif %}
+            <p style="font-size: 12.5px; color: var(--color-text-muted); margin-top: 8px;">
+              Supported formats: JPEG, PNG, WebP. High resolution landscape images recommended.
+            </p>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--color-border); text-align: right;">
+          <button type="submit" class="btn btn-primary" style="padding: 12px 32px; font-weight: 800; border-radius: var(--radius-full); box-shadow: 0 4px 14px rgba(228, 192, 113, 0.4);">
+            Save Story &amp; Image Changes
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- ── SECTION 3: Latest Updates Management ── -->
+    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 28px 32px; margin-bottom: 32px; box-shadow: var(--shadow-md);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 14px;">
+        <div>
+          <h2 style="font-size: 19px; font-weight: 800; color: var(--color-text-primary); margin: 0 0 4px 0;">
+            3. Latest Progress Updates
+          </h2>
+          <p style="font-size: 13.5px; color: var(--color-text-muted); margin: 0;">
+            Post news, treatment progress, or milestones to inform and engage your donors.
+          </p>
+        </div>
+        <span class="badge" style="background: rgba(228, 192, 113, 0.12); color: var(--color-primary); border: 1px solid rgba(228, 192, 113, 0.25); font-size: 11.5px; padding: 4px 10px; border-radius: var(--radius-full);">
+          {{ updates.count }} Total Update{{ updates.count|pluralize }}
+        </span>
+      </div>
+
+      <!-- Post New Update Form -->
+      <div style="background: var(--color-surface); border: 1.5px solid var(--color-border); border-radius: var(--radius-xl); padding: 26px 28px; margin-bottom: 28px; box-shadow: var(--shadow-sm);">
+        <h3 style="font-size: 16.5px; font-weight: 800; color: var(--color-text-primary); margin: 0 0 18px 0; display: flex; align-items: center; gap: 8px;">
+          <span>📢</span> Post a New Update
+        </h3>
+        <form method="post" action="{% url 'campaigns:create_campaign_update' campaign.id %}">
+          {% csrf_token %}
+          <div style="margin-bottom: 18px;">
+            <label for="id_title" style="display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--color-text-primary);">
+              <span>Update Title <span style="color: var(--color-danger);">*</span></span>
+              <span style="font-size: 12px; color: var(--color-text-muted); font-weight: 400;">يدعم العربي والإنجليزي (Auto RTL)</span>
+            </label>
+            {{ update_form.title }}
+            {% if update_form.title.errors %}
+              <div style="color: var(--color-danger); font-size: 13px; margin-top: 6px;">{{ update_form.title.errors.0 }}</div>
+            {% endif %}
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label for="id_content" style="display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--color-text-primary);">
+              <span>Update Content / Story Progress <span style="color: var(--color-danger);">*</span></span>
+              <span style="font-size: 12px; color: var(--color-text-muted); font-weight: 400;">يدعم العربي والإنجليزي (Auto RTL)</span>
+            </label>
+            {{ update_form.content }}
+            {% if update_form.content.errors %}
+              <div style="color: var(--color-danger); font-size: 13px; margin-top: 6px;">{{ update_form.content.errors.0 }}</div>
+            {% endif %}
+          </div>
+          <div style="text-align: right; border-top: 1px solid var(--color-border); padding-top: 16px;">
+            <button type="submit" class="btn btn-primary" style="padding: 11px 30px; font-weight: 800; font-size: 14.5px; border-radius: var(--radius-full); box-shadow: 0 4px 14px rgba(228, 192, 113, 0.35);">
+              📢 Publish Update
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Existing Updates List -->
+      {% if updates %}
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          {% for update in updates %}
+            <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 22px 24px; border-left: 4px solid var(--color-primary); position: relative; box-shadow: var(--shadow-sm);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                <h4 style="margin: 0; font-size: 16.5px; font-weight: 800; color: var(--color-text-primary); direction: auto;">{{ update.title }}</h4>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <small style="font-size: 12px; color: var(--color-text-muted);">Posted on {{ update.created_at|date:"d M Y, h:i A" }}</small>
+                  <button type="button" onclick="toggleEditUpdate('edit-box-{{ update.id }}')" class="btn btn-ghost btn-sm" style="color: var(--color-primary); padding: 4px 10px; font-size: 12.5px; font-weight: 700; border-radius: var(--radius-full);">Edit</button>
+                  <form method="post" action="{% url 'campaigns:delete_campaign_update' campaign.id update.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this update?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--color-danger); padding: 4px 10px; font-size: 12.5px; font-weight: 700; border-radius: var(--radius-full);">Delete</button>
+                  </form>
+                </div>
+              </div>
+              <p style="font-size: 14.5px; line-height: 1.75; color: var(--color-text-secondary); margin: 0; white-space: pre-wrap; direction: auto; unicode-bidi: plaintext;">{{ update.content }}</p>
+
+              <!-- Inline Edit Form (Hidden by default) -->
+              <div id="edit-box-{{ update.id }}" style="display: none; margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--color-border);">
+                <form method="post" action="{% url 'campaigns:edit_campaign_update' campaign.id update.id %}">
+                  {% csrf_token %}
+                  <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 6px;">Edit Title</label>
+                    <input type="text" name="title" value="{{ update.title }}" class="form-input form-input-update-title" required dir="auto">
+                  </div>
+                  <div style="margin-bottom: 14px;">
+                    <label style="display: block; font-size: 13px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 6px;">Edit Content</label>
+                    <textarea name="content" rows="4" class="form-input form-textarea-update-content" required dir="auto">{{ update.content }}</textarea>
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" onclick="toggleEditUpdate('edit-box-{{ update.id }}')" class="btn btn-ghost btn-sm" style="font-size: 13px; font-weight: 700;">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm" style="font-size: 13px; font-weight: 800; padding: 8px 22px; border-radius: var(--radius-full);">Save Changes</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div style="text-align: center; padding: 32px 16px; background: var(--color-bg); border-radius: var(--radius-lg); border: 1px dashed var(--color-border);">
+          <p style="color: var(--color-text-muted); font-size: 14px; margin: 0;">No updates posted yet. Use the form above to share your first progress update.</p>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</main>
+
+<script>
+function toggleEditUpdate(id) {
+  var el = document.getElementById(id);
+  if (el) {
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  }
+}
+</script>
+{% endblock %}

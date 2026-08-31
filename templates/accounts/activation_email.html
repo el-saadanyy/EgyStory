@@ -6,15 +6,13 @@
   <title>Activate Your EgyStory Account</title>
   <style>
     body { font-family: Arial, Helvetica, sans-serif; background: #F9FAFB; margin: 0; padding: 32px 16px; }
-    .email-container { max-width: 520px; margin: 0 auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,.08); }
-    .email-header { background: #1A1A1A; padding: 28px 32px; text-align: center; }
+    .email-container { max-width: 520px; margin: 0 auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,.08); border: 1px solid #E5E7EB; }
+    .email-header { background: #111110; padding: 28px 32px; text-align: center; }
     .email-brand { color: #fff; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-    .email-brand span { color: #C62828; }
+    .email-brand span { color: #BE9B4B; }
     .email-body { padding: 36px 32px; }
     .email-title { font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 12px; }
-    .email-text { font-size: 15px; color: #6B7280; line-height: 1.75; margin-bottom: 16px; }
-    .email-btn { display: inline-block; padding: 14px 32px; background: #C62828; color: #fff; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 16px; margin: 8px 0 20px; }
-    .email-url { word-break: break-all; font-size: 12px; color: #9CA3AF; background: #F3F4F6; padding: 10px 14px; border-radius: 6px; margin-top: 8px; }
+    .email-text { font-size: 15px; color: #4B5563; line-height: 1.75; margin-bottom: 16px; }
     .email-footer { background: #F9FAFB; padding: 20px 32px; border-top: 1px solid #E5E7EB; font-size: 12px; color: #9CA3AF; text-align: center; }
     .email-expire { background: #FEF3C7; border: 1px solid #FDE68A; border-radius: 6px; padding: 10px 14px; font-size: 13px; color: #92400E; margin-bottom: 20px; }
   </style>
@@ -27,14 +25,14 @@
     <div class="email-body">
       <div class="email-title">Your Verification Code 👋</div>
       <p class="email-text">
-        Welcome to EgyStory, {{ user.first_name }}! You're almost there. Enter the 6-digit code below to activate
-        your account and start making a difference in Egypt.
+        Welcome to EgyStory, {{ user.first_name }}! You're almost there. Enter the 6-digit verification code below to activate
+        your account and start making a difference:
       </p>
       <div class="email-expire">
         ⏱️ This code expires in <strong>24 hours</strong>.
       </div>
       <div style="text-align:center; padding: 20px 0;">
-        <span style="font-size: 32px; font-weight: bold; letter-spacing: 4px; background: #f3f4f6; padding: 10px 20px; border-radius: 8px; color: #1f2937;">{{ otp }}</span>
+        <span style="font-size: 36px; font-weight: 800; letter-spacing: 6px; background: #F5EDD5; color: #7A5306; padding: 12px 24px; border-radius: 8px; border: 1px solid #E2D0A0; display: inline-block;">{{ otp }}</span>
       </div>
       <p class="email-text" style="margin-top:20px;font-size:13px;color:#9CA3AF;">
         If you didn't create an EgyStory account, you can safely ignore this email.

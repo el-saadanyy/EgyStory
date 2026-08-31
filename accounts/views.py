@@ -83,7 +83,7 @@ def register(request):
             request.session['activation_email'] = user.email
             messages.success(
                 request,
-                f'Account created! We sent a 6-digit verification code to {user.email}.'
+                f'Account created! We sent a 6-digit verification code to {user.email}. (Please check your Spam/Junk folder if not in Inbox).'
             )
             return redirect('verify_otp')
             
@@ -205,7 +205,7 @@ def resend_otp(request):
             if not sent:
                 raise Exception("Email failed to send (send_mail returned 0)")
                 
-            messages.success(request, f'A new verification code has been sent to {email}.')
+            messages.success(request, f'A new verification code has been sent to {email}. (Please check your Spam/Junk folder if not in Inbox).')
         except Exception as e:
             logger.error(f"SMTP Email Delivery Error during resend OTP: {str(e)}", exc_info=True)
             # Delete the token we just created because the email failed
@@ -233,12 +233,16 @@ def login_view(request):
         try:
             user_obj = User.objects.get(email=email)
             if not user_obj.is_active:
+                request.session['activation_email'] = email
                 messages.error(
                     request,
                     'Your account has not been activated yet. '
-                    'Please check your email for the activation link.'
+                    'Please check your email for the 6-digit verification code (including Spam/Junk folder).'
                 )
-                return render(request, 'accounts/login.html', {'form': form})
+                return render(request, 'accounts/login.html', {
+                    'form': form,
+                    'unactivated_email': email,
+                })
         except User.DoesNotExist:
             pass
 
@@ -285,7 +289,13 @@ def profile_edit(request):
         instance=request.user,
     )
     if request.method == 'POST' and form.is_valid():
-        form.save()
+        user = form.save(commit=False)
+        if request.POST.get('clear_avatar') == '1':
+            if user.profile_picture:
+                user.profile_picture.delete(save=False)
+            user.profile_picture = None
+        user.save()
+        form.save_m2m()
         messages.success(request, 'Your profile has been updated.')
         return redirect('profile')
 

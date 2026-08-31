@@ -1049,6 +1049,57 @@ class AlmostFundedFilterTests(TestCase):
         self.assertIn(self.completed_campaign, response_completed.context['campaigns'])
         self.assertNotIn(self.almost_funded_campaign, response_completed.context['campaigns'])
 
+    def test_most_urgent_sort_prioritizes_critical_cases(self):
+        from django.urls import reverse
+        # Create normal campaign with moderate score
+        c_norm = Campaign.objects.create(
+            title='Normal Campaign High Progress',
+            story='Story',
+            target_amount=Decimal('10000.00'),
+            raised_amount=Decimal('5000.00'),
+            owner=self.user,
+            category=self.category,
+            status=CampaignStatus.ACTIVE
+        )
+        # Create 2 critical campaigns with different urgency scores
+        c_crit_low = Campaign.objects.create(
+            title='Critical Low Score',
+            story='Story',
+            target_amount=Decimal('10000.00'),
+            raised_amount=Decimal('1000.00'),
+            owner=self.user,
+            category=self.category,
+            status=CampaignStatus.ACTIVE,
+            is_manual_critical=True
+        )
+        c_crit_high = Campaign.objects.create(
+            title='Critical High Score',
+            story='Story',
+            target_amount=Decimal('10000.00'),
+            raised_amount=Decimal('8000.00'),
+            owner=self.user,
+            category=self.category,
+            status=CampaignStatus.ACTIVE,
+            is_manual_critical=True
+        )
+        url = reverse('campaigns:case_list') + '?sort=most_urgent'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        campaigns = response.context['campaigns']
+        
+        # Both critical campaigns must appear before non-critical campaigns
+        crit_high_idx = campaigns.index(c_crit_high)
+        crit_low_idx = campaigns.index(c_crit_low)
+        norm_idx = campaigns.index(c_norm)
+
+        self.assertLess(crit_high_idx, norm_idx)
+        self.assertLess(crit_low_idx, norm_idx)
+        # Between criticals, higher score comes first
+        self.assertLess(crit_high_idx, crit_low_idx)
+        # Completed campaign must always have lowest priority and be after all active ones
+        completed_idx = campaigns.index(self.completed_campaign)
+        self.assertLess(norm_idx, completed_idx)
+
 
 class HomepageRatingSortingTests(TestCase):
     def setUp(self):
@@ -1088,6 +1139,16 @@ class HomepageRatingSortingTests(TestCase):
         # Higher rated c2 (5 stars) must come before lower rated c1 (2 stars)
         self.assertEqual(normal_cases[0], self.c2)
         self.assertEqual(normal_cases[1], self.c1)
+
+    def test_critical_case_excluded_from_normal_cases(self):
+        self.c1.is_manual_critical = True
+        self.c1.save()
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        normal_cases = response.context['normal_cases']
+        critical_cases = response.context['critical_cases']
+        self.assertNotIn(self.c1, normal_cases)
+        self.assertIn(self.c1, critical_cases)
 
 
 from django.urls import reverse
@@ -1450,6 +1511,253 @@ class CommentAndReplyTests(TestCase):
         )
         self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign1.id]))
         self.assertTrue(CommentReport.objects.filter(comment=reply, reporter=self.user1).exists())
+
+    def test_user_can_delete_own_comment(self):
+        comment = Comment.objects.create(campaign=self.campaign1, user=self.user1, content='To be deleted')
+        self.client.force_login(self.user1)
+        response = self.client.post(reverse('campaigns:delete_comment', args=[comment.id]), follow=True)
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign1.id]))
+        self.assertFalse(Comment.objects.filter(id=comment.id).exists())
+
+    def test_user_cannot_delete_other_user_comment(self):
+        comment = Comment.objects.create(campaign=self.campaign1, user=self.user1, content='Protected comment')
+        self.client.force_login(self.user2)
+        response = self.client.post(reverse('campaigns:delete_comment', args=[comment.id]), follow=True)
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign1.id]))
+        self.assertTrue(Comment.objects.filter(id=comment.id).exists())
+
+
+class CampaignOwnerManagementTests(TestCase):
+    def setUp(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from campaigns.models import Campaign, CampaignUpdate, CampaignStatus, CaseType
+        from accounts.models import User
+        from django.urls import reverse
+
+        self.owner = User.objects.create_user(
+            email='owner_manage@egystory.com',
+            password='OwnerPassword@2026',
+            first_name='Owner',
+            last_name='User',
+            is_active=True
+        )
+        self.other_user = User.objects.create_user(
+            email='other_manage@egystory.com',
+            password='OtherPassword@2026',
+            first_name='Other',
+            last_name='User',
+            is_active=True
+        )
+        self.image = SimpleUploadedFile("initial_cover.jpg", b"initial_image_content", content_type="image/jpeg")
+        self.campaign = Campaign.objects.create(
+            owner=self.owner,
+            title='Owner Editable Campaign',
+            story='Original story text before owner edit.',
+            target_amount=Decimal('50000.00'),
+            initial_raised_amount=Decimal('500.00'),
+            raised_amount=Decimal('1000.00'),
+            campaign_image=self.image,
+            case_type=CaseType.NORMAL,
+            status=CampaignStatus.ACTIVE,
+            is_featured=False,
+            is_manual_critical=False
+        )
+
+    def test_owner_can_view_management_page(self):
+        from django.urls import reverse
+        self.client.force_login(self.owner)
+        response = self.client.get(reverse('campaigns:case_edit', args=[self.campaign.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'campaigns/case_edit.html')
+        self.assertContains(response, 'Original story text before owner edit.')
+
+    def test_other_user_cannot_view_management_page(self):
+        from django.urls import reverse
+        self.client.force_login(self.other_user)
+        response = self.client.get(reverse('campaigns:case_edit', args=[self.campaign.id]), follow=True)
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign.id]))
+        self.assertContains(response, 'You do not have permission to manage this campaign.')
+
+    def test_owner_can_edit_story(self):
+        from django.urls import reverse
+        self.client.force_login(self.owner)
+        response = self.client.post(
+            reverse('campaigns:case_edit', args=[self.campaign.id]),
+            {'story': 'Updated new story with important medical details.'},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_edit', args=[self.campaign.id]))
+        self.campaign.refresh_from_db()
+        self.assertEqual(self.campaign.story, 'Updated new story with important medical details.')
+
+    def test_forbidden_fields_cannot_be_modified_via_crafted_post(self):
+        from django.urls import reverse
+        from campaigns.models import CampaignStatus, CaseType
+        self.client.force_login(self.owner)
+        crafted_data = {
+            'story': 'Updated story safely.',
+            'title': 'HACKED TITLE',
+            'target_amount': '1.00',
+            'raised_amount': '999999.00',
+            'initial_raised_amount': '999999.00',
+            'status': CampaignStatus.COMPLETED,
+            'case_type': CaseType.RARE,
+            'is_featured': True,
+            'is_manual_critical': True
+        }
+        response = self.client.post(reverse('campaigns:case_edit', args=[self.campaign.id]), crafted_data, follow=True)
+        self.assertRedirects(response, reverse('campaigns:case_edit', args=[self.campaign.id]))
+        self.campaign.refresh_from_db()
+
+        # Allowed field updated
+        self.assertEqual(self.campaign.story, 'Updated story safely.')
+
+        # Forbidden fields remained unchanged
+        self.assertEqual(self.campaign.title, 'Owner Editable Campaign')
+        self.assertEqual(self.campaign.target_amount, Decimal('50000.00'))
+        self.assertEqual(self.campaign.raised_amount, Decimal('1000.00'))
+        self.assertEqual(self.campaign.initial_raised_amount, Decimal('500.00'))
+        self.assertEqual(self.campaign.status, CampaignStatus.ACTIVE)
+        self.assertEqual(self.campaign.case_type, CaseType.NORMAL)
+        self.assertFalse(self.campaign.is_featured)
+        self.assertFalse(self.campaign.is_manual_critical)
+
+    def test_owner_can_replace_main_image(self):
+        from django.urls import reverse
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        self.client.force_login(self.owner)
+        valid_gif_bytes = b'GIF89a\x01\x00\x01\x00\x80\x00\x00\xff\xff\xff\x00\x00\x00!\xf9\x04\x01\x00\x00\x00\x00,\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;'
+        new_image = SimpleUploadedFile("new_cover.gif", valid_gif_bytes, content_type="image/gif")
+        response = self.client.post(
+            reverse('campaigns:case_edit', args=[self.campaign.id]),
+            {'story': self.campaign.story, 'campaign_image': new_image},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_edit', args=[self.campaign.id]))
+        self.campaign.refresh_from_db()
+        self.assertIn('new_cover', self.campaign.campaign_image.name)
+
+    def test_other_user_cannot_edit_story_or_image(self):
+        from django.urls import reverse
+        self.client.force_login(self.other_user)
+        response = self.client.post(
+            reverse('campaigns:case_edit', args=[self.campaign.id]),
+            {'story': 'Unauthorized story update by someone else.'},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign.id]))
+        self.campaign.refresh_from_db()
+        self.assertEqual(self.campaign.story, 'Original story text before owner edit.')
+
+    def test_owner_can_create_campaign_update(self):
+        from django.urls import reverse
+        from campaigns.models import CampaignUpdate
+        self.client.force_login(self.owner)
+        response = self.client.post(
+            reverse('campaigns:create_campaign_update', args=[self.campaign.id]),
+            {'title': 'Surgery Date Set', 'content': 'The hospital confirmed surgery on Monday.'},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_edit', args=[self.campaign.id]))
+        self.assertEqual(self.campaign.updates.count(), 1)
+        update = self.campaign.updates.first()
+        self.assertEqual(update.title, 'Surgery Date Set')
+        self.assertEqual(update.content, 'The hospital confirmed surgery on Monday.')
+        self.assertEqual(update.campaign, self.campaign)
+
+    def test_other_user_cannot_create_campaign_update(self):
+        from django.urls import reverse
+        self.client.force_login(self.other_user)
+        response = self.client.post(
+            reverse('campaigns:create_campaign_update', args=[self.campaign.id]),
+            {'title': 'Fake Update', 'content': 'Malicious user content.'},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign.id]))
+        self.assertEqual(self.campaign.updates.count(), 0)
+
+    def test_owner_can_edit_own_campaign_update(self):
+        from django.urls import reverse
+        from campaigns.models import CampaignUpdate
+        update = CampaignUpdate.objects.create(
+            campaign=self.campaign,
+            title='Initial Update Title',
+            content='Initial update content.'
+        )
+        self.client.force_login(self.owner)
+        response = self.client.post(
+            reverse('campaigns:edit_campaign_update', args=[self.campaign.id, update.id]),
+            {'title': 'Revised Title', 'content': 'Revised content text.'},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_edit', args=[self.campaign.id]))
+        update.refresh_from_db()
+        self.assertEqual(update.title, 'Revised Title')
+        self.assertEqual(update.content, 'Revised content text.')
+        self.assertEqual(update.campaign, self.campaign)
+
+    def test_other_user_cannot_edit_campaign_update(self):
+        from django.urls import reverse
+        from campaigns.models import CampaignUpdate
+        update = CampaignUpdate.objects.create(
+            campaign=self.campaign,
+            title='Protected Title',
+            content='Protected content.'
+        )
+        self.client.force_login(self.other_user)
+        response = self.client.post(
+            reverse('campaigns:edit_campaign_update', args=[self.campaign.id, update.id]),
+            {'title': 'Tampered Title', 'content': 'Tampered content.'},
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign.id]))
+        update.refresh_from_db()
+        self.assertEqual(update.title, 'Protected Title')
+
+    def test_owner_can_delete_own_campaign_update(self):
+        from django.urls import reverse
+        from campaigns.models import CampaignUpdate
+        update = CampaignUpdate.objects.create(
+            campaign=self.campaign,
+            title='To be deleted',
+            content='Delete this update.'
+        )
+        self.client.force_login(self.owner)
+        response = self.client.post(
+            reverse('campaigns:delete_campaign_update', args=[self.campaign.id, update.id]),
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_edit', args=[self.campaign.id]))
+        self.assertFalse(CampaignUpdate.objects.filter(id=update.id).exists())
+
+    def test_other_user_cannot_delete_campaign_update(self):
+        from django.urls import reverse
+        from campaigns.models import CampaignUpdate
+        update = CampaignUpdate.objects.create(
+            campaign=self.campaign,
+            title='Protected Update',
+            content='Cannot be deleted by other.'
+        )
+        self.client.force_login(self.other_user)
+        response = self.client.post(
+            reverse('campaigns:delete_campaign_update', args=[self.campaign.id, update.id]),
+            follow=True
+        )
+        self.assertRedirects(response, reverse('campaigns:case_detail', args=[self.campaign.id]))
+        self.assertTrue(CampaignUpdate.objects.filter(id=update.id).exists())
+
+    def test_updates_displayed_on_case_detail_page(self):
+        from django.urls import reverse
+        from campaigns.models import CampaignUpdate
+        CampaignUpdate.objects.create(
+            campaign=self.campaign,
+            title='Public Visible Update',
+            content='Everyone can see this progress milestone on the story page.'
+        )
+        response = self.client.get(reverse('campaigns:case_detail', args=[self.campaign.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Public Visible Update')
+        self.assertContains(response, 'Everyone can see this progress milestone on the story page.')
 
 
 

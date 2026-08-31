@@ -49,17 +49,14 @@
 
           <div class="profile-badges-row">
             <div class="profile-badge-chip">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
               <span>{{ user.email }}</span>
             </div>
             {% if user.phone %}
               <div class="profile-badge-chip">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 15z"/></svg>
                 <span>{{ user.phone }}</span>
               </div>
             {% endif %}
             <div class="profile-badge-chip">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
               <span>Member since {{ user.date_joined|date:"F Y" }}</span>
             </div>
           </div>
@@ -67,7 +64,6 @@
 
         <div class="profile-header-actions">
           <a href="{% url 'profile_edit' %}" class="btn-edit-profile" id="edit-profile-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
             Edit Profile
           </a>
         </div>
@@ -83,9 +79,9 @@
             <div class="profile-sidebar-section" style="padding:18px 24px;">
               <div class="profile-info-label">Account Status</div>
               {% if user.is_active %}
-                <span class="badge" style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.35); padding: 4px 12px; font-weight: 700; border-radius: var(--radius-full);">✓ Verified Account</span>
+                <span class="badge" style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.35); padding: 4px 12px; font-weight: 700; border-radius: var(--radius-full);">Verified Account</span>
               {% else %}
-                <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); padding: 4px 12px; font-weight: 700; border-radius: var(--radius-full);">⏳ Pending Activation</span>
+                <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); padding: 4px 12px; font-weight: 700; border-radius: var(--radius-full);">Pending Activation</span>
               {% endif %}
             </div>
             <div class="profile-sidebar-section">
@@ -105,7 +101,7 @@
             {% if user.country %}
             <div class="profile-sidebar-section">
               <div class="profile-info-label">Country</div>
-              <div class="profile-info-value">🇪🇬 {{ user.country }}</div>
+              <div class="profile-info-value">{{ user.country }}</div>
             </div>
             {% endif %}
             {% if user.facebook %}
@@ -122,7 +118,7 @@
             </div>
             <div class="profile-sidebar-section" style="border-bottom:none; padding-top: 14px;">
               <a href="{% url 'delete_account' %}" class="btn btn-ghost btn-sm" style="color: #f87171; font-weight: 600; padding: 6px 0; font-size: 13px;" id="delete-account-link">
-                🗑️ Delete Account
+                Delete Account
               </a>
             </div>
           </div>
@@ -134,7 +130,7 @@
           <div class="profile-content-card">
             <div class="profile-content-header">
               <div class="profile-content-title">
-                <span>📁 My Campaigns</span>
+                <span>My Campaigns</span>
                 {% if user_campaigns %}
                   <span class="badge" style="background: rgba(228, 192, 113, 0.15); color: #E4C071; font-size: 12px; font-weight: 700; border: 1px solid rgba(228, 192, 113, 0.3);">{{ user_campaigns|length }}</span>
                 {% endif %}
@@ -145,21 +141,65 @@
               {% if user_campaigns %}
                 <div style="display: flex; flex-direction: column; gap: 16px;">
                   {% for campaign in user_campaigns %}
-                    <div class="profile-campaign-item">
-                      <div>
-                        <h4 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 800; color: #FFFFFF;">{{ campaign.title }}</h4>
-                        <div style="font-size: 13.5px; color: #D9CFB8;">
-                          Status: <strong style="color: {% if campaign.status == 'Active' %}#4ade80{% elif campaign.status == 'Completed' %}#60a5fa{% else %}#fbbf24{% endif %};">{{ campaign.status }}</strong> &bull; 
-                          Raised: <strong style="color: #E4C071;">{{ campaign.get_total_raised }}</strong> / {{ campaign.target_amount }} EGP ({{ campaign.get_progress_percentage }}%)
+                    <div class="profile-campaign-item" style="display: flex; gap: 20px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                      
+                      <!-- Left: Thumbnail + Info -->
+                      <div style="display: flex; gap: 16px; align-items: center; min-width: 0; flex: 1;">
+                        <!-- Cover Thumbnail -->
+                        <div style="width: 72px; height: 72px; border-radius: var(--radius-md); overflow: hidden; flex-shrink: 0; border: 1px solid rgba(228, 192, 113, 0.2); background: #000;">
+                          {% if campaign.campaign_image %}
+                            <img src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                          {% else %}
+                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 11px;">No Img</div>
+                          {% endif %}
+                        </div>
+
+                        <!-- Campaign Details -->
+                        <div style="min-width: 0; flex: 1;">
+                          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                            <span class="badge" style="padding: 2px 8px; border-radius: var(--radius-full); font-size: 11px; font-weight: 700;
+                              {% if campaign.status == 'Active' %}background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.35);
+                              {% elif campaign.status == 'Completed' %}background: rgba(96, 165, 250, 0.15); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.35);
+                              {% else %}background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35);{% endif %}">
+                              {{ campaign.status }}
+                            </span>
+                            {% if campaign.case_type == 'Rare / Ultra-Rare & High-Cost' %}
+                              <span class="badge" style="padding: 2px 8px; border-radius: var(--radius-full); font-size: 11px; font-weight: 700; background: rgba(147, 51, 234, 0.15); color: #c084fc; border: 1px solid rgba(147, 51, 234, 0.35);">💎 Rare</span>
+                            {% endif %}
+                          </div>
+                          
+                          <h4 style="margin: 0 0 6px 0; font-size: 16.5px; font-weight: 800; color: var(--color-text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            {{ campaign.title }}
+                          </h4>
+                          
+                          <!-- Progress Info -->
+                          <div style="font-size: 13px; color: var(--color-text-secondary); display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <span>Raised: <strong style="color: var(--color-primary);">{{ campaign.get_total_raised|floatformat:"0" }} EGP</strong> of {{ campaign.target_amount|floatformat:"0" }} EGP</span>
+                            <span style="font-weight: 700; color: var(--color-primary);">({{ campaign.get_progress_percentage }}%)</span>
+                          </div>
+
+                          <!-- Mini Progress bar -->
+                          <div style="background: rgba(255, 255, 255, 0.08); border-radius: 99px; height: 5px; width: 100%; max-width: 320px; overflow: hidden; margin-top: 6px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                            <div style="background: linear-gradient(90deg, #c9a227, #E4C071); height: 100%; width: calc({{ campaign.get_progress_percentage }} * 1%); border-radius: 99px;"></div>
+                          </div>
                         </div>
                       </div>
-                      <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline btn-sm" style="border-radius: var(--radius-full); font-weight: 700; border-color: rgba(228, 192, 113, 0.35); color: #E4C071; white-space: nowrap;">View Story</a>
+
+                      <!-- Right: Action Buttons -->
+                      <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0;">
+                        <a href="{% url 'campaigns:case_edit' campaign.id %}" class="btn btn-primary btn-sm" style="border-radius: var(--radius-full); font-weight: 700; padding: 7px 16px; font-size: 13px; white-space: nowrap;">
+                          ⚙️ Manage
+                        </a>
+                        <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline btn-sm" style="border-radius: var(--radius-full); font-weight: 700; border-color: rgba(228, 192, 113, 0.35); color: var(--color-primary); white-space: nowrap; padding: 7px 16px; font-size: 13px;">
+                          View Story
+                        </a>
+                      </div>
+
                     </div>
                   {% endfor %}
                 </div>
               {% else %}
                 <div class="coming-soon-placeholder">
-                  <div class="coming-soon-icon" aria-hidden="true">📋</div>
                   <div class="coming-soon-text">
                     You haven't created any campaigns yet. Have a meaningful story that needs support?
                   </div>
@@ -173,7 +213,7 @@
           <div class="profile-content-card">
             <div class="profile-content-header">
               <div class="profile-content-title">
-                <span>💳 My Donations</span>
+                <span>My Donations</span>
                 {% if user_donations %}
                   <span class="badge" style="background: rgba(228, 192, 113, 0.15); color: #E4C071; font-size: 12px; font-weight: 700; border: 1px solid rgba(228, 192, 113, 0.3);">{{ user_donations|length }}</span>
                 {% endif %}
@@ -196,7 +236,6 @@
                 </div>
               {% else %}
                 <div class="coming-soon-placeholder">
-                  <div class="coming-soon-icon" aria-hidden="true">💳</div>
                   <div class="coming-soon-text">
                     You haven't made any donations yet. Discover stories and make a lasting impact today.
                   </div>

@@ -805,6 +805,57 @@ document.addEventListener('DOMContentLoaded', function () {
 
   window.initCustomSelects = initCustomSelects;
   initCustomSelects();
+
+  // ── Theme Toggle System (Dark / Light Mode) ──────────────────
+  function initThemeSystem() {
+    function getPreferredTheme() {
+      const saved = localStorage.getItem('egystory_theme');
+      if (saved === 'light' || saved === 'dark') return saved;
+      return 'dark'; // Default is Dark Mode
+    }
+
+    function applyTheme(theme) {
+      if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
+      localStorage.setItem('egystory_theme', theme);
+      updateThemeToggles(theme);
+    }
+
+    function updateThemeToggles(theme) {
+      const isLight = theme === 'light';
+      document.querySelectorAll('.theme-toggle-btn').forEach(function (btn) {
+        btn.setAttribute('aria-label', isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode');
+        btn.setAttribute('title', isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode');
+      });
+    }
+
+    // Sync initial state on load
+    const currentTheme = getPreferredTheme();
+    applyTheme(currentTheme);
+
+    // Bind click events to all theme toggles
+    document.querySelectorAll('.theme-toggle-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const activeTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        const newTheme = activeTheme === 'light' ? 'dark' : 'light';
+        
+        if (typeof document.startViewTransition === 'function') {
+          document.startViewTransition(function() {
+            applyTheme(newTheme);
+          });
+        } else {
+          applyTheme(newTheme);
+        }
+      });
+    });
+  }
+
+  window.initThemeSystem = initThemeSystem;
+  initThemeSystem();
 });
 
 

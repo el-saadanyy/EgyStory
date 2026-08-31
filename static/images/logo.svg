@@ -5,11 +5,24 @@
       <stop offset="40%" stop-color="#E4C071"/>
       <stop offset="100%" stop-color="#C4983C"/>
     </linearGradient>
+    <style>
+      .logo-egy-text {
+        fill: #F9FAFB;
+      }
+      :root[data-theme="light"] .logo-egy-text,
+      [data-theme="light"] .logo-egy-text {
+        fill: #1A1916;
+      }
+      @media (prefers-color-scheme: light) {
+        :root:not([data-theme="dark"]) .logo-egy-text {
+          fill: #1A1916;
+        }
+      }
+    </style>
   </defs>
 
   <!-- Golden Crown & Ankh Emblem -->
   <g transform="translate(4, 2)" fill="none" stroke="url(#egyGold)" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Outer Pharaonic Crown & Central Spire -->
     <!-- Central Spire (Pyramid Peak) -->
     <polygon points="22,2 38,40 6,40" stroke-width="2.2"/>
     <line x1="22" y1="2" x2="22" y2="16" stroke-width="1.8"/>
@@ -24,10 +37,8 @@
     <line x1="6" y1="40" x2="38" y2="40" stroke-width="2.2"/>
 
     <!-- Ankh - Key of Life -->
-    <!-- Loop (Oval with Diamond Facets) -->
     <path d="M 22,12 C 16,12 14,19 14,24 C 14,29 18,31 22,31 C 26,31 30,29 30,24 C 30,19 28,12 22,12 Z" stroke-width="2" fill="none"/>
     
-    <!-- Diamond facets grid inside Loop -->
     <polygon points="22,14 17,23 22,30 27,23" stroke-width="1.2"/>
     <line x1="22" y1="14" x2="22" y2="30" stroke-width="1"/>
     <line x1="17" y1="23" x2="27" y2="23" stroke-width="1"/>
@@ -43,6 +54,6 @@
 
   <!-- Brand Typography -->
   <text x="56" y="32" font-family="'Inter', system-ui, -apple-system, sans-serif" font-weight="800" font-size="22" letter-spacing="-0.5">
-    <tspan fill="#F9FAFB">Egy</tspan><tspan fill="url(#egyGold)">Story</tspan>
+    <tspan class="logo-egy-text" fill="#1A1916">Egy</tspan><tspan fill="url(#egyGold)">Story</tspan>
   </text>
 </svg>

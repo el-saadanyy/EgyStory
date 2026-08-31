@@ -7,7 +7,7 @@
 {% block admin_content %}
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
   <div class="section-title">
-    <span>👥 Community Members</span>
+    <span>Community Members</span>
     {% if users %}
       <span class="badge badge-gray" style="font-size: 13px; font-weight: 800; border-color: rgba(228, 192, 113, 0.3); color: #E4C071; background: rgba(228, 192, 113, 0.1);">
         {{ users|length }} Registered
@@ -51,15 +51,15 @@
                 {% if user.is_active %}
                   <span class="badge badge-success">✓ Active</span>
                 {% else %}
-                  <span class="badge badge-warning">⏳ Pending</span>
+                  <span class="badge badge-warning">Pending</span>
                 {% endif %}
               </td>
               <td style="color: #AFA793; font-size: 13.5px;">{{ user.date_joined|date:"M d, Y" }}</td>
               <td class="actions-col">
-                <form method="post" action="{% url 'admin_delete_user' user.id %}" class="admin-table-action" onsubmit="return confirm('⚠️ WARNING: Deleting this user is permanent and will cascade-delete all their Campaigns, Updates, and Donations.\n\nAre you sure you want to proceed?');">
+                <form method="post" action="{% url 'admin_delete_user' user.id %}" class="admin-table-action" onsubmit="return confirm('WARNING: Deleting this user is permanent and will cascade-delete all their Campaigns, Updates, and Donations.\n\nAre you sure you want to proceed?');">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-sm btn-danger-outline" style="min-width: 90px;">
-                    🗑️ Delete
+                    Delete
                   </button>
                 </form>
               </td>
@@ -70,7 +70,6 @@
     </div>
   {% else %}
     <div class="admin-users-empty">
-      <div class="admin-users-empty-icon">👥</div>
       <div class="admin-users-empty-title">No Users Found</div>
       <div style="font-size: 14.5px; color: #AFA793;">There are currently no regular users registered in the system.</div>
     </div>

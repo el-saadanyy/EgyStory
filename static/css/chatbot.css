@@ -1,0 +1,528 @@
+/* ================================================================
+   EgyStory - Chatbot Widget Styles
+   Floating AI assistant styled with Pharaonic Dark/Gold design tokens
+   ================================================================ */
+
+.egystory-chatbot-wrapper {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  font-family: var(--font-sans);
+}
+
+/* Floating Trigger Button */
+.egystory-chat-toggle-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #E4C071 0%, #C8A355 100%);
+  color: #111009;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 24px rgba(228, 192, 113, 0.35), 0 4px 12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  outline: none;
+}
+
+.egystory-chat-toggle-btn:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 12px 28px rgba(228, 192, 113, 0.45), 0 6px 16px rgba(0, 0, 0, 0.6);
+  border-color: #FFFFFF;
+}
+
+.egystory-chat-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.egystory-chat-toggle-btn .chat-icon-open,
+.egystory-chat-toggle-btn .chat-icon-close {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.egystory-chat-toggle-btn .chat-icon-close {
+  display: none;
+}
+
+.egystory-chatbot-wrapper.is-active .egystory-chat-toggle-btn .chat-icon-open {
+  display: none;
+}
+
+.egystory-chatbot-wrapper.is-active .egystory-chat-toggle-btn .chat-icon-close {
+  display: flex;
+}
+
+/* Chat Window Modal */
+.egystory-chat-window {
+  position: absolute;
+  bottom: 72px;
+  right: 0;
+  width: 380px;
+  max-width: calc(100vw - 36px);
+  height: 540px;
+  max-height: calc(100vh - 120px);
+  background: #1C1B18;
+  border: 1px solid rgba(228, 192, 113, 0.25);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.65), 0 0 24px rgba(228, 192, 113, 0.12);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.9) translateY(20px);
+  transform-origin: bottom right;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+}
+
+.egystory-chatbot-wrapper.is-active .egystory-chat-window {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1) translateY(0);
+}
+
+/* Chat Header */
+.egystory-chat-header {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #24221D 0%, #171613 100%);
+  border-bottom: 1px solid rgba(228, 192, 113, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.egystory-chat-header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.egystory-chat-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-full);
+  background: rgba(228, 192, 113, 0.15);
+  border: 1px solid rgba(228, 192, 113, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+}
+
+.egystory-chat-title-group h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: -0.2px;
+}
+
+.egystory-chat-status {
+  font-size: 11px;
+  color: #16A34A;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.egystory-chat-status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #16A34A;
+  box-shadow: 0 0 6px #16A34A;
+}
+
+.egystory-chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Language Switcher */
+.egystory-chat-lang-switch {
+  display: inline-flex;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(228, 192, 113, 0.25);
+  border-radius: var(--radius-full);
+  padding: 2px;
+  gap: 2px;
+}
+
+.egystory-chat-lang-switch .lang-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.egystory-chat-lang-switch .lang-btn:hover {
+  color: #FFFFFF;
+}
+
+.egystory-chat-lang-switch .lang-btn.active {
+  background: var(--color-primary);
+  color: #111009;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.egystory-chat-clear-btn,
+.egystory-chat-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.egystory-chat-clear-btn:hover,
+.egystory-chat-close-btn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Chat Messages Container */
+.egystory-chat-messages {
+  flex: 1;
+  padding: 18px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #191815;
+  scroll-behavior: smooth;
+}
+
+.egystory-chat-messages::-webkit-scrollbar {
+  width: 5px;
+}
+.egystory-chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(228, 192, 113, 0.2);
+  border-radius: 10px;
+}
+
+/* Message Bubbles */
+.chat-msg {
+  display: flex;
+  gap: 10px;
+  max-width: 88%;
+  animation: chatFadeIn 0.25s ease-out;
+  font-family: var(--font-sans, 'Inter', -apple-system, sans-serif);
+}
+
+@keyframes chatFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chat-msg.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.chat-msg.assistant {
+  align-self: flex-start;
+}
+
+.chat-msg-bubble {
+  padding: 14px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+  line-height: 1.65;
+  word-break: break-word;
+  letter-spacing: -0.01em;
+}
+
+.chat-msg.user .chat-msg-bubble {
+  background: linear-gradient(135deg, #E4C071 0%, #C8A355 100%);
+  color: #111009;
+  font-weight: 600;
+  border-bottom-right-radius: 6px;
+  box-shadow: 0 4px 14px rgba(228, 192, 113, 0.25);
+}
+
+.chat-msg.assistant .chat-msg-bubble {
+  background: linear-gradient(145deg, #2A2822 0%, #201E1A 100%);
+  color: #F5EDD5;
+  border: 1px solid rgba(228, 192, 113, 0.22);
+  border-bottom-left-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.chat-msg.assistant .chat-msg-bubble strong {
+  color: #E4C071;
+  font-weight: 800;
+}
+
+.chat-msg.assistant .chat-msg-bubble .chat-p {
+  margin: 0 0 8px 0;
+}
+.chat-msg.assistant .chat-msg-bubble .chat-p:last-child {
+  margin-bottom: 0;
+}
+
+.chat-msg.assistant .chat-msg-bubble .chat-inline-code {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(228, 192, 113, 0.3);
+  color: #E4C071;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12.5px;
+}
+
+.chat-msg.assistant .chat-msg-bubble .chat-link {
+  color: #E4C071;
+  font-weight: 700;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.chat-msg.assistant .chat-msg-bubble .chat-link:hover {
+  color: #FFFFFF;
+}
+
+/* Typing Indicator */
+.chat-msg-typing {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 20px;
+  background: linear-gradient(145deg, #2A2822 0%, #201E1A 100%);
+  border: 1px solid rgba(228, 192, 113, 0.22);
+  border-radius: 20px;
+  border-bottom-left-radius: 6px;
+  width: fit-content;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.chat-msg-typing span {
+  width: 7px;
+  height: 7px;
+  background: var(--color-primary, #E4C071);
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+.chat-msg-typing span:nth-child(1) { animation-delay: -0.32s; }
+.chat-msg-typing span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* Quick Suggestion Chips */
+.chat-quick-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(228, 192, 113, 0.15);
+}
+
+.chat-chip {
+  background: rgba(228, 192, 113, 0.08);
+  border: 1px solid rgba(228, 192, 113, 0.3);
+  color: #E4C071;
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  letter-spacing: -0.01em;
+}
+
+.chat-chip:hover {
+  background: rgba(228, 192, 113, 0.2);
+  border-color: #E4C071;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(228, 192, 113, 0.2);
+  color: #FFFFFF;
+}
+
+/* Input Area */
+.egystory-chat-footer {
+  padding: 12px 14px;
+  background: #24221D;
+  border-top: 1px solid rgba(228, 192, 113, 0.15);
+}
+
+.egystory-chat-input-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.egystory-chat-input {
+  flex: 1;
+  background: #181714;
+  border: 1px solid rgba(228, 192, 113, 0.25);
+  border-radius: var(--radius-full);
+  padding: 10px 16px;
+  color: #FFFFFF;
+  font-size: 13.5px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.egystory-chat-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 10px rgba(228, 192, 113, 0.2);
+}
+
+.egystory-chat-send-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: #111009;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.egystory-chat-send-btn:hover {
+  background: var(--color-primary-hover);
+  transform: scale(1.05);
+}
+
+.egystory-chat-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive adjustment */
+@media (max-width: 480px) {
+  .egystory-chatbot-wrapper {
+    bottom: 20px;
+    right: 20px;
+  }
+  .egystory-chat-window {
+    width: calc(100vw - 40px);
+    height: calc(100vh - 100px);
+    bottom: 68px;
+  }
+}
+
+.chat-greeting-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #E4C071;
+  margin-bottom: 6px;
+}
+
+.chat-greeting-desc {
+  color: #F5EDD5;
+  line-height: 1.6;
+}
+
+/* ── Light Mode Chatbot Overrides ──────────────────────────────── */
+[data-theme="light"] .egystory-chat-window {
+  background: #FFFFFF;
+  border-color: rgba(184, 134, 11, 0.25);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+}
+[data-theme="light"] .egystory-chat-header {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FAF8F2 100%);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+[data-theme="light"] .egystory-chat-title-group h4 {
+  color: #1A1916;
+}
+[data-theme="light"] .egystory-chat-status {
+  color: #15803D;
+}
+[data-theme="light"] .egystory-chat-messages {
+  background: #F8F7F4;
+}
+[data-theme="light"] .chat-msg.assistant .chat-msg-bubble {
+  background: #FFFFFF;
+  color: #1A1916;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+[data-theme="light"] .chat-greeting-title {
+  color: #B8860B;
+}
+[data-theme="light"] .chat-greeting-desc {
+  color: #4A473F;
+}
+[data-theme="light"] .chat-msg.assistant .chat-msg-bubble strong {
+  color: #B8860B;
+}
+[data-theme="light"] .chat-chip,
+[data-theme="light"] .egystory-chat-chip {
+  background: #FFFFFF;
+  color: #4A473F;
+  border-color: rgba(184, 134, 11, 0.35);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+[data-theme="light"] .chat-chip:hover,
+[data-theme="light"] .egystory-chat-chip:hover {
+  background: rgba(184, 134, 11, 0.12);
+  color: #B8860B;
+  border-color: #B8860B;
+}
+[data-theme="light"] .egystory-chat-footer {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+[data-theme="light"] .egystory-chat-input {
+  background: #F8F7F4;
+  color: #1A1916;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+[data-theme="light"] .egystory-chat-input:focus {
+  background: #FFFFFF;
+  border-color: #B8860B;
+}
+[data-theme="light"] .egystory-chat-lang-switch {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .egystory-chat-clear-btn,
+[data-theme="light"] .egystory-chat-close-btn {
+  color: #787366;
+}
+[data-theme="light"] .egystory-chat-clear-btn:hover,
+[data-theme="light"] .egystory-chat-close-btn:hover {
+  color: #1A1916;
+  background: rgba(0, 0, 0, 0.05);
+}
+

@@ -2,6 +2,7 @@ from django import forms
 from decimal import Decimal
 from .models import (
     Campaign, 
+    CampaignUpdate,
     Donation, 
     CaseType, 
     Category, 
@@ -155,3 +156,60 @@ class CommentReportForm(forms.ModelForm):
                 'placeholder': 'Reason for reporting (optional)...'
             }),
         }
+
+
+class OwnerCampaignEditForm(forms.ModelForm):
+    class Meta:
+        model = Campaign
+        fields = ['story', 'campaign_image']
+        widgets = {
+            'story': forms.Textarea(attrs={
+                'class': 'form-input form-textarea-story',
+                'rows': 10,
+                'placeholder': 'اكتب أو حدّث تفاصيل قصة الحملة هنا... / Write or update campaign story details here...',
+                'dir': 'auto',
+                'style': 'width: 100%; min-height: 240px; padding: 18px 20px; font-size: 15.5px; line-height: 1.85; border-radius: var(--radius-lg); background: var(--color-bg); color: var(--color-text-primary); border: 1.5px solid var(--color-border); direction: auto; unicode-bidi: plaintext; resize: vertical; box-sizing: border-box;'
+            }),
+            'campaign_image': forms.FileInput(attrs={'class': 'form-input', 'accept': 'image/*'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['campaign_image'].required = False
+
+    def clean_story(self):
+        story = self.cleaned_data.get('story', '').strip()
+        if not story:
+            raise forms.ValidationError("Story content cannot be empty.")
+        return story
+
+
+class CampaignUpdateForm(forms.ModelForm):
+    class Meta:
+        model = CampaignUpdate
+        fields = ['title', 'content']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-input form-input-update-title',
+                'placeholder': 'e.g., Medical operation scheduled for next week',
+                'dir': 'auto',
+            }),
+            'content': forms.Textarea(attrs={
+                'class': 'form-input form-textarea-update-content',
+                'rows': 5,
+                'placeholder': 'Share the latest progress, milestones, or news with your supporters...',
+                'dir': 'auto',
+            }),
+        }
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title', '').strip()
+        if not title:
+            raise forms.ValidationError("Update title cannot be empty.")
+        return title
+
+    def clean_content(self):
+        content = self.cleaned_data.get('content', '').strip()
+        if not content:
+            raise forms.ValidationError("Update content cannot be empty.")
+        return content

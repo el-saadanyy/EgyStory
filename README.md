@@ -30,11 +30,19 @@ Create a `.env` file in the project root directory based on `.env.example`:
 ```ini
 SECRET_KEY=your-local-secret-key
 DEBUG=True
+GEMINI_API_KEY=your-gemini-api-key
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_HOST_USER=your-email@gmail.com
 EMAIL_HOST_PASSWORD=your-app-password
 ```
+
+### 3.1 AI Chatbot Assistant (Google Gemini)
+- Powered by `gemini-3.1-flash-lite`.
+- Requires `GEMINI_API_KEY` in `.env`.
+- **Session-only Persistence**: Chat history is kept in the user's active Django session memory and is **never** persisted to the database.
+- Provides grounded, anti-hallucination answers regarding EgyStory campaign searches, recommendations, and platform FAQ using live database queries.
+
 
 ### 4. Database Setup & Fixture Loading
 Run migrations to create the database schema, then populate it with the development dataset fixture (`fixtures/dev_data.json`):

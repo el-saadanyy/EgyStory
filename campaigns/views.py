@@ -7,10 +7,11 @@ from django.http import JsonResponse
 from django.urls import reverse
 from .models import (
     Campaign, CampaignStatus, CaseType, Category, Tag, 
-    CampaignImage, CampaignRating, CampaignReport, Comment, CommentReport
+    CampaignImage, CampaignUpdate, CampaignRating, CampaignReport, Comment, CommentReport
 )
 from .forms import (
-    CampaignForm, DonationForm, RatingForm, ReportForm, 
+    CampaignForm, OwnerCampaignEditForm, CampaignUpdateForm, 
+    DonationForm, RatingForm, ReportForm, 
     CommentForm, CommentReportForm
 )
 
@@ -107,16 +108,41 @@ def case_list(request):
 
     sort_type = request.GET.get('sort', 'newest')
     if sort_type == 'most_urgent':
-        campaigns.sort(key=lambda c: c.get_urgency_score(), reverse=True)
+        # Active campaigns come first (is_active=1 vs 0), critical active first (1 vs 0), then urgency score
+        campaigns.sort(
+            key=lambda c: (
+                1 if c.status == CampaignStatus.ACTIVE else 0,
+                1 if (c.status == CampaignStatus.ACTIVE and c.is_critical()) else 0,
+                c.get_urgency_score(),
+                c.created_at
+            ),
+            reverse=True
+        )
     elif sort_type == 'almost_funded':
-        campaigns.sort(key=lambda c: c.get_progress_percentage(), reverse=True)
+        # Active campaigns come first, then progress percentage
+        campaigns.sort(
+            key=lambda c: (
+                1 if c.status == CampaignStatus.ACTIVE else 0,
+                c.get_progress_percentage(),
+                c.created_at
+            ),
+            reverse=True
+        )
     elif sort_type == 'recently_completed':
         completed = [c for c in campaigns if c.status == CampaignStatus.COMPLETED]
         completed.sort(key=lambda c: c.updated_at, reverse=True)
         others = [c for c in campaigns if c.status != CampaignStatus.COMPLETED]
+        others.sort(key=lambda c: c.created_at, reverse=True)
         campaigns = completed + others
     else:
-        campaigns.sort(key=lambda c: c.created_at, reverse=True)
+        # Default 'newest': Active campaigns first, then completed campaigns at the bottom
+        campaigns.sort(
+            key=lambda c: (
+                1 if c.status == CampaignStatus.ACTIVE else 0,
+                c.created_at
+            ),
+            reverse=True
+        )
 
     categories = Category.objects.all()
     tags = Tag.objects.all()
@@ -253,6 +279,22 @@ def report_comment(request, comment_id):
             messages.success(request, 'Thank you. The comment has been reported for review.')
         else:
             messages.error(request, 'Failed to submit report.')
+    return redirect('campaigns:case_detail', campaign_id=campaign_id)
+
+
+@login_required
+def delete_comment(request, comment_id):
+    """Allows a user to delete their own comment or reply."""
+    comment = get_object_or_404(Comment, id=comment_id)
+    campaign_id = comment.campaign.id
+
+    if comment.user != request.user and not request.user.is_staff:
+        messages.error(request, 'You do not have permission to delete this comment.')
+        return redirect('campaigns:case_detail', campaign_id=campaign_id)
+
+    if request.method == 'POST':
+        comment.delete()
+        messages.success(request, 'Comment deleted successfully.')
     return redirect('campaigns:case_detail', campaign_id=campaign_id)
 
 
@@ -399,3 +441,117 @@ def cancel_campaign(request, campaign_id):
 
     messages.success(request, f'Campaign "{campaign.title}" has been successfully cancelled.')
     return redirect('campaigns:case_detail', campaign_id=campaign_id)
+
+
+# ── Campaign Owner Management Views ──────────────────────────────────────────
+
+@login_required
+def case_edit(request, campaign_id):
+    """
+    Dedicated management area for a campaign owner to:
+    - Edit/update their campaign story
+    - Change or replace the main campaign image
+    - View and manage campaign updates
+    """
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+
+    # Strict server-side ownership authorization
+    if campaign.owner != request.user and not request.user.is_staff:
+        messages.error(request, 'You do not have permission to manage this campaign.')
+        return redirect('campaigns:case_detail', campaign_id=campaign.id)
+
+    # Editing is permitted when campaign status is Active or Pending Review
+    if campaign.status not in [CampaignStatus.ACTIVE, CampaignStatus.PENDING] and not request.user.is_staff:
+        messages.error(request, f'Campaigns with status "{campaign.status}" cannot be edited.')
+        return redirect('campaigns:case_detail', campaign_id=campaign.id)
+
+    if request.method == 'POST':
+        form = OwnerCampaignEditForm(request.POST, request.FILES, instance=campaign)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Campaign information updated successfully.')
+            return redirect('campaigns:case_edit', campaign_id=campaign.id)
+        else:
+            messages.error(request, 'Failed to update campaign. Please check the errors below.')
+    else:
+        form = OwnerCampaignEditForm(instance=campaign)
+
+    update_form = CampaignUpdateForm()
+    updates = campaign.updates.all().order_by('-created_at')
+
+    return render(request, 'campaigns/case_edit.html', {
+        'campaign': campaign,
+        'form': form,
+        'update_form': update_form,
+        'updates': updates,
+    })
+
+
+@login_required
+def create_campaign_update(request, campaign_id):
+    """
+    Allows a campaign owner to post a Latest Update for their campaign.
+    """
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+
+    if campaign.owner != request.user and not request.user.is_staff:
+        messages.error(request, 'You do not have permission to post updates for this campaign.')
+        return redirect('campaigns:case_detail', campaign_id=campaign.id)
+
+    if request.method == 'POST':
+        form = CampaignUpdateForm(request.POST)
+        if form.is_valid():
+            update = form.save(commit=False)
+            update.campaign = campaign
+            update.save()
+            messages.success(request, 'Campaign update posted successfully.')
+        else:
+            messages.error(request, 'Failed to post update. Please ensure all required fields are filled.')
+    
+    return redirect('campaigns:case_edit', campaign_id=campaign.id)
+
+
+@login_required
+def edit_campaign_update(request, campaign_id, update_id):
+    """
+    Allows a campaign owner to edit an existing update belonging to their campaign.
+    """
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+
+    if campaign.owner != request.user and not request.user.is_staff:
+        messages.error(request, 'You do not have permission to edit this update.')
+        return redirect('campaigns:case_detail', campaign_id=campaign.id)
+
+    update = get_object_or_404(CampaignUpdate, id=update_id, campaign=campaign)
+
+    if request.method == 'POST':
+        form = CampaignUpdateForm(request.POST, instance=update)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Campaign update modified successfully.')
+        else:
+            messages.error(request, 'Failed to modify update. Please check the entered details.')
+
+    return redirect('campaigns:case_edit', campaign_id=campaign.id)
+
+
+@login_required
+def delete_campaign_update(request, campaign_id, update_id):
+    """
+    Allows a campaign owner to delete an existing update belonging to their campaign.
+    """
+    if request.method != 'POST':
+        messages.error(request, 'Invalid request method.')
+        return redirect('campaigns:case_detail', campaign_id=campaign_id)
+
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+
+    if campaign.owner != request.user and not request.user.is_staff:
+        messages.error(request, 'You do not have permission to delete this update.')
+        return redirect('campaigns:case_detail', campaign_id=campaign.id)
+
+    update = get_object_or_404(CampaignUpdate, id=update_id, campaign=campaign)
+    update.delete()
+
+    messages.success(request, 'Campaign update deleted successfully.')
+    return redirect('campaigns:case_edit', campaign_id=campaign.id)

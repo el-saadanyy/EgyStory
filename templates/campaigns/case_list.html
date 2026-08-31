@@ -14,7 +14,7 @@
 
     <div class="container" style="position: relative; z-index: 1;">
       <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: var(--radius-full); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; background: rgba(228, 192, 113, 0.12); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.3); backdrop-filter: blur(6px);">
-        🇪🇬 Verified Egyptian Campaigns • 100% Secure
+        Verified Egyptian Campaigns • 100% Secure
       </div>
 
       <h1 style="font-size: 42px; font-weight: 900; color: #FFFFFF; margin-bottom: 14px; letter-spacing: -0.8px; line-height: 1.15; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);">
@@ -30,9 +30,9 @@
   <section class="container">
     
     <!-- ── Filter & Search Control Panel ───────────────────────── -->
-    <div id="cases-control-panel" style="background: var(--color-surface); padding: 28px; border-radius: var(--radius-xl); box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35); border: 1px solid rgba(228, 192, 113, 0.2); margin-bottom: 36px; position: relative; overflow: hidden; backdrop-filter: blur(8px);">
+    <div id="cases-control-panel" style="background: var(--color-surface); padding: 28px; border-radius: var(--radius-xl); box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35); border: 1px solid rgba(228, 192, 113, 0.2); margin-bottom: 36px; position: relative; backdrop-filter: blur(8px);">
       <!-- Subtle top decorative gold line -->
-      <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071, transparent);" aria-hidden="true"></div>
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071, transparent); border-top-left-radius: var(--radius-xl); border-top-right-radius: var(--radius-xl);" aria-hidden="true"></div>
 
       <!-- Top Row: Search & Sort -->
       <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; margin-bottom: 24px;">
@@ -40,8 +40,7 @@
         <!-- Search Input -->
         <form method="get" id="case-search-form" style="display: flex; gap: 10px; flex: 1; min-width: 280px;">
           <div style="position: relative; flex: 1;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E4C071" stroke-width="2" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); opacity: 0.85;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" name="q" placeholder="Search by title, story details, or tags..." value="{{ query|default:'' }}" class="form-control" style="padding-left: 46px; border-radius: var(--radius-full); background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); color: #FFFFFF; font-size: 15px; height: 48px; transition: all 0.25s ease;">
+            <input type="text" name="q" placeholder="Search by title, story details, or tags..." value="{{ query|default:'' }}" class="form-control" style="padding-left: 20px; border-radius: var(--radius-full); background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); color: #FFFFFF; font-size: 15px; height: 48px; transition: all 0.25s ease;">
           </div>
           <input type="hidden" name="filter" value="{{ current_filter }}">
           <input type="hidden" name="sort" value="{{ current_sort }}">
@@ -58,17 +57,14 @@
           <input type="hidden" name="q" value="{{ query|default:'' }}">
           {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
           {% if selected_tag %}<input type="hidden" name="tag" value="{{ selected_tag }}">{% endif %}
-          <label style="font-size: 14px; font-weight: 700; color: #E4C071; white-space: nowrap;">⚡ Sort by:</label>
-          <div style="position: relative;">
-            <select name="sort" id="case-sort-select" class="form-control" style="border-radius: var(--radius-full); padding: 10px 36px 10px 18px; font-size: 14px; font-weight: 600; min-width: 180px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(228, 192, 113, 0.3); color: #FFFFFF; appearance: none; cursor: pointer; height: 48px;">
-              <option value="newest" {% if current_sort == 'newest' %}selected{% endif %} style="background: #2A2823; color: #fff;">Newest First</option>
-              <option value="most_urgent" {% if current_sort == 'most_urgent' %}selected{% endif %} style="background: #2A2823; color: #fff;">🚨 Most Urgent</option>
-              <option value="almost_funded" {% if current_sort == 'almost_funded' %}selected{% endif %} style="background: #2A2823; color: #fff;">🔥 Almost Funded</option>
-              <option value="recently_completed" {% if current_sort == 'recently_completed' %}selected{% endif %} style="background: #2A2823; color: #fff;">🎉 Recently Completed</option>
+          <label style="font-size: 14px; font-weight: 700; color: #E4C071; white-space: nowrap;">Sort by:</label>
+          <div style="position: relative; min-width: 190px;">
+            <select name="sort" id="case-sort-select">
+              <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Newest First</option>
+              <option value="most_urgent" {% if current_sort == 'most_urgent' %}selected{% endif %}>Most Urgent</option>
+              <option value="almost_funded" {% if current_sort == 'almost_funded' %}selected{% endif %}>Almost Funded</option>
+              <option value="recently_completed" {% if current_sort == 'recently_completed' %}selected{% endif %}>Recently Completed</option>
             </select>
-            <div style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #E4C071;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </div>
           </div>
         </form>
 
@@ -84,27 +80,27 @@
             All Campaigns
           </a>
 
-          <!-- Critical -->
+          <!-- Critical (STATUS ICON KEPT) -->
           <a href="?filter=critical&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="filter-pill {% if current_filter == 'critical' %}filter-pill--active-red{% endif %}">
             🚨 Critical
           </a>
 
-          <!-- Rare -->
+          <!-- Rare (STATUS ICON KEPT) -->
           <a href="?filter=rare&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="filter-pill {% if current_filter == 'rare' %}filter-pill--active-purple{% endif %}">
             💜 Rare Cases
           </a>
 
-          <!-- Active -->
+          <!-- Active (STATUS ICON KEPT) -->
           <a href="?filter=active&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="filter-pill {% if current_filter == 'active' %}filter-pill--active-gold{% endif %}">
             🤝 Active
           </a>
 
-          <!-- Almost Funded -->
+          <!-- Almost Funded (STATUS ICON KEPT) -->
           <a href="?filter=almost_funded&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="filter-pill {% if current_filter == 'almost_funded' %}filter-pill--active-amber{% endif %}">
             ⚡ Almost Funded
           </a>
 
-          <!-- Completed -->
+          <!-- Completed (STATUS ICON KEPT) -->
           <a href="?filter=completed&sort={{ current_sort }}&q={{ query|default:'' }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" class="filter-pill {% if current_filter == 'completed' %}filter-pill--active-green{% endif %}">
             🎉 Completed
           </a>
@@ -117,19 +113,19 @@
           
           {% for cat in categories %}
             <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&category={{ cat.slug }}" class="tag-chip {% if selected_category == cat.slug %}tag-chip--active{% endif %}">
-              📁 {{ cat.name }}
+              {{ cat.name }}
             </a>
           {% endfor %}
 
           {% for tag in tags %}
             <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&tag={{ tag.slug }}" class="tag-chip {% if selected_tag == tag.slug %}tag-chip--active{% endif %}">
-              🏷️ {{ tag.name }}
+              {{ tag.name }}
             </a>
           {% endfor %}
 
           {% if selected_category or selected_tag or query or current_filter != 'all' %}
             <a href="{% url 'campaigns:case_list' %}" class="reset-filters-btn" style="margin-left: auto; color: #E4C071; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: var(--radius-full); background: rgba(228, 192, 113, 0.1); border: 1px solid rgba(228, 192, 113, 0.25); transition: all 0.2s ease;">
-              ✕ Reset Filters
+              Reset Filters
             </a>
           {% endif %}
         </div>
@@ -145,9 +141,6 @@
         {% include 'includes/campaign_card.html' %}
       {% empty %}
         <div class="empty-state" style="grid-column: 1 / -1; background: var(--color-surface); border-radius: var(--radius-xl); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35); border: 1px dashed rgba(228, 192, 113, 0.3); padding: 72px 24px; text-align: center;">
-          <div style="width: 72px; height: 72px; margin: 0 auto 20px; background: rgba(228, 192, 113, 0.12); border: 1px solid rgba(228, 192, 113, 0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px;">
-            🔍
-          </div>
           <h2 style="font-size: 26px; font-weight: 800; color: #FFFFFF; margin-bottom: 10px;">No campaigns found</h2>
           <p style="color: #F5EDD5; opacity: 0.85; font-size: 16px; max-width: 500px; margin: 0 auto 28px; line-height: 1.6;">
             We couldn't find any campaigns matching your current filters or search terms. Try searching with different keywords or clearing active filters.
@@ -265,6 +258,61 @@
     border-color: #E4C071 !important;
     transform: scale(1.03);
   }
+
+  /* ── Light Mode Specific Overrides ────────────────────────────── */
+  [data-theme="light"] #cases-control-panel {
+    background: linear-gradient(145deg, #FFFFFF 0%, #FAF8F2 100%) !important;
+    border: 1px solid rgba(184, 134, 11, 0.25) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+  }
+  [data-theme="light"] #case-search-form input {
+    background: #FFFFFF !important;
+    color: #1A1916 !important;
+    border: 1.5px solid rgba(0, 0, 0, 0.12) !important;
+  }
+  [data-theme="light"] #case-search-form input:focus {
+    border-color: #B8860B !important;
+    box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.2) !important;
+  }
+  [data-theme="light"] .filter-pill {
+    background: #FFFFFF;
+    color: #4A473F;
+    border-color: rgba(0, 0, 0, 0.12);
+  }
+  [data-theme="light"] .filter-pill:hover {
+    background: rgba(184, 134, 11, 0.1);
+    color: #B8860B;
+    border-color: #B8860B;
+  }
+  [data-theme="light"] .filter-pill--active-gold {
+    background: #B8860B !important;
+    color: #FFFFFF !important;
+    border-color: #B8860B !important;
+    box-shadow: 0 4px 14px rgba(184, 134, 11, 0.3) !important;
+  }
+  [data-theme="light"] .tag-chip {
+    background: #FFFFFF;
+    color: #4A473F;
+    border-color: rgba(184, 134, 11, 0.25);
+  }
+  [data-theme="light"] .tag-chip:hover {
+    background: rgba(184, 134, 11, 0.12);
+    color: #B8860B;
+  }
+  [data-theme="light"] .tag-chip--active {
+    background: #B8860B !important;
+    color: #FFFFFF !important;
+  }
+  [data-theme="light"] .empty-state {
+    background: #FFFFFF !important;
+    border-color: rgba(184, 134, 11, 0.3) !important;
+  }
+  [data-theme="light"] .empty-state h2 {
+    color: #1A1916 !important;
+  }
+  [data-theme="light"] .empty-state p {
+    color: #4A473F !important;
+  }
 </style>
 
 <!-- ── Seamless Instant Dynamic AJAX Filtering ────────────────── -->
@@ -304,6 +352,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (updatedPanel && controlPanel) {
         controlPanel.innerHTML = updatedPanel.innerHTML;
+        if (typeof window.initCustomSelects === 'function') {
+          window.initCustomSelects();
+        }
       }
       if (updatedGrid && gridContainer) {
         gridContainer.innerHTML = updatedGrid.innerHTML;

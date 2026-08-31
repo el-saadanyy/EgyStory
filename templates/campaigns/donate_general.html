@@ -18,10 +18,10 @@
         <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071 50%, transparent);" aria-hidden="true"></div>
 
         <div style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 16px; border-radius: var(--radius-full); font-weight: 700; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; background: rgba(228, 192, 113, 0.12); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.3);">
-          ✨ General Support
+          General Support
         </div>
 
-        <h1 style="font-size: 36px; font-weight: 900; margin-bottom: 12px; line-height: 1.2; text-shadow: 0 2px 12px rgba(0,0,0,0.7);">
+        <h1 style="font-size: 36px; font-weight: 900; margin-bottom: 12px; line-height: 1.2;">
           Make a <span style="color: #E4C071;">General Donation</span>
         </h1>
         <p style="color: #F5EDD5; font-size: 16px; opacity: 0.92; line-height: 1.6; max-width: 480px; margin: 0 auto;">Select an active verified campaign to support from the list below.</p>
@@ -37,15 +37,12 @@
               Select Campaign to Fund <span style="color: #f87171;">*</span>
             </label>
             <div style="position: relative;">
-              <select name="campaign_id" id="campaign_id" class="form-control" style="width: 100%; padding: 16px 44px 16px 20px; font-size: 16px; font-weight: 600; border: 1.5px solid rgba(228, 192, 113, 0.3); border-radius: var(--radius-xl); appearance: none; background: rgba(0, 0, 0, 0.35); color: #FFFFFF; cursor: pointer; transition: all 0.25s ease;" required>
-                <option value="" disabled selected style="background: #24221D; color: #AFA793;">-- Click to choose an active campaign --</option>
+              <select name="campaign_id" id="campaign_id" class="form-control" style="width: 100%; padding: 16px 20px; font-size: 16px; font-weight: 600; border: 1.5px solid var(--color-input-border); border-radius: var(--radius-xl); background: var(--color-input-bg); color: var(--color-input-text); cursor: pointer; transition: all 0.25s ease;" required>
+                <option value="" disabled selected>-- Click to choose an active campaign --</option>
                 {% for campaign in active_campaigns %}
-                  <option value="{{ campaign.id }}" style="background: #24221D; color: #FFFFFF;">{{ campaign.title }} (Goal: {{ campaign.target_amount }} EGP)</option>
+                  <option value="{{ campaign.id }}">{{ campaign.title }} (Goal: {{ campaign.target_amount }} EGP)</option>
                 {% endfor %}
               </select>
-              <div style="position: absolute; right: 18px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #E4C071;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
             </div>
           </div>
 
@@ -55,7 +52,7 @@
           
           <div style="text-align: center; margin-top: 24px;">
             <a href="{% url 'campaigns:case_list' %}" style="color: #E4C071; font-weight: 700; font-size: 14.5px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: var(--radius-full); background: rgba(228, 192, 113, 0.08); border: 1px solid rgba(228, 192, 113, 0.2); transition: all 0.2s ease;">
-              🔍 Browse all campaigns with filters instead
+              Browse all campaigns with filters instead
             </a>
           </div>
         </form>

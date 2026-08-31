@@ -8,7 +8,7 @@
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
   <div>
     <div class="section-title" style="margin-bottom: 6px;">
-      <span>🏷️ Tags &amp; Taxonomy Management</span>
+      <span>Tags &amp; Taxonomy Management</span>
     </div>
     <p style="color: #AFA793; font-size: 14px; margin: 0;">Create, organize, and manage categorization tags for stories across EgyStory.</p>
   </div>
@@ -17,7 +17,7 @@
 <!-- Create New Tag Form Card -->
 <div class="admin-card" style="margin-bottom: 28px; padding: 24px 28px;">
   <div style="font-size: 16px; font-weight: 800; color: #FFFFFF; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-    <span>➕</span> Add New Platform Tag
+    <span>Add New Platform Tag</span>
   </div>
   <form method="post" action="{% url 'admin_tags' %}" style="display: flex; gap: 14px; align-items: center; max-width: 620px; padding: 0; margin: 0;">
     {% csrf_token %}
@@ -29,7 +29,7 @@
 <!-- Tags List Table Card -->
 <div class="admin-card">
   {% if tags %}
-    <div style="overflow-x: auto; width: 100%;">
+    <div class="table-wrap">
       <table class="table">
         <thead>
           <tr>
@@ -44,7 +44,7 @@
             <tr>
               <td>
                 <span style="font-weight: 800; font-size: 15px; color: #FFFFFF; display: inline-flex; align-items: center; gap: 6px;">
-                  🏷️ {{ tag.name }}
+                  {{ tag.name }}
                 </span>
               </td>
               <td style="color: #AFA793; font-family: monospace; font-size: 13.5px;">
@@ -58,12 +58,12 @@
               <td class="actions-col" style="text-align: right; padding-right: 24px;">
                 <div style="display: inline-flex; gap: 8px; align-items: center; justify-content: flex-end;">
                   <a href="{% url 'admin_edit_tag' tag.id %}" class="btn btn-outline btn-sm">
-                    ✏️ Edit
+                    Edit
                   </a>
-                  <form method="post" action="{% url 'admin_delete_tag' tag.id %}" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('⚠️ Are you sure you want to delete tag \'{{ tag.name }}\'?');">
+                  <form method="post" action="{% url 'admin_delete_tag' tag.id %}" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('Are you sure you want to delete tag \'{{ tag.name }}\'?');">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger-outline btn-sm">
-                      🗑️ Delete
+                      Delete
                     </button>
                   </form>
                 </div>
@@ -75,7 +75,6 @@
     </div>
   {% else %}
     <div class="admin-empty-state">
-      <div class="admin-empty-icon">🏷️</div>
       <div class="admin-empty-title">No Tags Created Yet</div>
       <div style="font-size: 14.5px; color: #AFA793;">Use the input box above to add the platform's first tag.</div>
     </div>

@@ -8,7 +8,7 @@
 <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
   <div>
     <div class="section-title" style="margin-bottom: 6px;">
-      <span>🚩 Campaign Reports Moderation</span>
+      <span>Campaign Reports Moderation</span>
     </div>
     <p style="font-size: 14px; color: #AFA793; margin: 0;">Review flagged cases, inspect reasons and user details, and take required actions.</p>
   </div>
@@ -16,7 +16,7 @@
   <!-- Status Filter Pills -->
   <div class="admin-filter-bar">
     <a href="?status=all" class="admin-filter-pill {% if current_status == 'all' %}active{% endif %}">All</a>
-    <a href="?status=pending" class="admin-filter-pill {% if current_status == 'pending' %}active{% endif %}">⏳ Pending</a>
+    <a href="?status=pending" class="admin-filter-pill {% if current_status == 'pending' %}active{% endif %}">Pending</a>
     <a href="?status=reviewed" class="admin-filter-pill {% if current_status == 'reviewed' %}active{% endif %}">✓ Reviewed</a>
     <a href="?status=dismissed" class="admin-filter-pill {% if current_status == 'dismissed' %}active{% endif %}">✕ Dismissed</a>
     <a href="?status=action_taken" class="admin-filter-pill {% if current_status == 'action_taken' %}active{% endif %}">⚡ Action Taken</a>
@@ -25,7 +25,7 @@
 
 <div class="admin-card">
   {% if reports %}
-    <div style="overflow-x: auto; width: 100%;">
+    <div class="table-wrap">
       <table class="table">
         <thead>
           <tr>
@@ -53,7 +53,7 @@
               </td>
               <td>
                 <span class="badge badge-danger" style="margin-bottom: 6px;">
-                  🚩 {{ report.get_reason_display }}
+                  {{ report.get_reason_display }}
                 </span>
                 {% if report.details %}
                   <div style="font-size: 13px; color: #D9CFB8; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: var(--radius-md); border: 1px solid rgba(228,192,113,0.15); line-height: 1.5; max-width: 320px;">
@@ -71,7 +71,7 @@
               </td>
               <td>
                 {% if report.status == 'Pending Review' %}
-                  <span class="badge badge-warning">⏳ Pending</span>
+                  <span class="badge badge-warning">Pending</span>
                 {% elif report.status == 'Action Taken' %}
                   <span class="badge badge-danger">⚡ Action Taken</span>
                 {% elif report.status == 'Dismissed' %}
@@ -97,10 +97,10 @@
                       </button>
                     </form>
                     {% if report.campaign.status == 'Active' %}
-                      <form method="post" action="{% url 'admin_report_action' report.id 'cancel_campaign' %}" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('⚠️ Are you sure you want to CANCEL this reported campaign?');">
+                      <form method="post" action="{% url 'admin_report_action' report.id 'cancel_campaign' %}" style="display: inline; margin: 0; padding: 0;" onsubmit="return confirm('Are you sure you want to CANCEL this reported campaign?');">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-danger" title="Cancel Campaign">
-                          🚫 Cancel Case
+                          Cancel Case
                         </button>
                       </form>
                     {% endif %}
@@ -116,7 +116,6 @@
     </div>
   {% else %}
     <div class="admin-empty-state">
-      <div class="admin-empty-icon">✅</div>
       <div class="admin-empty-title">No Reports Found</div>
       <div style="font-size: 14.5px; color: #AFA793;">There are no campaign reports matching the selected filter status.</div>
     </div>

@@ -19,11 +19,11 @@
         <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071 50%, transparent);" aria-hidden="true"></div>
 
         <a href="{% url 'campaigns:case_detail' campaign.id %}" style="position: absolute; left: 32px; top: 32px; color: #E4C071; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; background: rgba(228, 192, 113, 0.12); border: 1px solid rgba(228, 192, 113, 0.3); padding: 8px 18px; border-radius: var(--radius-full); transition: all 0.2s; backdrop-filter: blur(6px);">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Story
+          Back to Story
         </a>
         
         <div style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 16px; border-radius: var(--radius-full); font-weight: 700; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; background: rgba(228, 192, 113, 0.12); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.3);">
-          🤝 Secure Contribution
+          Secure Contribution
         </div>
 
         <h1 style="font-size: 38px; font-weight: 900; margin-bottom: 12px; line-height: 1.2; text-shadow: 0 2px 12px rgba(0,0,0,0.7);">
@@ -98,23 +98,19 @@
           </div>
 
           <!-- Anonymous Option Card -->
-          <div style="background: rgba(255, 255, 255, 0.03); padding: 18px 22px; border-radius: var(--radius-xl); border: 1px solid rgba(228, 192, 113, 0.2); margin-bottom: 36px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.2s ease;">
+          <div class="anonymous-card" style="background: rgba(255, 255, 255, 0.04); padding: 18px 22px; border-radius: var(--radius-xl); border: 1.5px solid rgba(228, 192, 113, 0.25); margin-bottom: 36px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.2s ease;">
             {{ form.is_anonymous }}
-            <label for="{{ form.is_anonymous.id_for_label }}" style="margin: 0; font-weight: 700; font-size: 15px; color: #FFFFFF; cursor: pointer; user-select: none;">
+            <label for="{{ form.is_anonymous.id_for_label }}" class="anonymous-label" style="margin: 0; font-weight: 700; font-size: 15px; cursor: pointer; user-select: none;">
               Make my donation anonymous
             </label>
-            <div style="margin-left: auto; color: #AFA793; display: flex; align-items: center;" title="Your name will be hidden from the public campaign donor list.">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E4C071" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-            </div>
           </div>
 
           <!-- Submit Button -->
           <button type="submit" class="btn btn-primary" style="width: 100%; padding: 18px; font-size: 18px; font-weight: 900; border-radius: var(--radius-full); box-shadow: 0 6px 28px rgba(228, 192, 113, 0.45); letter-spacing: 0.02em; border: none; cursor: pointer; transition: all 0.25s ease;">
-            🔒 Complete Donation Securely
+            Complete Donation Securely
           </button>
           
           <div style="text-align: center; margin-top: 24px; color: #AFA793; font-size: 13.5px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#E4C071" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             <span>Protected by 256-bit SSL encryption &bull; 100% Egyptian gateway verified</span>
           </div>
         </form>
@@ -126,6 +122,9 @@
 
 <style>
   /* ── Form Inputs & Widgets ────────────────────────────────────── */
+  .anonymous-label {
+    color: #FFFFFF;
+  }
   #id_amount {
     width: 100%;
     padding: 16px 18px 16px 64px;
@@ -191,6 +190,51 @@
     border-color: #E4C071 !important;
     box-shadow: 0 0 20px rgba(228, 192, 113, 0.5) !important;
     transform: scale(1.02);
+  }
+
+  /* ── Light Mode Specific Overrides ────────────────────────────── */
+  [data-theme="light"] .anonymous-card {
+    background: #FFFFFF !important;
+    border-color: rgba(184, 134, 11, 0.28) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+  }
+  [data-theme="light"] .anonymous-label,
+  [data-theme="light"] label[for*="is_anonymous"] {
+    color: #1A1916 !important;
+  }
+  [data-theme="light"] .btn-primary {
+    background: linear-gradient(135deg, #c99316 0%, #a67406 100%) !important;
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) !important;
+    box-shadow: 0 6px 24px rgba(184, 134, 11, 0.4) !important;
+  }
+  [data-theme="light"] #id_amount,
+  [data-theme="light"] #id_donor_name,
+  [data-theme="light"] #id_donor_email {
+    background: #FFFFFF !important;
+    color: #1A1916 !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+  }
+  [data-theme="light"] #id_amount:focus,
+  [data-theme="light"] #id_donor_name:focus,
+  [data-theme="light"] #id_donor_email:focus {
+    border-color: #B8860B !important;
+    box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.2) !important;
+  }
+  [data-theme="light"] .quick-amount {
+    background: #F8F7F4;
+    color: #4A473F;
+    border-color: rgba(184, 134, 11, 0.3);
+  }
+  [data-theme="light"] .quick-amount:hover {
+    background: rgba(184, 134, 11, 0.12);
+    color: #B8860B;
+    border-color: #B8860B;
+  }
+  [data-theme="light"] .quick-amount.active {
+    background: linear-gradient(135deg, #B8860B 0%, #996515 100%) !important;
+    color: #FFFFFF !important;
   }
 </style>
 

@@ -481,3 +481,94 @@
     justify-content: center;
   }
 }
+
+/* ── Light Mode Profile Overrides ──────────────────────────────── */
+[data-theme="light"] .profile-header-card,
+[data-theme="light"] .profile-header {
+  background: linear-gradient(145deg, #FFFFFF 0%, #FAF8F2 60%, #F5EFE3 100%) !important;
+  border-color: rgba(184, 134, 11, 0.28) !important;
+  box-shadow: 0 12px 36px rgba(184, 134, 11, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-theme="light"] .profile-name {
+  color: #1A1916 !important;
+}
+
+[data-theme="light"] .profile-badge-chip {
+  background: #FFFFFF !important;
+  color: #4A473F !important;
+  border-color: rgba(184, 134, 11, 0.25) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+}
+
+[data-theme="light"] .profile-sidebar-card,
+[data-theme="light"] .profile-content-card {
+  background: #FFFFFF !important;
+  border-color: rgba(184, 134, 11, 0.22) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="light"] .profile-sidebar-section {
+  border-bottom-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] .profile-info-label {
+  color: #B8860B !important;
+}
+
+[data-theme="light"] .profile-info-value {
+  color: #1A1916 !important;
+}
+
+[data-theme="light"] .profile-content-header {
+  border-bottom-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] .profile-content-title {
+  color: #1A1916 !important;
+}
+
+[data-theme="light"] .profile-campaign-item,
+[data-theme="light"] .profile-donation-item {
+  background: #FCFBF8 !important;
+  border-color: rgba(184, 134, 11, 0.2) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03) !important;
+}
+
+[data-theme="light"] .profile-campaign-item h4,
+[data-theme="light"] .profile-donation-item div {
+  color: #1A1916 !important;
+}
+
+[data-theme="light"] .profile-campaign-item div,
+[data-theme="light"] .coming-soon-text {
+  color: #4A473F !important;
+}
+
+[data-theme="light"] .profile-stat-box {
+  background: #FCFBF8 !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] .profile-stat-num {
+  color: #1A1916 !important;
+}
+
+[data-theme="light"] .profile-stat-lbl {
+  color: #787366 !important;
+}
+
+[data-theme="light"] .btn-edit-profile {
+  background: var(--color-primary) !important;
+  color: #FFFFFF !important;
+  border: 1px solid var(--color-primary) !important;
+  box-shadow: 0 4px 14px rgba(255, 175, 0, 0.35) !important;
+}
+
+[data-theme="light"] .btn-edit-profile:hover {
+  background: var(--color-primary-hover) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 6px 20px rgba(255, 175, 0, 0.5) !important;
+}
+
+

@@ -10,14 +10,15 @@
       <!-- Brand column -->
       <div>
         <a href="{% url 'home' %}" aria-label="EgyStory home" style="display: flex; align-items: center; text-decoration: none; margin-bottom: var(--space-4);">
-          <img src="{% static 'images/logo.svg' %}?v=2.0" alt="EgyStory" class="footer-logo">
+          <img src="{% static 'images/logo.svg' %}?v=2.0" alt="EgyStory" class="footer-logo logo-dark-mode">
+          <img src="{% static 'images/logo-light.svg' %}?v=2.0" alt="EgyStory" class="footer-logo logo-light-mode">
         </a>
         <p class="footer-brand-text">
           EgyStory is Egypt's crowdfunding platform — connecting generous hearts
           with real people who need real help. Every story matters.
         </p>
         <div class="footer-trust-badge">
-          <span>🇪🇬 100% Egyptian Crowdfunding</span>
+          <span>100% Egyptian Crowdfunding</span>
         </div>
       </div>
 
@@ -50,8 +51,8 @@
 
     <!-- Bottom bar -->
     <div class="footer-bottom">
-      <span>&copy; {% now "Y" %} EgyStory. Made with <span class="heart-pulse">❤️</span> in Egypt.</span>
-      <span style="color: #E4C071; font-weight: 700;">For Egyptians, by Egyptians 🇪🇬</span>
+      <span>&copy; {% now "Y" %} EgyStory. Made in Egypt.</span>
+      <span style="color: #E4C071; font-weight: 700;">For Egyptians, by Egyptians</span>
     </div>
   </div>
 </footer>
