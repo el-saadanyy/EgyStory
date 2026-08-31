@@ -15,6 +15,8 @@
 .admin-layout {
   display: flex;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
   background-color: #11100E;
   color: #F5EDD5;
   font-family: var(--font-sans, 'Inter', system-ui, -apple-system, sans-serif);
@@ -30,8 +32,10 @@
   border-right: 1px solid rgba(228, 192, 113, 0.2);
   display: flex;
   flex-direction: column;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  bottom: 0;
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
@@ -173,7 +177,10 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  max-width: calc(100vw - 270px);
+  margin-left: 270px;
+  width: calc(100% - 270px);
+  max-width: calc(100% - 270px);
+  min-height: 100vh;
   overflow-x: hidden;
   background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(228, 192, 113, 0.08) 0%, transparent 60%), #11100E;
   position: relative;
@@ -315,10 +322,23 @@
   box-sizing: border-box;
 }
 
-.admin-users-table-wrapper {
-  overflow-x: auto;
+.admin-users-table-wrapper,
+.table-wrap,
+.admin-card > div[style*="overflow-x"] {
   width: 100%;
   box-sizing: border-box;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-users-table-wrapper::-webkit-scrollbar,
+.table-wrap::-webkit-scrollbar,
+.admin-card > div[style*="overflow-x"]::-webkit-scrollbar {
+  display: none;
+  height: 0;
+  width: 0;
 }
 
 .admin-users-table,
@@ -335,20 +355,20 @@
 .admin-table th {
   background: rgba(0, 0, 0, 0.45);
   color: #E4C071;
-  font-size: 12.5px;
+  font-size: 11.5px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 16px 20px;
+  letter-spacing: 0.04em;
+  padding: 12px 14px;
   border-bottom: 1px solid rgba(228, 192, 113, 0.2);
 }
 
 .admin-users-table td,
 .table td,
 .admin-table td {
-  padding: 16px 20px;
+  padding: 12px 14px;
   color: #F5EDD5;
-  font-size: 14px;
+  font-size: 13px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   vertical-align: middle;
 }
@@ -692,7 +712,7 @@
 }
 
 /* ── Responsive ────────────────────────────────────────────────── */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .admin-layout {
     flex-direction: column;
   }
@@ -705,7 +725,9 @@
     border-bottom: 1px solid rgba(228, 192, 113, 0.2);
   }
   .admin-main {
-    max-width: 100vw;
+    margin-left: 0;
+    width: 100%;
+    max-width: 100%;
   }
   .admin-content {
     padding: 24px 20px 60px;
@@ -714,3 +736,4 @@
     padding: 0 20px;
   }
 }
+

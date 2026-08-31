@@ -20,6 +20,13 @@ urlpatterns = [
     path('<int:campaign_id>/comment/', views.add_comment, name='add_comment'),
     path('<int:campaign_id>/comment/<int:parent_id>/reply/', views.add_comment, name='add_reply'),
     path('comment/<int:comment_id>/report/', views.report_comment, name='report_comment'),
+    path('comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
+
+    # مسارات إدارة الحملة والتحديثات لصاحب الحملة
+    path('<int:campaign_id>/manage/', views.case_edit, name='case_edit'),
+    path('<int:campaign_id>/updates/create/', views.create_campaign_update, name='create_campaign_update'),
+    path('<int:campaign_id>/updates/<int:update_id>/edit/', views.edit_campaign_update, name='edit_campaign_update'),
+    path('<int:campaign_id>/updates/<int:update_id>/delete/', views.delete_campaign_update, name='delete_campaign_update'),
 ]
 
 

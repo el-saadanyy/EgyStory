@@ -4,13 +4,13 @@
   tabindex="0"
   role="region"
   aria-label="{{ campaign.title }}"
-  style="display: flex; flex-direction: column; background: linear-gradient(135deg, rgba(38,36,30,0.92) 0%, rgba(26,25,22,0.98) 100%); border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.45); border: 1px solid rgba(228,192,113,0.15); cursor: pointer; height: 100%; transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; position: relative;">
+  style="display: flex; flex-direction: column; background: linear-gradient(135deg, rgba(38,36,30,0.92) 0%, rgba(26,25,22,0.98) 100%); border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.45); border: 1.5px solid rgba(228,192,113,0.18); cursor: pointer; height: 100%; transition: transform 0.25s ease, box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1); position: relative;">
 
   <!-- Top gold line (hidden until hover via class) -->
   <div class="card-top-line" style="position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #E4C071 50%, transparent); opacity: 0; transition: opacity 0.3s ease; z-index: 2;" aria-hidden="true"></div>
 
   <!-- Image Wrapper -->
-  <div style="position: relative; height: 210px; width: 100%; flex-shrink: 0; overflow: hidden;">
+  <div style="position: relative; height: 180px; width: 100%; flex-shrink: 0; overflow: hidden;">
     {% if campaign.campaign_image %}
       <img src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
     {% else %}
@@ -21,24 +21,24 @@
     <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, transparent 40%, rgba(0,0,0,0.55) 100%);" aria-hidden="true"></div>
 
     <!-- Badges -->
-    <div style="position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 1;">
+    <div style="position: absolute; top: 10px; left: 10px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 1;">
       {% if campaign.category %}
-        <span style="padding: 4px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 700; backdrop-filter: blur(8px); background: rgba(228,192,113,0.88); color: #1C1B18; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+        <span style="padding: 3px 9px; border-radius: var(--radius-full); font-size: 11px; font-weight: 700; backdrop-filter: blur(8px); background: rgba(228,192,113,0.88); color: #1C1B18; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
           {{ campaign.category.name }}
         </span>
       {% endif %}
       {% if campaign.case_type == 'Rare / Ultra-Rare & High-Cost' %}
-        <span style="padding: 4px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 700; backdrop-filter: blur(8px); background: rgba(147,51,234,0.88); color: #FFFFFF; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+        <span style="padding: 3px 9px; border-radius: var(--radius-full); font-size: 11px; font-weight: 700; backdrop-filter: blur(8px); background: rgba(147,51,234,0.88); color: #FFFFFF; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
           💎 Rare
         </span>
       {% endif %}
       {% if campaign.is_critical %}
-        <span style="padding: 4px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 700; backdrop-filter: blur(8px); background: rgba(220,38,38,0.88); color: #FFFFFF; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+        <span style="padding: 3px 9px; border-radius: var(--radius-full); font-size: 11px; font-weight: 700; backdrop-filter: blur(8px); background: rgba(220,38,38,0.88); color: #FFFFFF; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
           🚨 Critical
         </span>
       {% endif %}
       {% if campaign.is_featured %}
-        <span style="padding: 4px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 700; backdrop-filter: blur(8px); background: rgba(228,192,113,0.92); color: #1C1B18; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+        <span style="padding: 3px 9px; border-radius: var(--radius-full); font-size: 11px; font-weight: 700; backdrop-filter: blur(8px); background: rgba(228,192,113,0.92); color: #1C1B18; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
           🌟 Featured
         </span>
       {% endif %}
@@ -46,42 +46,41 @@
 
     <!-- Status badge (bottom right) -->
     {% if campaign.status == 'Completed' %}
-      <div style="position: absolute; bottom: 12px; right: 12px; background: rgba(22,163,74,0.9); color: #fff; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-full); backdrop-filter: blur(6px);">✓ Funded</div>
+      <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(22,163,74,0.9); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: var(--radius-full); backdrop-filter: blur(6px);">✓ Funded</div>
     {% endif %}
   </div>
 
   <!-- Card Content -->
-  <div style="padding: 22px 24px; display: flex; flex-direction: column; flex-grow: 1;">
+  <div class="campaign-card__body" style="padding: 18px 20px; display: flex; flex-direction: column; flex-grow: 1;">
 
     <!-- Tags row -->
     {% if campaign.tags.all %}
-      <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px;">
+      <div class="campaign-card__tags" style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px;">
         {% for tag in campaign.tags.all %}
-          <span style="font-size: 11px; font-weight: 600; color: #34d399; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); padding: 2px 8px; border-radius: var(--radius-full);">#{{ tag.name }}</span>
+          <span class="campaign-card__tag" style="font-size: 10.5px; font-weight: 600; color: #34d399; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); padding: 2px 7px; border-radius: var(--radius-full);">#{{ tag.name }}</span>
         {% endfor %}
       </div>
     {% endif %}
 
-    <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 8px; color: #FFFFFF; line-height: 1.3; letter-spacing: -0.2px;">{{ campaign.title }}</h3>
-    <p style="color: #AFA793; font-size: 13.5px; margin-bottom: 20px; line-height: 1.65; flex-grow: 1;">{{ campaign.story|truncatewords:18 }}</p>
+    <h3 class="campaign-card__title" style="font-size: 16px; font-weight: 800; margin-bottom: 6px; color: #FFFFFF; line-height: 1.3; letter-spacing: -0.2px;">{{ campaign.title }}</h3>
+    <p class="campaign-card__desc" style="color: #AFA793; font-size: 13px; margin-bottom: 14px; line-height: 1.6; flex-grow: 1;">{{ campaign.story|truncatewords:14 }}</p>
 
     <!-- Stats -->
-    <div style="margin-bottom: 18px;">
-      <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 8px; align-items: baseline;">
-        <span style="font-weight: 800; color: #E4C071; font-size: 16px;">{{ campaign.get_total_raised }} <span style="font-size: 12px; font-weight: 600; color: #AFA793;">EGP</span></span>
-        <span style="color: #AFA793; font-size: 12px;">of {{ campaign.target_amount }} EGP</span>
+    <div class="campaign-card__stats" style="margin-bottom: 14px;">
+      <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; align-items: baseline;">
+        <span class="campaign-card__raised" style="font-weight: 800; color: #E4C071; font-size: 15px;">{{ campaign.get_total_raised }} <span class="campaign-card__currency" style="font-size: 11.5px; font-weight: 600; color: #AFA793;">EGP</span></span>
+        <span class="campaign-card__target" style="color: #AFA793; font-size: 11.5px;">of {{ campaign.target_amount }} EGP</span>
       </div>
 
       <!-- Progress Bar -->
-      <div style="background: rgba(255,255,255,0.08); border-radius: 99px; height: 5px; width: 100%; overflow: hidden; margin-bottom: 8px;">
-        <div style="background: {% if campaign.status == 'Completed' %}linear-gradient(90deg,#16a34a,#4ade80){% else %}linear-gradient(90deg,#c9a227,#E4C071){% endif %}; height: 100%; width: calc({{ campaign.get_progress_percentage }} * 1%); border-radius: 99px; box-shadow: 0 0 6px rgba(228,192,113,0.35);"></div>
+      <div class="campaign-card__progress-track" style="background: rgba(255,255,255,0.08); border-radius: 99px; height: 5px; width: 100%; overflow: hidden; margin-bottom: 6px;">
+        <div class="campaign-card__progress-bar" style="background: {% if campaign.status == 'Completed' %}linear-gradient(90deg,#16a34a,#4ade80){% else %}linear-gradient(90deg,#c9a227,#E4C071){% endif %}; height: 100%; width: calc({{ campaign.get_progress_percentage }} * 1%); border-radius: 99px; box-shadow: 0 0 6px rgba(228,192,113,0.35);"></div>
       </div>
 
-      <div style="display: flex; justify-content: space-between; font-size: 12.5px;">
-        <span style="font-weight: 700; color: #E4C071;">{{ campaign.get_progress_percentage }}% Funded</span>
+      <div style="display: flex; justify-content: space-between; font-size: 12px;">
+        <span class="campaign-card__funded-pct" style="font-weight: 700; color: #E4C071;">{{ campaign.get_progress_percentage }}% Funded</span>
         {% if campaign.deadline %}
-          <span style="color: #AFA793; display: flex; align-items: center; gap: 4px;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="campaign-card__deadline" style="color: #AFA793; display: flex; align-items: center; gap: 4px;">
             {{ campaign.get_days_remaining }} days left
           </span>
         {% endif %}
@@ -89,12 +88,12 @@
     </div>
 
     <!-- Actions -->
-    <div style="display: flex; gap: 10px; margin-top: auto;">
-      <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline" style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 10px 14px; font-size: 13.5px; font-weight: 700; border-radius: var(--radius-full);">View Story</a>
+    <div class="campaign-card__actions" style="display: flex; gap: 8px; margin-top: auto;">
+      <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline campaign-card__btn-view" style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 8px 12px; font-size: 13px; font-weight: 700; border-radius: var(--radius-full); border: 1.5px solid rgba(228,192,113,0.3);">View Story</a>
       {% if campaign.status == 'Active' %}
-        <a href="{% url 'campaigns:donate' campaign.id %}" class="btn btn-primary" style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 10px 14px; font-size: 13.5px; font-weight: 700; border-radius: var(--radius-full);">❤️ Donate</a>
+        <a href="{% url 'campaigns:donate' campaign.id %}" class="btn btn-primary campaign-card__btn-donate" style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 8px 12px; font-size: 13px; font-weight: 700; border-radius: var(--radius-full); border: 1.5px solid transparent;">Donate</a>
       {% else %}
-        <button class="btn btn-secondary" disabled style="flex: 1; padding: 10px 14px; font-size: 13px; background: rgba(255,255,255,0.06); color: #AFA793; cursor: not-allowed; border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-full); font-weight: 600;">{{ campaign.status }}</button>
+        <button class="btn btn-secondary campaign-card__btn-status" disabled style="flex: 1; padding: 8px 12px; font-size: 12.5px; background: rgba(255,255,255,0.06); color: #AFA793; cursor: not-allowed; border: 1.5px solid rgba(255,255,255,0.1); border-radius: var(--radius-full); font-weight: 600;">{{ campaign.status }}</button>
       {% endif %}
     </div>
 
@@ -102,16 +101,96 @@
 </article>
 
 <style>
+  [data-theme="light"] .campaign-card {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FAF7F0 100%) !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.22) !important;
+    box-shadow: 0 8px 24px -4px rgba(70, 50, 15, 0.06), 0 2px 6px rgba(0, 0, 0, 0.02), inset 0 1px 0 #FFFFFF !important;
+    border-radius: var(--radius-xl) !important;
+  }
+  [data-theme="light"] .campaign-card__title {
+    color: #171614 !important;
+    transition: color 0.45s ease;
+  }
+  [data-theme="light"] .campaign-card__desc {
+    color: #555045 !important;
+  }
+  [data-theme="light"] .campaign-card__tag {
+    color: #047857 !important;
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+    font-weight: 700 !important;
+  }
+  [data-theme="light"] .campaign-card__raised {
+    color: #9A680C !important;
+    font-weight: 800 !important;
+  }
+  [data-theme="light"] .campaign-card__currency {
+    color: #7A7466 !important;
+  }
+  [data-theme="light"] .campaign-card__target {
+    color: #7A7466 !important;
+  }
+  [data-theme="light"] .campaign-card__progress-track {
+    background: rgba(184, 134, 11, 0.12) !important;
+  }
+  [data-theme="light"] .campaign-card__funded-pct {
+    color: #9A680C !important;
+  }
+  [data-theme="light"] .campaign-card__deadline {
+    color: #7A7466 !important;
+  }
+  [data-theme="light"] .campaign-card__btn-view {
+    border: 1.5px solid rgba(184, 134, 11, 0.35) !important;
+    color: #8A6006 !important;
+    background: #FFFFFF !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03) !important;
+    transition: all 0.45s ease !important;
+  }
+  [data-theme="light"] .campaign-card__btn-view:hover {
+    background: #FAF5E8 !important;
+    border-color: #8A6006 !important;
+    color: #634300 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 10px rgba(184, 134, 11, 0.18) !important;
+  }
+  [data-theme="light"] .campaign-card__btn-donate {
+    background: linear-gradient(135deg, #ECC870 0%, #D4A843 100%) !important;
+    color: #1C1B18 !important;
+    font-weight: 700 !important;
+    border: 1.5px solid transparent !important;
+    box-shadow: 0 4px 14px rgba(212, 168, 67, 0.35) !important;
+    transition: all 0.45s ease !important;
+  }
+  [data-theme="light"] .campaign-card__btn-donate:hover {
+    background: linear-gradient(135deg, #F3D382 0%, #DEB34D 100%) !important;
+    box-shadow: 0 6px 18px rgba(212, 168, 67, 0.45) !important;
+    transform: translateY(-1px) !important;
+  }
+  [data-theme="light"] .campaign-card__btn-status {
+    background: rgba(22, 163, 74, 0.1) !important;
+    color: #15803D !important;
+    border: 1.5px solid rgba(22, 163, 74, 0.25) !important;
+    font-weight: 700 !important;
+  }
   .campaign-card:hover {
     transform: translateY(-6px) !important;
     box-shadow: 0 20px 56px rgba(0,0,0,0.65), 0 0 0 1px rgba(228,192,113,0.35) !important;
     border-color: rgba(228,192,113,0.4) !important;
   }
+  [data-theme="light"] .campaign-card:hover {
+    transform: translateY(-8px) scale(1.01) !important;
+    box-shadow: 0 22px 48px -10px rgba(184, 134, 11, 0.22), 0 4px 12px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(212, 175, 55, 0.45) !important;
+    border-color: #D4AF37 !important;
+  }
+  [data-theme="light"] .campaign-card:hover .campaign-card__title {
+    color: #B8860B !important;
+  }
   .campaign-card:hover .card-top-line {
     opacity: 1 !important;
   }
   .campaign-card:hover img {
-    transform: scale(1.04);
+    transform: scale(1.05);
   }
 </style>
 

@@ -42,16 +42,27 @@
         <!-- ── Avatar Upload Section ─────────────────────────────── -->
         <div style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(228, 192, 113, 0.22); border-radius: 26px; padding: 24px; margin-bottom: 32px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
           {% if user.profile_picture %}
-            <img src="{{ user.profile_picture.url }}" class="profile-edit-avatar" id="avatar-preview" alt="Current avatar" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3.5px solid #E4C071; box-shadow: 0 0 20px rgba(228, 192, 113, 0.35); background: #1C1B18;">
+            <img src="{{ user.profile_picture.url }}" class="profile-edit-avatar" id="avatar-preview" data-default-src="{% static 'images/default-avatar.svg' %}" alt="Current avatar" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3.5px solid #E4C071; box-shadow: 0 0 20px rgba(228, 192, 113, 0.35); background: #1C1B18;">
           {% else %}
-            <img src="{% static 'images/default-avatar.svg' %}" class="profile-edit-avatar" id="avatar-preview" alt="Default avatar" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3.5px solid #E4C071; box-shadow: 0 0 20px rgba(228, 192, 113, 0.35); background: #1C1B18;">
+            <img src="{% static 'images/default-avatar.svg' %}" class="profile-edit-avatar" id="avatar-preview" data-default-src="{% static 'images/default-avatar.svg' %}" alt="Default avatar" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3.5px solid #E4C071; box-shadow: 0 0 20px rgba(228, 192, 113, 0.35); background: #1C1B18;">
           {% endif %}
-          <div style="flex: 1; min-width: 220px;">
-            <div style="font-size: 15px; font-weight: 800; color: #FFFFFF; margin-bottom: 6px;">Profile Photo</div>
-            <div class="avatar-upload-area" id="avatar-upload-area" style="padding: 12px 18px; border: 1.5px dashed rgba(228, 192, 113, 0.35); border-radius: var(--radius-lg); cursor: pointer; background: rgba(255, 255, 255, 0.03); transition: all 0.2s ease;" role="button" tabindex="0" aria-label="Upload new profile picture">
-              <div style="font-weight: 700; font-size: 13.5px; color: #E4C071;">📷 Click to select a new photo</div>
-              <div style="font-size: 12px; color: #AFA793; margin-top: 2px;">JPEG, PNG, WebP — max 5MB</div>
+          <div style="flex: 1; min-width: 240px;">
+            <div style="font-size: 15px; font-weight: 800; color: #FFFFFF; margin-bottom: 8px;">Profile Photo</div>
+            
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 8px;">
+              <button type="button" class="btn btn-primary" id="btn-change-avatar" onclick="document.getElementById('avatar-input').click();" style="border-radius: var(--radius-full); padding: 8px 22px; font-size: 13.5px; font-weight: 700; cursor: pointer;">
+                {% if user.profile_picture %}Change Photo{% else %}Add Photo{% endif %}
+              </button>
+              {% if user.profile_picture %}
+                <button type="button" class="btn btn-clear-photo" id="btn-clear-avatar" onclick="handleClearAvatar();" style="border-radius: var(--radius-full); padding: 8px 20px; font-size: 13.5px; font-weight: 700; border: 1.5px solid rgba(220, 38, 38, 0.6); color: #f87171; background: transparent; cursor: pointer; transition: all 0.2s ease;">
+                  Clear Photo
+                </button>
+              {% endif %}
             </div>
+
+            <input type="hidden" name="clear_avatar" id="clear_avatar_input" value="0">
+            <div style="font-size: 12px; color: #AFA793;">JPEG, PNG, WebP — max 5MB</div>
+            
             {{ form.profile_picture }}
             {% for error in form.profile_picture.errors %}
               <div style="color: #f87171; font-size: 13px; margin-top: 6px; font-weight: 600;">{{ error }}</div>
@@ -59,12 +70,24 @@
           </div>
         </div>
 
+
+
+        <style>
+          .btn-clear-photo:hover {
+            background-color: #dc2626 !important;
+            border-color: #dc2626 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 16px rgba(220, 38, 38, 0.45) !important;
+            transform: translateY(-1px);
+          }
+        </style>
+
         <!-- ── Email (read-only) ─────────────────────────────────── -->
         <div class="form-group" style="margin-bottom: 24px;">
           <label class="form-label" style="font-size: 14.5px; font-weight: 700; color: #D9CFB8; margin-bottom: 8px; display: block;">Email Address</label>
           <input type="email" class="form-control" value="{{ user.email }}" readonly aria-describedby="email-notice" style="width: 100%; padding: 14px 18px; font-size: 15px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-lg); background: rgba(0, 0, 0, 0.45); color: #AFA793; cursor: not-allowed;">
           <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-md); padding: 10px 14px; font-size: 12.5px; color: #AFA793; margin-top: 8px; display: flex; align-items: center; gap: 8px;">
-            <span>🔒</span> Your email address is protected and cannot be modified.
+            Your email address is protected and cannot be modified.
           </div>
         </div>
 
@@ -148,7 +171,7 @@
             Cancel
           </a>
           <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-full); padding: 12px 32px; font-weight: 800; font-size: 15.5px; box-shadow: 0 6px 24px rgba(228, 192, 113, 0.45); border: none;" id="save-profile-btn">
-            💾 Save Changes
+            Save Changes
           </button>
         </div>
 
@@ -161,10 +184,62 @@
 
 {% block extra_js %}
 <script>
-  (function(){
-    var field = document.getElementById('id_profile_picture');
-    if(field){ field.id = 'avatar-input'; field.className = 'avatar-input'; }
-  })();
+  document.addEventListener('DOMContentLoaded', function(){
+    var avatarInput = document.getElementById('avatar-input');
+    var avatarPreview = document.getElementById('avatar-preview');
+    var changeBtn = document.getElementById('btn-change-avatar');
+    var clearBtn = document.getElementById('btn-clear-avatar');
+    var clearInput = document.getElementById('clear_avatar_input');
+
+    if (avatarInput) {
+      avatarInput.addEventListener('change', function(){
+        var file = avatarInput.files[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+          alert('Image must be smaller than 5MB.');
+          avatarInput.value = '';
+          return;
+        }
+
+        var reader = new FileReader();
+        reader.onload = function(e){
+          if (avatarPreview) { avatarPreview.src = e.target.result; }
+        };
+        reader.readAsDataURL(file);
+
+        if (clearInput) { clearInput.value = '0'; }
+        if (changeBtn) { changeBtn.innerText = 'Change Photo'; }
+        if (clearBtn) {
+          clearBtn.style.display = 'inline-block';
+          clearBtn.style.opacity = '1';
+          clearBtn.innerText = 'Clear Photo';
+          clearBtn.disabled = false;
+        }
+      });
+    }
+  });
+
+  function handleClearAvatar() {
+    var input = document.getElementById('avatar-input');
+    if (input) { input.value = ''; }
+    var preview = document.getElementById('avatar-preview');
+    if (preview) {
+      preview.src = "{% static 'images/default-avatar.svg' %}";
+    }
+    var clearHidden = document.getElementById('clear_avatar_input');
+    if (clearHidden) {
+      clearHidden.value = '1';
+    }
+    var changeBtn = document.getElementById('btn-change-avatar');
+    if (changeBtn) {
+      changeBtn.innerText = 'Add Photo';
+    }
+    var clearBtn = document.getElementById('btn-clear-avatar');
+    if (clearBtn) {
+      clearBtn.style.display = 'none';
+    }
+  }
 </script>
 <script src="{% static 'js/auth.js' %}"></script>
 {% endblock %}

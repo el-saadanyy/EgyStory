@@ -8,7 +8,7 @@
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
   <div class="section-title">
-    <span>📋 Pending Review Queue</span>
+    <span>Pending Review Queue</span>
     {% if pending_campaigns %}
       <span class="badge badge-warning" style="font-size: 13px; font-weight: 800;">
         {{ pending_campaigns.count }} Awaiting Moderation
@@ -22,7 +22,7 @@
 
 <div class="admin-card">
   {% if pending_campaigns %}
-    <div style="overflow-x: auto; width: 100%;">
+    <div class="table-wrap">
       <table class="table">
         <thead>
           <tr>
@@ -46,7 +46,7 @@
                   {% if campaign.supporting_document %}
                     <span style="color: rgba(255,255,255,0.2);">|</span>
                     <a href="{{ campaign.supporting_document.url }}" target="_blank" style="font-size: 13px; font-weight: 600; color: #38bdf8; text-decoration: underline; display: inline-flex; align-items: center; gap: 4px;">
-                      📄 Medical / Supporting Doc ↗
+                      Medical / Supporting Doc ↗
                     </a>
                   {% endif %}
                 </div>
@@ -73,7 +73,7 @@
               <td class="actions-col" style="text-align: right; padding-right: 24px;">
                 <div style="display: inline-flex; gap: 8px; align-items: center; justify-content: flex-end;">
                   <a href="{% url 'admin_campaign_edit' campaign.id %}" class="btn btn-outline btn-sm">
-                    ✏️ Edit
+                    Edit
                   </a>
                   <a href="{% url 'admin_campaign_action' campaign.id 'approve' %}" class="btn btn-primary btn-sm">
                     ✓ Approve
@@ -90,7 +90,6 @@
     </div>
   {% else %}
     <div class="admin-empty-state">
-      <div class="admin-empty-icon">✅</div>
       <div class="admin-empty-title">All Caught Up!</div>
       <div style="font-size: 14.5px; color: #AFA793;">There are currently no campaigns pending review. New submissions will appear here.</div>
     </div>
@@ -102,11 +101,10 @@
   <div class="modal-dialog">
     <div class="modal-header">
       <h3 id="reject-modal-title" class="modal-title">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
         Reject Campaign?
       </h3>
       <button type="button" class="modal-close" id="reject-modal-close" aria-label="Close modal">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        ✕
       </button>
     </div>
     <div class="modal-body">
@@ -124,6 +122,7 @@
 {% block extra_js %}
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    let activeRejectRow = null;
     const rejectModal = document.getElementById('reject-modal');
     const confirmBtn = document.getElementById('reject-modal-confirm-btn');
     const modalMsg = document.getElementById('reject-modal-message');
@@ -132,7 +131,8 @@
 
     if (!rejectModal) return;
 
-    function openModal(actionUrl, title) {
+    function openModal(actionUrl, title, row) {
+      activeRejectRow = row;
       if (confirmBtn) confirmBtn.href = actionUrl;
       if (modalMsg && title) {
         modalMsg.textContent = 'Are you sure you want to reject "' + title + '"? This will mark the campaign as rejected.';
@@ -144,14 +144,54 @@
     function closeModal() {
       rejectModal.classList.remove('is-open');
       rejectModal.setAttribute('aria-hidden', 'true');
+      activeRejectRow = null;
     }
 
     document.querySelectorAll('.btn-reject-campaign').forEach(btn => {
       btn.addEventListener('click', function(e) {
         e.preventDefault();
-        openModal(this.dataset.actionUrl, this.dataset.campaignTitle);
+        openModal(this.dataset.actionUrl, this.dataset.campaignTitle, this.closest('tr'));
       });
     });
+
+    if (confirmBtn) {
+      confirmBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const actionUrl = confirmBtn.href;
+        if (!actionUrl || actionUrl === '#') return;
+
+        confirmBtn.textContent = 'Rejecting...';
+        confirmBtn.style.pointerEvents = 'none';
+
+        fetch(actionUrl, {
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': window.getCsrfToken()
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          confirmBtn.textContent = 'Reject Campaign';
+          confirmBtn.style.pointerEvents = 'auto';
+          closeModal();
+
+          if (data.success) {
+            window.showAdminToast(data.message || 'Campaign rejected successfully.', 'success');
+            if (activeRejectRow) {
+              window.removeTableRow(activeRejectRow);
+            }
+          } else {
+            window.showAdminToast(data.message || 'Failed to reject campaign.', 'error');
+          }
+        })
+        .catch(() => {
+          confirmBtn.textContent = 'Reject Campaign';
+          confirmBtn.style.pointerEvents = 'auto';
+          closeModal();
+          window.showAdminToast('A network error occurred. Please try again.', 'error');
+        });
+      });
+    }
 
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
     if (cancelBtn) cancelBtn.addEventListener('click', closeModal);

@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Admin{% endblock %} — EgyStory Admin</title>
   {% load static %}
+  <script>
+    (function() {
+      // Admin Dashboard is strictly Dark Mode only
+      document.documentElement.removeAttribute('data-theme');
+      if (window.MutationObserver) {
+        var observer = new MutationObserver(function() {
+          if (document.documentElement.getAttribute('data-theme') === 'light') {
+            document.documentElement.removeAttribute('data-theme');
+          }
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      }
+    })();
+  </script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,34 +46,34 @@
     <nav class="admin-nav" aria-label="Admin menu">
       <div class="admin-nav-section">Dashboard &amp; Overview</div>
       <a href="{% url 'admin_dashboard' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
-        <span class="admin-nav-icon" aria-hidden="true">📊</span> Main Dashboard
+        Main Dashboard
       </a>
 
       <div class="admin-nav-section" style="margin-top:14px;">Campaigns &amp; Moderation</div>
       <a href="{% url 'admin_moderation' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_moderation' %}active{% endif %}">
-        <span class="admin-nav-icon" aria-hidden="true">📋</span> Moderation Queue
+        Moderation Queue
       </a>
 
       <a href="{% url 'admin_reports' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_reports' %}active{% endif %}">
-        <span class="admin-nav-icon" aria-hidden="true">🚩</span> Campaign Reports
+        Campaign Reports
       </a>
 
       <a href="{% url 'admin_comments' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_comments' %}active{% endif %}">
-        <span class="admin-nav-icon" aria-hidden="true">💬</span> Comment Moderation
+        Comment Moderation
       </a>
 
       <div class="admin-nav-section" style="margin-top:14px;">Taxonomy &amp; Settings</div>
       <a href="{% url 'admin_tags' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_tags' or 'admin_edit_tag' in request.resolver_match.url_name %}active{% endif %}">
-        <span class="admin-nav-icon" aria-hidden="true">🏷️</span> Tags Management
+        Tags Management
       </a>
 
       <div class="admin-nav-section" style="margin-top:14px;">User Management</div>
       <a href="{% url 'admin_users' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_users' %}active{% endif %}">
-        <span class="admin-nav-icon" aria-hidden="true">👥</span> All Members
+        All Members
       </a>
       {% if request.user.is_superuser %}
       <a href="{% url 'admin_management' %}" class="admin-nav-item {% if 'admin_management' in request.resolver_match.url_name or 'admin_create' in request.resolver_match.url_name or 'admin_edit' in request.resolver_match.url_name %}active{% endif %}">
-        <span class="admin-nav-icon" aria-hidden="true">🛡️</span> Admin Team
+        Admin Team
       </a>
       {% endif %}
     </nav>
@@ -73,13 +87,13 @@
         {% endif %}
         <div style="min-width: 0; flex: 1;">
           <div class="admin-user-name" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ request.user.first_name|default:request.user.email }}</div>
-          <div class="admin-user-role">{% if request.user.is_superuser %}⚡ Superuser{% else %}🛡️ Staff Admin{% endif %}</div>
+          <div class="admin-user-role">{% if request.user.is_superuser %}⚡ Superuser{% else %}Staff Admin{% endif %}</div>
         </div>
       </div>
       <form method="post" action="{% url 'admin_logout' %}" style="margin-top: 10px;">
         {% csrf_token %}
         <button type="submit" class="admin-nav-item" style="border-radius: var(--radius-md); color: #AFA793; padding: 8px 12px; font-size: 13px;">
-          <span class="admin-nav-icon" aria-hidden="true">🚪</span> Sign Out
+          Sign Out
         </button>
       </form>
     </div>
@@ -94,9 +108,9 @@
     <!-- Top bar -->
     <header class="admin-topbar">
       <div class="admin-topbar-title">{% block page_title %}Dashboard{% endblock %}</div>
-      <div class="admin-topbar-actions">
+      <div class="admin-topbar-actions" style="display: flex; align-items: center; gap: 10px;">
         <a href="{% url 'home' %}" class="btn btn-ghost btn-sm" target="_blank">
-          🌐 View Live Site ↗
+          View Live Site ↗
         </a>
       </div>
     </header>
@@ -114,6 +128,7 @@
 </div>
 
 <script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/admin.js' %}?v=1.0"></script>
 {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -9,10 +9,10 @@ def home(request):
     scored_campaigns = list(active_campaigns)
     
     # Separate Rare, Normal, and Critical
-    rare_campaigns = [c for c in scored_campaigns if c.case_type == CaseType.RARE]
+    rare_campaigns = [c for c in scored_campaigns if c.case_type == CaseType.RARE and not c.is_critical()]
     rare_campaigns.sort(key=lambda c: c.get_urgency_score(), reverse=True)
     
-    normal_campaigns = [c for c in scored_campaigns if c.case_type == CaseType.NORMAL]
+    normal_campaigns = [c for c in scored_campaigns if c.case_type == CaseType.NORMAL and not c.is_critical()]
     normal_campaigns.sort(key=lambda c: c.get_urgency_score(), reverse=True)
     
     critical_campaigns = [c for c in scored_campaigns if c.is_critical()]

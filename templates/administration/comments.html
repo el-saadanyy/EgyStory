@@ -1,4 +1,4 @@
-﻿{% extends 'administration/base.html' %}
+{% extends 'administration/base.html' %}
 {% load static humanize %}
 
 {% block title %}Comment Moderation{% endblock %}
@@ -22,7 +22,7 @@
 
 <div class="admin-card" style="border-color: rgba(228, 192, 113, 0.2);">
   {% if comments %}
-    <div style="overflow-x: auto;">
+    <div class="table-wrap">
       <table class="table">
         <thead>
           <tr>

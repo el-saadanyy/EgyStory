@@ -5,7 +5,7 @@
 {% block meta_description %}EgyStory — Egypt's crowdfunding platform. Help real people, fund real stories that matter.{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}?v=230.0">
+<link rel="stylesheet" href="{% static 'css/home.css' %}?v=305.0">
 {% endblock %}
 
 
@@ -18,7 +18,7 @@
     <!-- Hero Text -->
     <div>
       <div class="hero-eyebrow" style="color: #E4C071; border-color: rgba(228, 192, 113, 0.3); background: rgba(228, 192, 113, 0.1);">
-        🇪🇬 Egypt's Crowdfunding Platform
+        Egypt's Crowdfunding Platform
       </div>
       <h1 id="hero-title" class="hero-title">
         Fund Real<br><span class="accent">Egyptian Stories</span>
@@ -45,13 +45,13 @@
         <span style="font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 600;">Popular Tags:</span>
         {% if tags %}
           {% for tag in tags %}
-            <a href="{% url 'campaigns:case_list' %}?tag={{ tag.slug }}" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">🏷️ {{ tag.name }}</a>
+            <a href="{% url 'campaigns:case_list' %}?tag={{ tag.slug }}" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">{{ tag.name }}</a>
           {% endfor %}
         {% else %}
-          <a href="{% url 'campaigns:case_list' %}?tag=education" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">🏷️ Education</a>
-          <a href="{% url 'campaigns:case_list' %}?tag=emergency" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">🏷️ Emergency</a>
-          <a href="{% url 'campaigns:case_list' %}?tag=medical" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">🏷️ Medical</a>
-          <a href="{% url 'campaigns:case_list' %}?tag=social" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">🏷️ Social</a>
+          <a href="{% url 'campaigns:case_list' %}?tag=education" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">Education</a>
+          <a href="{% url 'campaigns:case_list' %}?tag=emergency" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">Emergency</a>
+          <a href="{% url 'campaigns:case_list' %}?tag=medical" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">Medical</a>
+          <a href="{% url 'campaigns:case_list' %}?tag=social" class="badge hero-tag-badge" style="padding: 6px 14px; font-size: 13px; border-radius: 99px; text-decoration: none; background: rgba(255,255,255,0.12); color: #F5EDD5; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s ease;">Social</a>
         {% endif %}
       </div>
       
@@ -104,16 +104,16 @@
                 <div style="margin-bottom: 24px;">
                   <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; font-weight: 700;">
                     <span style="color: var(--color-primary);">{{ campaign.get_total_raised }} EGP raised</span>
-                    <span style="color: rgba(255,255,255,0.4);">of {{ campaign.target_amount }}</span>
+                    <span class="slider-target-text">of {{ campaign.target_amount }}</span>
                   </div>
-                  <div style="background: rgba(255,255,255,0.1); border-radius: 99px; height: 8px; width: 100%; overflow: hidden; margin-bottom: 8px;">
+                  <div class="slider-progress-track">
                     <div style="background: var(--color-primary); height: 100%; width: calc({{ campaign.get_progress_percentage }} * 1%); border-radius: 99px;"></div>
                   </div>
                 </div>
 
                 <div style="display: flex; gap: 12px; margin-top: auto;">
                   <a href="{% url 'campaigns:donate' campaign.id %}" class="btn btn-primary" style="flex: 1; padding: 14px; font-size: 16px;">Donate</a>
-                  <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline" style="flex: 1; padding: 14px; font-size: 16px; border-color: rgba(255,255,255,0.2); color: white;">View Story</a>
+                  <a href="{% url 'campaigns:case_detail' campaign.id %}" class="btn btn-outline slider-btn-outline" style="flex: 1; padding: 14px; font-size: 16px;">View Story</a>
                 </div>
               </div>
             </div>
@@ -153,7 +153,7 @@
         <div class="section-banner__body">
           <div class="section-eyebrow section-eyebrow--critical">
             <span class="pulse-dot pulse-dot--red"></span>
-            🚨 Immediate Alert
+            Immediate Alert
           </div>
           <h2 class="section-title">Critical Campaigns</h2>
           <p class="section-desc">These campaigns require urgent attention. Every hour matters — your support can change the outcome for someone in crisis right now.</p>
@@ -188,7 +188,7 @@
       <div class="section-banner">
         <div class="section-banner__body">
           <div class="section-eyebrow section-eyebrow--rare">
-            💜 Rare Conditions
+            Rare Conditions
           </div>
           <h2 class="section-title">Rare &amp; High-Cost Cases</h2>
           <p class="section-desc">Specialized medical and extraordinary situations that go beyond ordinary campaigns — requiring exceptional community solidarity and significant resources.</p>
@@ -213,6 +213,9 @@
 <!-- ── Normal Cases / Community Support ──────────────────────────────────── -->
 {% if normal_cases %}
 <section class="section-normal">
+  <!-- Decorative background glow -->
+  <div class="section-normal-glow" aria-hidden="true"></div>
+
   <div class="container" style="position: relative; z-index: 1;">
     <div class="section-panel section-panel--normal">
 
@@ -220,7 +223,7 @@
       <div class="section-banner">
         <div class="section-banner__body">
           <div class="section-eyebrow section-eyebrow--normal">
-            🤝 Community Support
+            Community Support
           </div>
           <h2 class="section-title">Normal Cases</h2>
           <p class="section-desc">Support everyday stories and community campaigns making a direct, positive impact across Egypt.</p>
@@ -255,7 +258,7 @@
       <div class="section-banner">
         <div class="section-banner__body">
           <div class="section-eyebrow section-eyebrow--success">
-            🎉 Fully Funded
+            Fully Funded
           </div>
           <h2 class="section-title">Success Stories</h2>
           <p class="section-desc">Campaigns that reached their goal and changed lives. Proof that Egyptian generosity turns stories into real, lasting impact.</p>
@@ -281,18 +284,18 @@
 <section id="how-it-works" class="section-how-it-works" style="padding: 88px 0; background-color: var(--color-bg); position: relative;">
   <div class="container">
     <div style="text-align: center; max-width: 640px; margin: 0 auto 56px;">
-      <div style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 16px; border-radius: var(--radius-full); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; background: rgba(228, 192, 113, 0.12); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.28);">
-        🇪🇬 Simple 4-Step Journey
+      <div style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 16px; border-radius: var(--radius-full); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; background: var(--color-primary-light); color: var(--color-primary); border: 1px solid var(--color-primary);">
+        Simple 4-Step Journey
       </div>
-      <h2 style="font-size: 38px; font-weight: 900; color: #FFFFFF; margin-bottom: 14px; line-height: 1.2;">
-        How <span style="color: #E4C071;">EgyStory</span> Works
+      <h2 style="font-size: 38px; font-weight: 900; color: var(--color-text-primary); margin-bottom: 14px; line-height: 1.2;">
+        How <span style="color: var(--color-primary);">EgyStory</span> Works
       </h2>
-      <p style="font-size: 17px; color: #D9CFB8; line-height: 1.65; opacity: 0.9;">
+      <p style="font-size: 17px; color: var(--color-text-secondary); line-height: 1.65; opacity: 0.9;">
         Simple, transparent, and built to make a real difference in the lives of Egyptians.
       </p>
     </div>
     
-    <div class="steps-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px;">
+    <div class="steps-grid">
       
       <!-- Step 1 -->
       <div class="home-step-card">
@@ -317,7 +320,7 @@
 
       <!-- Step 4 -->
       <div class="home-step-card home-step-card--success">
-        <div class="home-step-number home-step-number--success">✓</div>
+        <div class="home-step-number home-step-number--success">4</div>
         <h3 class="home-step-title">Goal Reached</h3>
         <p class="home-step-desc">Funds reach the verified people who need them. Real Egyptian lives changed forever.</p>
       </div>
@@ -333,7 +336,7 @@
 
   <div class="container" style="max-width: 820px; position: relative; z-index: 1;">
     <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: var(--radius-full); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 20px; background: rgba(228, 192, 113, 0.12); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.3); backdrop-filter: blur(6px);">
-      ✨ Join Thousands of Egyptian Supporters
+      Join Thousands of Egyptian Supporters
     </div>
     <h2 style="font-size: 42px; font-weight: 900; margin-bottom: 18px; line-height: 1.15; letter-spacing: -0.5px;">
       Ready to Make a <span style="color: #E4C071;">Difference?</span>
@@ -360,64 +363,64 @@
       <!-- Left Column: Trust Info -->
       <div>
         <div style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 16px; border-radius: var(--radius-full); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; background: rgba(228, 192, 113, 0.12); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.28);">
-          🛡️ Trust &amp; Verification
+          Trust &amp; Verification
         </div>
-        <h2 style="font-size: 36px; font-weight: 900; color: #FFFFFF; margin-bottom: 18px; line-height: 1.2;">
+        <h2 style="font-size: 36px; font-weight: 900; color: var(--color-text-primary); margin-bottom: 18px; line-height: 1.2;">
           Transparency You Can <span style="color: #E4C071;">Trust</span>
         </h2>
-        <p style="font-size: 17px; color: #D9CFB8; line-height: 1.75; margin-bottom: 32px; opacity: 0.92;">
+        <p style="font-size: 17px; color: var(--color-text-secondary); line-height: 1.75; margin-bottom: 32px; opacity: 0.92;">
           EgyStory is dedicated to providing a safe, verified platform. Every campaign is reviewed by our administrators before going live. We provide continuous updates so you know exactly where your support is going.
         </p>
 
         <div style="display: flex; flex-direction: column; gap: 14px;">
           <div class="trust-check-card">
-            <div class="trust-check-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E4C071" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
             <div>
-              <div style="color: #FFFFFF; font-weight: 700; font-size: 15px;">100% Secure Donations</div>
-              <div style="color: #AFA793; font-size: 13px; margin-top: 2px;">Encrypted transactions with official Egyptian payment methods.</div>
+              <div style="color: var(--color-text-primary); font-weight: 700; font-size: 15px;">100% Secure Donations</div>
+              <div style="color: var(--color-text-muted); font-size: 13px; margin-top: 2px;">Encrypted transactions with official Egyptian payment methods.</div>
             </div>
           </div>
 
           <div class="trust-check-card">
-            <div class="trust-check-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E4C071" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
             <div>
-              <div style="color: #FFFFFF; font-weight: 700; font-size: 15px;">Verified Egyptian Cases</div>
-              <div style="color: #AFA793; font-size: 13px; margin-top: 2px;">Medical reports and identity documents carefully validated.</div>
+              <div style="color: var(--color-text-primary); font-weight: 700; font-size: 15px;">Verified Egyptian Cases</div>
+              <div style="color: var(--color-text-muted); font-size: 13px; margin-top: 2px;">Medical reports and identity documents carefully validated.</div>
             </div>
           </div>
 
           <div class="trust-check-card">
-            <div class="trust-check-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E4C071" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
             <div>
-              <div style="color: #FFFFFF; font-weight: 700; font-size: 15px;">Transparent Progress Tracking</div>
-              <div style="color: #AFA793; font-size: 13px; margin-top: 2px;">Real-time progress bars, donor count, and verified updates.</div>
+              <div style="color: var(--color-text-primary); font-weight: 700; font-size: 15px;">Transparent Progress Tracking</div>
+              <div style="color: var(--color-text-muted); font-size: 13px; margin-top: 2px;">Real-time progress bars, donor count, and verified updates.</div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Right Column: Made in Egypt Card -->
-      <div>
-        <div style="background: linear-gradient(135deg, #24221D 0%, #1C1B18 100%); border-radius: var(--radius-2xl); padding: 48px 36px; text-align: center; border: 1px solid rgba(228, 192, 113, 0.25); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45); position: relative; overflow: hidden;">
-          <!-- Ambient light -->
-          <div style="position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 250px; height: 150px; background: radial-gradient(ellipse at center, rgba(228, 192, 113, 0.15) 0%, transparent 70%); pointer-events: none;" aria-hidden="true"></div>
+      <div style="display: flex; justify-content: center; align-items: center;">
+        <div class="made-in-egypt-card" style="background: linear-gradient(145deg, rgba(38, 35, 29, 0.95) 0%, rgba(22, 20, 16, 0.98) 100%); border-radius: 32px; padding: 52px 40px; text-align: center; border: 1.5px solid rgba(228, 192, 113, 0.35); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(228, 192, 113, 0.25), 0 0 35px rgba(228, 192, 113, 0.1); position: relative; overflow: hidden; max-width: 480px; width: 100%; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);">
+          <!-- Ambient gold aura -->
+          <div style="position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 300px; height: 180px; background: radial-gradient(ellipse at center, rgba(228, 192, 113, 0.2) 0%, transparent 70%); pointer-events: none;" aria-hidden="true"></div>
 
-          <img src="{% static 'images/logo.svg' %}?v=2.0" alt="EgyStory" style="width: 140px; height: auto; margin-bottom: 24px; filter: drop-shadow(0 0 16px rgba(228, 192, 113, 0.3));">
-          
-          <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px; border-radius: var(--radius-full); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; background: rgba(228, 192, 113, 0.1); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.25);">
-            🇪🇬 Made in Egypt
+          <div style="position: relative; z-index: 1;">
+            <div style="margin-bottom: 22px; display: inline-block;">
+              <img src="{% static 'images/logo.svg' %}?v=2.0" alt="EgyStory" class="logo-dark-mode" style="width: 150px; height: auto; filter: drop-shadow(0 4px 20px rgba(228, 192, 113, 0.35)); transition: transform 0.3s ease;">
+              <img src="{% static 'images/logo-light.svg' %}?v=2.0" alt="EgyStory" class="logo-light-mode" style="width: 150px; height: auto; filter: drop-shadow(0 4px 20px rgba(184, 134, 11, 0.25)); transition: transform 0.3s ease;">
+            </div>
+            
+            <div style="display: flex; justify-content: center; margin-bottom: 18px;">
+              <span style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: var(--radius-full); font-weight: 800; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.1em; background: rgba(228, 192, 113, 0.14); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.4); box-shadow: 0 0 14px rgba(228, 192, 113, 0.15);">
+                Made in Egypt
+              </span>
+            </div>
+
+            <h3 style="font-size: 26px; font-weight: 900; color: #FFFFFF; margin-bottom: 14px; letter-spacing: -0.3px; line-height: 1.25;">
+              Built for Egyptians, by Egyptians
+            </h3>
+            <p style="color: #D9CFB8; line-height: 1.75; font-size: 15px; margin: 0 auto; opacity: 0.92; max-width: 390px;">
+              Empowering real people across all Egyptian governorates. Every contribution helps write a story of hope and solidarity.
+            </p>
           </div>
-
-          <h3 style="font-size: 24px; font-weight: 800; color: #FFFFFF; margin-bottom: 12px;">Built for Egyptians, by Egyptians</h3>
-          <p style="color: #D9CFB8; line-height: 1.7; font-size: 15px; max-width: 380px; margin: 0 auto;">
-            Empowering real people across all Egyptian governorates. Every contribution helps write a story of hope and solidarity.
-          </p>
         </div>
       </div>
 
@@ -426,6 +429,72 @@
 </section>
 
 <style>
+  /* ── Made in Egypt Showcase Card ─────────────────────────────── */
+  .made-in-egypt-card:hover {
+    transform: translateY(-8px) scale(1.015);
+    border-color: #E4C071 !important;
+    box-shadow: 0 32px 70px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(228, 192, 113, 0.4), 0 0 45px rgba(228, 192, 113, 0.22) !important;
+  }
+  .made-in-egypt-card:hover img {
+    transform: scale(1.05);
+  }
+
+  /* ── How It Works Steps Grid (2x2 on small screens) ───────────── */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+  }
+
+  @media (max-width: 900px) {
+    .steps-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 20px !important;
+    }
+    .home-step-card {
+      padding: 28px 16px !important;
+    }
+    .home-step-number {
+      width: 50px !important;
+      height: 50px !important;
+      font-size: 19px !important;
+      margin-bottom: 14px !important;
+    }
+    .home-step-title {
+      font-size: 17px !important;
+      margin-bottom: 8px !important;
+    }
+    .home-step-desc {
+      font-size: 13px !important;
+      line-height: 1.55 !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .steps-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 14px !important;
+    }
+    .home-step-card {
+      padding: 22px 12px !important;
+      border-radius: var(--radius-lg) !important;
+    }
+    .home-step-number {
+      width: 44px !important;
+      height: 44px !important;
+      font-size: 17px !important;
+      margin-bottom: 10px !important;
+    }
+    .home-step-title {
+      font-size: 15px !important;
+      margin-bottom: 6px !important;
+    }
+    .home-step-desc {
+      font-size: 12px !important;
+      line-height: 1.45 !important;
+    }
+  }
+
   /* ── Step Cards ────────────────────────────────────────────────── */
   .home-step-card {
     background: var(--color-surface, #2A2823);

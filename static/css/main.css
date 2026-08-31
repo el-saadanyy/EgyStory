@@ -28,12 +28,22 @@
   --color-danger:         #A93A2E;
   --color-danger-light:   rgba(169, 58, 46, 0.18);
 
-  /* Neutrals — Temple Basalt & Limestone */
+  /* Neutrals — Temple Basalt & Limestone (Default Dark Mode) */
   --color-white:          #FFFFFF;
   --color-bg:             #1C1B18;
+  --color-bg-secondary:   #151412;
   --color-surface:        #2A2823;
+  --color-surface-elevated: #33302A;
+  --color-surface-card:   #25231E;
   --color-border:         rgba(245, 237, 213, 0.12);
+  --color-border-subtle:  rgba(255, 255, 255, 0.06);
   --color-border-focus:   #E4C071;
+
+  /* Form Input Tokens */
+  --color-input-bg:       rgba(0, 0, 0, 0.35);
+  --color-input-border:   rgba(228, 192, 113, 0.25);
+  --color-input-text:     #FFFFFF;
+  --color-input-placeholder: #AFA793;
 
   /* Text — Limestone Sand / Warm White */
   --color-text-primary:   #F5EDD5;
@@ -91,6 +101,56 @@
   --navbar-height: 88px;
 }
 
+/* ── Light Mode Color Tokens (Pharaonic Warm Alabaster & Sunlit Sand) ── */
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Brand Colors — Custom User Warm Gold */
+  --color-primary:        #B8860B;
+  --color-primary-hover:  #996E00;
+  --color-primary-light:  rgba(184, 134, 11, 0.12);
+  --color-gold:           #B8860B;
+  --color-gold-light:     rgba(184, 134, 11, 0.12);
+
+  /* Status Colors */
+  --color-success:        #15803D;
+  --color-success-light:  #DCFCE7;
+  --color-warning:        #B45309;
+  --color-warning-light:  #FEF3C7;
+  --color-danger:         #B91C1C;
+  --color-danger-light:   rgba(185, 28, 28, 0.12);
+
+  /* Neutrals — Warm Alabaster & Pure White */
+  --color-white:          #FFFFFF;
+  --color-bg:             #F8F7F4;
+  --color-bg-secondary:   #EFECE6;
+  --color-surface:        #FFFFFF;
+  --color-surface-elevated: #FCFBF8;
+  --color-surface-card:   #FFFFFF;
+  --color-border:         rgba(0, 0, 0, 0.08);
+  --color-border-subtle:  rgba(0, 0, 0, 0.04);
+  --color-border-focus:   #A07800;
+
+  /* Form Input Tokens */
+  --color-input-bg:       #FFFFFF;
+  --color-input-border:   rgba(160, 120, 0, 0.35);
+  --color-input-text:     #1A1916;
+  --color-input-placeholder: #787366;
+
+  /* Text — Deep Charcoal & Warm Slate */
+  --color-text-primary:   #1A1916;
+  --color-text-secondary: #4A473F;
+  --color-text-muted:     #787366;
+  --color-text-inverse:   #FFFFFF;
+
+  /* Subtle Crisp Shadows for Light Theme */
+  --shadow-xs:   0 1px 2px rgba(0,0,0,.04);
+  --shadow-sm:   0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.03);
+  --shadow-md:   0 4px 10px rgba(0,0,0,.06), 0 2px 4px rgba(0,0,0,.03);
+  --shadow-lg:   0 10px 20px rgba(0,0,0,.07), 0 4px 6px rgba(0,0,0,.03);
+  --shadow-xl:   0 20px 30px rgba(0,0,0,.08), 0 8px 12px rgba(0,0,0,.04);
+}
+
 /* ── Reset ─────────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -102,6 +162,64 @@ html {
   font-size: 16px;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(228, 192, 113, 0.45) #181714;
+}
+
+[data-theme="light"],
+[data-theme="light"] html {
+  scrollbar-color: rgba(184, 134, 11, 0.5) #F2EFE8;
+}
+
+/* ── Custom Scrollbar (WebKit / Chrome / Edge / Safari / Brave) ── */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #181714;
+  border-left: 1px solid rgba(228, 192, 113, 0.08);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(228, 192, 113, 0.35) 0%, rgba(200, 163, 85, 0.55) 100%);
+  border-radius: var(--radius-full);
+  border: 2px solid #181714;
+  transition: all var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #E4C071 0%, #D4A017 100%);
+  box-shadow: 0 0 10px rgba(228, 192, 113, 0.5);
+}
+
+::-webkit-scrollbar-corner {
+  background: #181714;
+}
+
+/* Light Mode Scrollbar */
+[data-theme="light"]::-webkit-scrollbar-track,
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #F4F1EA;
+  border-left: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"]::-webkit-scrollbar-thumb,
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(184, 134, 11, 0.38) 0%, rgba(184, 134, 11, 0.58) 100%);
+  border: 2px solid #F4F1EA;
+}
+
+[data-theme="light"]::-webkit-scrollbar-thumb:hover,
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #C59B27 0%, #A07800 100%);
+  box-shadow: 0 0 8px rgba(184, 134, 11, 0.35);
+}
+
+[data-theme="light"]::-webkit-scrollbar-corner,
+[data-theme="light"] ::-webkit-scrollbar-corner {
+  background: #F4F1EA;
 }
 
 body {
@@ -114,6 +232,38 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  transition:
+    background-color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+    color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+    border-color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+main,
+.navbar,
+.navbar-inner,
+.footer,
+.card,
+.section-panel,
+.campaign-card,
+.campaign-card__body,
+.btn,
+.form-control,
+.badge,
+.hero,
+.step-card {
+  transition:
+    background-color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+    color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+    border-color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ── Hardware-Accelerated Theme Cross-Fade Transition ──────────── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.38s;
+  animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 main { flex: 1; }
@@ -206,3 +356,107 @@ button, input, select, textarea {
   color: var(--color-text-secondary);
   margin-top: var(--space-2);
 }
+
+/* ── Global Theme Transition ───────────────────────────────────── */
+body,
+.navbar,
+.card,
+.section-panel,
+.admin-sidebar,
+.admin-topbar,
+.auth-card,
+.profile-header-card,
+.profile-card,
+.egystory-chat-window {
+  transition: background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* ── Light Mode Global Surface Overrides ────────────────────────── */
+[data-theme="light"] .auth-card,
+[data-theme="light"] div[style*="rgba(38, 36, 30"],
+[data-theme="light"] div[style*="rgba(38,36,30"],
+[data-theme="light"] div[style*="#1C1B18"],
+[data-theme="light"] div[style*="#111009"],
+[data-theme="light"] div[style*="#161512"] {
+  background: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+[data-theme="light"] div[style*="radial-gradient(ellipse 75% 65% at 85% 15%"],
+[data-theme="light"] div[style*="linear-gradient(160deg, #111009"],
+[data-theme="light"] div[style*="linear-gradient(135deg, #161512"],
+[data-theme="light"] div[style*="linear-gradient(135deg, #000000"] {
+  background: var(--color-surface-elevated) !important;
+  color: var(--color-text-primary) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+[data-theme="light"] h1[style*="color: #FFFFFF"],
+[data-theme="light"] h1[style*="color: white"],
+[data-theme="light"] h2[style*="color: #FFFFFF"],
+[data-theme="light"] h2[style*="color: white"],
+[data-theme="light"] h3[style*="color: #FFFFFF"],
+[data-theme="light"] h3[style*="color: white"],
+[data-theme="light"] strong[style*="color: #FFFFFF"],
+[data-theme="light"] strong[style*="color: white"],
+[data-theme="light"] div[style*="color: #FFFFFF"],
+[data-theme="light"] div[style*="color: white"],
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] p,
+[data-theme="light"] span,
+[data-theme="light"] [style*="text-shadow"] {
+  text-shadow: none !important;
+}
+
+[data-theme="light"] p[style*="color: #D9CFB8"],
+[data-theme="light"] p[style*="color: #F5EDD5"],
+[data-theme="light"] label[style*="color: #D9CFB8"],
+[data-theme="light"] span[style*="color: #AFA793"] {
+  color: var(--color-text-secondary) !important;
+}
+
+[data-theme="light"] div[style*="background: rgba(0, 0, 0, 0.25)"],
+[data-theme="light"] div[style*="background: rgba(0, 0, 0, 0.35)"],
+[data-theme="light"] div[style*="background: rgba(0, 0, 0, 0.45)"],
+[data-theme="light"] input[style*="background: rgba(0, 0, 0, 0.35)"],
+[data-theme="light"] input[style*="background: rgba(0, 0, 0, 0.45)"],
+[data-theme="light"] input[style*="background: rgba(255, 255, 255, 0.06)"],
+[data-theme="light"] select[style*="background: rgba(0, 0, 0, 0.35)"] {
+  background: var(--color-input-bg) !important;
+  color: var(--color-input-text) !important;
+  border-color: var(--color-input-border) !important;
+}
+
+/* ── Universal Light Mode Input & Autofill Fixes ──────────────── */
+[data-theme="light"] input:-webkit-autofill,
+[data-theme="light"] input:-webkit-autofill:hover,
+[data-theme="light"] input:-webkit-autofill:focus,
+[data-theme="light"] input:-webkit-autofill:active,
+[data-theme="light"] select:-webkit-autofill,
+[data-theme="light"] select:-webkit-autofill:hover,
+[data-theme="light"] select:-webkit-autofill:focus,
+[data-theme="light"] textarea:-webkit-autofill,
+[data-theme="light"] textarea:-webkit-autofill:hover,
+[data-theme="light"] textarea:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+  -webkit-text-fill-color: #1A1916 !important;
+  caret-color: #1A1916 !important;
+  background-color: #FFFFFF !important;
+}
+
+[data-theme="light"] input,
+[data-theme="light"] .form-control,
+[data-theme="light"] .form-input {
+  color: var(--color-input-text) !important;
+}
+
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #787366 !important;
+}
+

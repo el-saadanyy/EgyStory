@@ -8,7 +8,7 @@
 <main style="background-color: var(--color-bg); min-height: calc(100vh - var(--navbar-height)); padding-bottom: 80px;">
 
   <!-- ── Hero Banner (Premium Dark/Gold) ──────────────────────── -->
-  <div style="background: linear-gradient(160deg, #111009 0%, #1E1C17 40%, #2A2720 70%, #1A1815 100%); border-bottom: 1px solid rgba(228,192,113,0.22); padding: 52px 0 48px; position: relative; overflow: hidden;">
+  <div style="background: linear-gradient(160deg, #111009 0%, #1E1C17 40%, #2A2720 70%, #1A1815 100%); border-bottom: 1px solid rgba(228,192,113,0.22); padding: 24px 0 20px; position: relative; overflow: hidden;">
 
     <!-- Radial gold glow — large ambient -->
     <div style="position: absolute; top: -120px; left: 50%; transform: translateX(-50%); width: 900px; height: 500px; background: radial-gradient(ellipse at center, rgba(228,192,113,0.13) 0%, rgba(228,192,113,0.04) 45%, transparent 70%); pointer-events: none;" aria-hidden="true"></div>
@@ -19,61 +19,58 @@
 
     <div class="container" style="position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
 
-
-
-
       <!-- Badges Row -->
-      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; align-items: center;">
+      <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; align-items: center;">
         {% if campaign.category %}
-          <span style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; border-radius: var(--radius-full); font-size: 12.5px; font-weight: 700; background: rgba(228,192,113,0.14); color: #E4C071; border: 1px solid rgba(228,192,113,0.32);">
-            📁 {{ campaign.category.name }}
+          <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 700; background: rgba(228,192,113,0.14); color: #E4C071; border: 1px solid rgba(228,192,113,0.32);">
+            {{ campaign.category.name }}
           </span>
         {% endif %}
         {% if campaign.case_type == 'Rare / Ultra-Rare & High-Cost' %}
-          <span style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; border-radius: var(--radius-full); font-size: 12.5px; font-weight: 700; background: rgba(147,51,234,0.15); color: #c084fc; border: 1px solid rgba(147,51,234,0.35);">
+          <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 700; background: rgba(147,51,234,0.15); color: #c084fc; border: 1px solid rgba(147,51,234,0.35);">
             💎 Rare Condition
           </span>
         {% endif %}
         {% if campaign.is_critical %}
-          <span style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; border-radius: var(--radius-full); font-size: 12.5px; font-weight: 700; background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.35);">
+          <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 700; background: rgba(220,38,38,0.15); color: #f87171; border: 1px solid rgba(220,38,38,0.35);">
             🚨 Critical Case
           </span>
         {% endif %}
         {% if campaign.is_featured %}
-          <span style="display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; border-radius: var(--radius-full); font-size: 12.5px; font-weight: 700; background: rgba(228,192,113,0.18); color: #E4C071; border: 1px solid rgba(228,192,113,0.45);">
+          <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: var(--radius-full); font-size: 11.5px; font-weight: 700; background: rgba(228,192,113,0.18); color: #E4C071; border: 1px solid rgba(228,192,113,0.45);">
             🌟 Featured
           </span>
         {% endif %}
         {% for tag in campaign.tags.all %}
-          <a href="{% url 'campaigns:case_list' %}?tag={{ tag.slug }}" style="display: inline-flex; align-items: center; padding: 5px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700; background: rgba(228,192,113,0.13); color: #E4C071; border: 1px solid rgba(228,192,113,0.32); text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='rgba(228,192,113,0.24)'" onmouseout="this.style.background='rgba(228,192,113,0.13)'">#{{ tag.name }}</a>
+          <a href="{% url 'campaigns:case_list' %}?tag={{ tag.slug }}" style="display: inline-flex; align-items: center; padding: 3px 10px; border-radius: var(--radius-full); font-size: 11px; font-weight: 700; background: rgba(228,192,113,0.13); color: #E4C071; border: 1px solid rgba(228,192,113,0.32); text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='rgba(228,192,113,0.24)'" onmouseout="this.style.background='rgba(228,192,113,0.13)'">#{{ tag.name }}</a>
         {% endfor %}
       </div>
 
       <!-- Two-column: Title + Stats mini-bar -->
-      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
 
         <!-- Title -->
-        <h1 style="font-size: clamp(26px, 4vw, 42px); font-weight: 900; color: #FFFFFF; margin: 0; line-height: 1.15; text-shadow: 0 2px 16px rgba(0,0,0,0.5); letter-spacing: -0.5px; max-width: 700px; flex: 1;">
+        <h1 style="font-size: clamp(20px, 2.6vw, 28px); font-weight: 900; color: var(--color-primary); margin: 0; line-height: 1.25; text-shadow: 0 2px 16px rgba(0,0,0,0.5); letter-spacing: -0.4px; max-width: 680px; flex: 1;">
           {{ campaign.title }}
         </h1>
 
         <!-- Quick Stats Chips -->
-        <div style="display: flex; gap: 16px; flex-wrap: wrap; flex-shrink: 0; align-items: flex-end;">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; flex-shrink: 0; align-items: center;">
           <!-- Raised -->
-          <div style="background: rgba(228,192,113,0.1); border: 1px solid rgba(228,192,113,0.28); border-radius: var(--radius-xl); padding: 14px 20px; text-align: center; min-width: 110px;">
-            <div style="font-size: 20px; font-weight: 900; color: #E4C071; line-height: 1; margin-bottom: 5px;">{{ campaign.raised_amount|floatformat:"0" }}</div>
-            <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #AFA793;">EGP Raised</div>
+          <div style="background: rgba(228,192,113,0.1); border: 1px solid rgba(228,192,113,0.28); border-radius: var(--radius-lg); padding: 8px 14px; text-align: center; min-width: 80px;">
+            <div style="font-size: 16px; font-weight: 900; color: #E4C071; line-height: 1.1; margin-bottom: 2px;">{{ campaign.raised_amount|floatformat:"0" }}</div>
+            <div style="font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #AFA793;">EGP Raised</div>
           </div>
           <!-- Progress -->
-          <div style="background: rgba(228,192,113,0.08); border: 1px solid rgba(228,192,113,0.2); border-radius: var(--radius-xl); padding: 14px 20px; text-align: center; min-width: 90px;">
-            <div style="font-size: 20px; font-weight: 900; color: #E4C071; line-height: 1; margin-bottom: 5px;">{{ campaign.get_progress_percentage }}%</div>
-            <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #AFA793;">Funded</div>
+          <div style="background: rgba(228,192,113,0.08); border: 1px solid rgba(228,192,113,0.2); border-radius: var(--radius-lg); padding: 8px 14px; text-align: center; min-width: 70px;">
+            <div style="font-size: 16px; font-weight: 900; color: #E4C071; line-height: 1.1; margin-bottom: 2px;">{{ campaign.get_progress_percentage }}%</div>
+            <div style="font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #AFA793;">Funded</div>
           </div>
           <!-- Days -->
           {% if campaign.deadline %}
-          <div style="background: rgba(228,192,113,0.08); border: 1px solid rgba(228,192,113,0.2); border-radius: var(--radius-xl); padding: 14px 20px; text-align: center; min-width: 90px;">
-            <div style="font-size: 20px; font-weight: 900; color: {% if campaign.get_days_remaining <= 3 %}#f87171{% elif campaign.get_days_remaining <= 7 %}#fbbf24{% else %}#E4C071{% endif %}; line-height: 1; margin-bottom: 5px;">{{ campaign.get_days_remaining }}</div>
-            <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #AFA793;">Days Left</div>
+          <div style="background: rgba(228,192,113,0.08); border: 1px solid rgba(228,192,113,0.2); border-radius: var(--radius-lg); padding: 8px 14px; text-align: center; min-width: 70px;">
+            <div style="font-size: 16px; font-weight: 900; color: {% if campaign.get_days_remaining <= 3 %}#f87171{% elif campaign.get_days_remaining <= 7 %}#fbbf24{% else %}#E4C071{% endif %}; line-height: 1.1; margin-bottom: 2px;">{{ campaign.get_days_remaining }}</div>
+            <div style="font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #AFA793;">Days Left</div>
           </div>
           {% endif %}
         </div>
@@ -84,7 +81,7 @@
 
 
   <!-- ── Main Content ─────────────────────────────────────────── -->
-  <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px 0;">
+  <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 24px 20px 0;">
     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px; align-items: start;">
       
       <!-- Main Content Column -->
@@ -98,8 +95,8 @@
               {% if campaign.campaign_image %}
                 <img src="{{ campaign.campaign_image.url }}" alt="{{ campaign.title }}" style="width: 100%; height: 100%; object-fit: cover;">
               {% else %}
-                <div style="width: 100%; height: 100%; background: var(--color-surface); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted);">
-                  <span style="font-size: 48px;">🖼️</span>
+                <div style="width: 100%; height: 100%; background: var(--color-surface); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); font-size: 15px; font-weight: 600;">
+                  No image available
                 </div>
               {% endif %}
             </div>
@@ -144,7 +141,7 @@
                     <img src="{{ img_obj.image.url }}" alt="Campaign picture" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
                     <form method="post" action="{% url 'campaigns:delete_campaign_image' img_obj.id %}" style="position: absolute; top: 4px; right: 4px;" onsubmit="return confirm('Delete this picture?');">
                       {% csrf_token %}
-                      <button type="submit" title="Delete image" style="background: rgba(220, 38, 38, 0.9); color: white; border: none; border-radius: 4px; padding: 4px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+                      <button type="submit" title="Delete image" style="background: rgba(220, 38, 38, 0.9); color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center;">Delete</button>
                     </form>
                   </div>
                 {% endfor %}
@@ -156,7 +153,7 @@
         <!-- The Story Section -->
         <div style="background: linear-gradient(135deg, rgba(38,36,30,0.92) 0%, rgba(24,23,20,0.98) 100%); padding: 40px; border-radius: var(--radius-xl); border: 1px solid rgba(228,192,113,0.18); box-shadow: 0 16px 48px rgba(0,0,0,0.45); position: relative; overflow: hidden;">
           <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071 50%, transparent);" aria-hidden="true"></div>
-          <h2 style="font-size: 22px; font-weight: 800; color: #FFFFFF; margin-bottom: 24px; border-bottom: 1px solid rgba(228,192,113,0.2); padding-bottom: 14px; letter-spacing: -0.3px;">📖 The Story</h2>
+          <h2 style="font-size: 22px; font-weight: 800; color: #FFFFFF; margin-bottom: 24px; border-bottom: 1px solid rgba(228,192,113,0.2); padding-bottom: 14px; letter-spacing: -0.3px;">The Story</h2>
           <div style="font-size: 16.5px; line-height: 1.9; color: #D9CFB8; white-space: pre-wrap;">{{ campaign.story }}</div>
           
           {% if campaign.updates.all %}
@@ -174,7 +171,7 @@
           </div>
           {% endif %}
 
-          <!-- Star Rating System (Feature #8) -->
+          <!-- Star Rating System (Feature #8) - Functionality & Stars Preserved -->
           <div style="margin-top: 48px; border-top: 1px solid var(--color-border); padding-top: 32px;">
             <h3 style="font-size: 18px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 12px;">Rate This Campaign</h3>
             {% if user.is_authenticated %}
@@ -196,7 +193,7 @@
           <!-- Campaign Comments Section -->
           <div style="margin-top: 48px; border-top: 1px solid rgba(228,192,113,0.15); padding-top: 32px;">
             <h3 style="font-size: 20px; font-weight: 800; color: #FFFFFF; margin-bottom: 20px; letter-spacing: -0.3px;">
-              💬 Comments <span style="font-size: 15px; font-weight: 600; color: #AFA793;">({{ campaign.comments.count }})</span>
+              Comments <span style="font-size: 15px; font-weight: 600; color: #AFA793;">({{ campaign.comments.count }})</span>
             </h3>
 
             <!-- Add Comment Form -->
@@ -230,16 +227,24 @@
                   </div>
                   <p style="font-size: 15px; line-height: 1.65; color: #D9CFB8; margin: 0; white-space: pre-wrap;">{{ comment.content }}</p>
 
-                  <!-- Actions Row: Reply & Report -->
+                  <!-- Actions Row: Reply, Delete & Report -->
                   <div style="margin-top: 14px; display: flex; justify-content: flex-end; gap: 12px; align-items: center;">
                     {% if user.is_authenticated %}
                       <button type="button" class="btn btn-ghost btn-sm" onclick="toggleReplyBox('replyBox{{ comment.id }}')" style="color: var(--color-primary); font-size: 13px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 5px;">
-                        💬 Reply
+                        Reply
                       </button>
+                    {% endif %}
+                    {% if user.is_authenticated and comment.user == user or user.is_staff %}
+                      <form method="post" action="{% url 'campaigns:delete_comment' comment.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--color-danger); font-size: 12px; padding: 4px 8px; display: inline-flex; align-items: center; gap: 4px;">
+                          Delete
+                        </button>
+                      </form>
                     {% endif %}
                     {% if user.is_authenticated and comment.user != user %}
                       <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('reportCommentModal{{ comment.id }}').style.display='flex';" style="color: var(--color-danger); font-size: 12px; padding: 4px 8px;">
-                        🚩 Report Comment
+                        Report Comment
                       </button>
                     {% endif %}
                   </div>
@@ -294,15 +299,25 @@
                           </div>
                           <p style="font-size: 14px; line-height: 1.5; color: var(--color-text-secondary); margin: 0; white-space: pre-wrap;">{{ reply.content }}</p>
 
-                          <!-- Report Reply Action -->
-                          {% if user.is_authenticated and reply.user != user %}
-                            <div style="margin-top: 8px; text-align: right;">
+                          <!-- Actions: Delete & Report Reply -->
+                          <div style="margin-top: 8px; display: flex; justify-content: flex-end; gap: 10px; align-items: center;">
+                            {% if user.is_authenticated and reply.user == user or user.is_staff %}
+                              <form method="post" action="{% url 'campaigns:delete_comment' reply.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this reply?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--color-danger); font-size: 11.5px; padding: 2px 6px; display: inline-flex; align-items: center; gap: 4px;">
+                                  Delete
+                                </button>
+                              </form>
+                            {% endif %}
+                            {% if user.is_authenticated and reply.user != user %}
                               <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('reportCommentModal{{ reply.id }}').style.display='flex';" style="color: var(--color-danger); font-size: 11.5px; padding: 2px 6px;">
-                                🚩 Report Reply
+                                Report Reply
                               </button>
-                            </div>
+                            {% endif %}
+                          </div>
 
-                            <!-- Report Reply Modal -->
+                          <!-- Report Reply Modal -->
+                          {% if user.is_authenticated and reply.user != user %}
                             <div id="reportCommentModal{{ reply.id }}" class="modal" role="dialog" aria-hidden="true" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
                               <div class="modal-content" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 24px; max-width: 450px; width: 90%; text-align: left; position: relative;">
                                 <button type="button" onclick="document.getElementById('reportCommentModal{{ reply.id }}').style.display='none';" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; font-size: 18px; color: var(--color-text-muted); cursor: pointer;">✕</button>
@@ -327,7 +342,6 @@
                 </div>
               {% empty %}
                 <div style="padding: 40px; text-align: center; background: rgba(255,255,255,0.02); border-radius: var(--radius-lg); border: 1px dashed rgba(228,192,113,0.2);">
-                  <div style="font-size: 32px; margin-bottom: 12px;">💬</div>
                   <p style="font-size: 14px; color: #AFA793; margin: 0;">No comments yet. Be the first to share your thoughts!</p>
                 </div>
               {% endfor %}
@@ -365,7 +379,6 @@
             <span style="color: #E4C071;">{{ campaign.get_progress_percentage }}% Funded</span>
             {% if campaign.deadline %}
               <span style="color: var(--color-text-secondary); display: flex; align-items: center; gap: 6px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 {{ campaign.get_days_remaining }} days left
               </span>
             {% endif %}
@@ -373,7 +386,7 @@
 
           <!-- Action Button -->
           {% if campaign.status == 'Active' %}
-            <a href="{% url 'campaigns:donate' campaign.id %}" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 17px; font-weight: 800; border-radius: var(--radius-full); box-shadow: 0 6px 24px rgba(228,192,113,0.45); letter-spacing: 0.03em;">❤️ Donate Now</a>
+            <a href="{% url 'campaigns:donate' campaign.id %}" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 17px; font-weight: 800; border-radius: var(--radius-full); box-shadow: 0 6px 24px rgba(228,192,113,0.45); letter-spacing: 0.03em;">Donate Now</a>
             <p style="text-align: center; font-size: 13px; color: var(--color-text-muted); margin-top: 16px;">100% secure payment</p>
           {% elif campaign.status == 'Completed' %}
             <div style="width: 100%; padding: 16px; background: linear-gradient(135deg, rgba(22,163,74,0.15), rgba(74,222,128,0.08)); color: #4ade80; border-radius: var(--radius-full); text-align: center; font-weight: 800; font-size: 17px; border: 1px solid rgba(22,163,74,0.3); box-shadow: 0 0 20px rgba(22,163,74,0.15);">
@@ -386,9 +399,6 @@
 
           <!-- Organizer Info -->
           <div style="margin-top: 28px; padding-top: 22px; border-top: 1px solid rgba(228,192,113,0.15); display: flex; align-items: center; gap: 14px;">
-            <div style="width: 44px; height: 44px; background: rgba(228,192,113,0.1); border: 1px solid rgba(228,192,113,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
-              👤
-            </div>
             <div>
               <div style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #AFA793; margin-bottom: 3px;">Organized by</div>
               <div style="font-weight: 800; color: #FFFFFF; font-size: 14.5px;">{{ campaign.owner.first_name }} {{ campaign.owner.last_name }}</div>
@@ -396,11 +406,20 @@
             </div>
           </div>
 
+          <!-- Owner Manage Campaign Trigger -->
+          {% if user.is_authenticated and user == campaign.owner %}
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--color-border); text-align: center;">
+              <a href="{% url 'campaigns:case_edit' campaign.id %}" class="btn btn-primary btn-sm" style="width: 100%; border-radius: var(--radius-full); font-weight: 700; padding: 10px; display: block; text-decoration: none;">
+                ⚙️ Manage My Campaign
+              </a>
+            </div>
+          {% endif %}
+
           <!-- Cancel Campaign Trigger (Feature #9: Creator < 25%) -->
           {% if user.is_authenticated and user == campaign.owner and can_creator_cancel %}
-            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--color-border); text-align: center;">
+            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--color-border); text-align: center;">
               <button type="button" id="btn-open-cancel-modal" class="btn btn-outline-danger btn-sm" style="width: 100%; border-color: var(--color-danger); color: var(--color-danger); font-weight: 600; padding: 10px;">
-                🚫 Cancel My Campaign
+                Cancel My Campaign
               </button>
             </div>
           {% endif %}
@@ -409,11 +428,11 @@
           <div style="margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--color-border); text-align: center;">
             {% if user.is_authenticated %}
               <button type="button" id="btn-open-report-modal" class="btn btn-ghost btn-sm" style="color: var(--color-danger); font-weight: 600; width: 100%; gap: 6px;">
-                🚩 Report this Campaign
+                Report this Campaign
               </button>
             {% else %}
               <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-ghost btn-sm" style="color: var(--color-text-muted); font-size: 12px;">
-                🚩 Log in to report campaign
+                Log in to report campaign
               </a>
             {% endif %}
           </div>
@@ -586,4 +605,59 @@
     form.submit();
   });
 </script>
+
+<style>
+  /* ── Light Mode Specific Overrides for Case Detail ────────────── */
+  [data-theme="light"] div[style*="linear-gradient(160deg, #111009"] {
+    background: linear-gradient(145deg, #FAF7EE 0%, #F5EBD4 60%, #EADBBA 100%) !important;
+    border-bottom: 1px solid rgba(184, 134, 11, 0.25) !important;
+  }
+  [data-theme="light"] div[style*="linear-gradient(160deg, #111009"] h1 {
+    color: #1A1916 !important;
+    text-shadow: none !important;
+  }
+  [data-theme="light"] div[style*="linear-gradient(135deg, rgba(38,36,30,0.95)"] {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(184, 134, 11, 0.25) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06) !important;
+  }
+  [data-theme="light"] div[style*="linear-gradient(135deg, rgba(38,36,30,0.92)"] {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(184, 134, 11, 0.2) !important;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.05) !important;
+  }
+  [data-theme="light"] div[style*="linear-gradient(135deg, rgba(38,36,30,0.92)"] h2,
+  [data-theme="light"] div[style*="linear-gradient(135deg, rgba(38,36,30,0.92)"] h3 {
+    color: #1A1916 !important;
+    border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+  }
+  [data-theme="light"] div[style*="color: #D9CFB8"] {
+    color: #3D392F !important;
+  }
+  [data-theme="light"] div[style*="background: rgba(255,255,255,0.03)"] {
+    background: #FCFBF8 !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03) !important;
+  }
+  [data-theme="light"] div[style*="background: rgba(255,255,255,0.03)"] div {
+    color: #1A1916 !important;
+  }
+  [data-theme="light"] div[style*="background: rgba(255,255,255,0.03)"] p {
+    color: #4A473F !important;
+  }
+  [data-theme="light"] div[style*="background: rgba(255,255,255,0.02)"] {
+    background: #FCFBF8 !important;
+    border-color: rgba(184, 134, 11, 0.25) !important;
+  }
+  [data-theme="light"] div[style*="background: rgba(255,255,255,0.02)"] p {
+    color: #787366 !important;
+  }
+  [data-theme="light"] h2[style*="color: #FFFFFF"],
+  [data-theme="light"] h3[style*="color: #FFFFFF"] {
+    color: #1A1916 !important;
+  }
+  [data-theme="light"] .slider-container {
+    background: #F8F7F4 !important;
+  }
+</style>
 {% endblock %}

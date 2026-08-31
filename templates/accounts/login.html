@@ -15,7 +15,8 @@
 
       <div class="auth-logo">
         <a href="{% url 'home' %}">
-          <img src="{% static 'images/logo.svg' %}?v=2.0" alt="EgyStory" height="40">
+          <img src="{% static 'images/logo.svg' %}?v=2.0" alt="EgyStory" height="40" class="logo-dark-mode">
+          <img src="{% static 'images/logo-light.svg' %}?v=2.0" alt="EgyStory" height="40" class="logo-light-mode">
         </a>
       </div>
 
@@ -24,6 +25,13 @@
 
       <form method="post" novalidate id="login-form">
         {% csrf_token %}
+
+        {% if unactivated_email %}
+          <div class="alert alert-warning" style="margin-bottom: 20px; font-size: 14px; text-align: center; background: rgba(190, 155, 75, 0.12); border: 1px solid rgba(190, 155, 75, 0.3); border-radius: 8px; padding: 12px;">
+            <p style="margin: 0 0 8px 0; color: #BE9B4B; font-weight: 600;">Pending Account Activation</p>
+            <a href="{% url 'verify_otp' %}" class="btn btn-primary btn-sm" style="display: inline-block; padding: 6px 14px; font-size: 13px;">Enter 6-Digit Code / Resend</a>
+          </div>
+        {% endif %}
 
         {% if form.non_field_errors %}
           {% for error in form.non_field_errors %}

@@ -59,7 +59,7 @@
   gap: var(--space-4);
 }
 
-/* Auth Inputs Dark Theme Override */
+/* Auth Inputs Theme Variables */
 .auth-page .form-control,
 .auth-card .form-control,
 .auth-page input[type="text"],
@@ -70,22 +70,22 @@
 .auth-card input[type="email"],
 .auth-card input[type="password"],
 .auth-card select {
-  background-color: #1E1D19 !important;
-  color: #FFFFFF !important;
-  border: 1.5px solid rgba(228, 192, 113, 0.3) !important;
+  background-color: var(--color-input-bg) !important;
+  color: var(--color-input-text) !important;
+  border: 1.5px solid var(--color-input-border) !important;
 }
 
 .auth-page .form-control:focus,
 .auth-card .form-control:focus,
 .auth-page input:focus,
 .auth-card input:focus {
-  background-color: #24221D !important;
-  color: #FFFFFF !important;
-  border-color: #E4C071 !important;
-  box-shadow: 0 0 0 3px rgba(228, 192, 113, 0.2) !important;
+  background-color: var(--color-surface) !important;
+  color: var(--color-input-text) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px var(--color-primary-light) !important;
 }
 
-/* Override WebKit / Browser Autofill to maintain dark theme & clear white text */
+/* Override WebKit / Browser Autofill to maintain dark theme in dark mode */
 .auth-page .form-control:-webkit-autofill,
 .auth-page .form-control:-webkit-autofill:hover,
 .auth-page .form-control:-webkit-autofill:focus,
@@ -109,6 +109,31 @@ textarea:-webkit-autofill:focus {
   caret-color: #FFFFFF !important;
   transition: background-color 5000s ease-in-out 0s !important;
   background-color: #1E1D19 !important;
+}
+
+/* ── Light Mode Autofill Overrides ────────────────────────────── */
+[data-theme="light"] .auth-page .form-control:-webkit-autofill,
+[data-theme="light"] .auth-page .form-control:-webkit-autofill:hover,
+[data-theme="light"] .auth-page .form-control:-webkit-autofill:focus,
+[data-theme="light"] .auth-page .form-control:-webkit-autofill:active,
+[data-theme="light"] .auth-card .form-control:-webkit-autofill,
+[data-theme="light"] .auth-card .form-control:-webkit-autofill:hover,
+[data-theme="light"] .auth-card .form-control:-webkit-autofill:focus,
+[data-theme="light"] .auth-card .form-control:-webkit-autofill:active,
+[data-theme="light"] input:-webkit-autofill,
+[data-theme="light"] input:-webkit-autofill:hover,
+[data-theme="light"] input:-webkit-autofill:focus,
+[data-theme="light"] input:-webkit-autofill:active,
+[data-theme="light"] select:-webkit-autofill,
+[data-theme="light"] select:-webkit-autofill:hover,
+[data-theme="light"] select:-webkit-autofill:focus,
+[data-theme="light"] textarea:-webkit-autofill,
+[data-theme="light"] textarea:-webkit-autofill:hover,
+[data-theme="light"] textarea:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+  -webkit-text-fill-color: #1A1916 !important;
+  caret-color: #1A1916 !important;
+  background-color: #FFFFFF !important;
 }
 
 

@@ -10,9 +10,9 @@
   min-height: 85px;
   height: auto;
   padding: 16px 0;
-  background-color: rgba(28, 27, 24, 0.95);
-  border-bottom: 1px solid rgba(228, 192, 113, 0.18);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, backdrop-filter 0.25s ease;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -42,12 +42,33 @@
   width: 100%;
   min-height: 85px;
   padding: 16px 0;
-  background: rgba(24, 23, 20, 0.90) !important;
-  border-bottom: 1px solid rgba(228, 192, 113, 0.25) !important;
-  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(228, 192, 113, 0.2) !important;
+  background: var(--color-bg) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
   animation: none !important;
+}
+
+/* Logo Theme Toggling */
+.logo-light-mode {
+  display: none !important;
+}
+.logo-dark-mode {
+  display: block !important;
+}
+
+[data-theme="light"] .logo-light-mode {
+  display: block !important;
+}
+[data-theme="light"] .logo-dark-mode {
+  display: none !important;
+}
+
+[data-theme="light"] .navbar.navbar-fixed {
+  background: rgba(248, 247, 244, 0.94) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
 }
 
 .navbar-inner {
@@ -88,21 +109,21 @@
   padding: 8px 18px;
   font-size: 14px;
   font-weight: 600;
-  color: #D9CFB8;
+  color: var(--color-text-secondary);
   border-radius: var(--radius-full);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
   border: 1px solid transparent;
 }
 .nav-link:hover {
-  color: #E4C071;
-  background-color: rgba(228, 192, 113, 0.1);
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
   border-color: rgba(228, 192, 113, 0.2);
 }
 .nav-link.active {
-  color: #E4C071;
+  color: var(--color-primary);
   font-weight: 700;
-  background-color: rgba(228, 192, 113, 0.14);
+  background-color: var(--color-primary-light);
   border-color: rgba(228, 192, 113, 0.3);
 }
 
@@ -152,12 +173,12 @@
   display: block;
 }
 .user-menu-trigger .user-name {
-  color: #FFFFFF;
+  color: var(--color-text-primary);
   font-size: 14px;
   font-weight: 700;
 }
 .user-menu-trigger .chevron-icon {
-  color: #E4C071;
+  color: var(--color-primary);
   transition: transform 0.25s ease;
 }
 .user-menu-dropdown.open ~ .user-menu-trigger .chevron-icon,
@@ -170,10 +191,10 @@
   top: calc(100% + 10px);
   right: 0;
   min-width: 220px;
-  background-color: rgba(32, 30, 26, 0.96);
-  border: 1px solid rgba(228, 192, 113, 0.28);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-xl);
   padding: 8px;
   display: none;
   z-index: 200;
@@ -189,17 +210,17 @@
 
 .user-menu-header {
   padding: 12px 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--color-border);
   margin-bottom: 6px;
 }
 .user-menu-name {
   font-weight: 700;
   font-size: 14px;
-  color: #FFFFFF;
+  color: var(--color-text-primary);
 }
 .user-menu-email {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-muted);
   margin-top: 3px;
 }
 
@@ -210,7 +231,7 @@
   padding: 10px 14px;
   font-size: 13px;
   font-weight: 600;
-  color: #D9CFB8;
+  color: var(--color-text-secondary);
   border-radius: var(--radius-md);
   transition: all 0.2s ease;
   cursor: pointer;
@@ -221,19 +242,112 @@
   text-decoration: none;
 }
 .dropdown-item:hover {
-  background-color: rgba(228, 192, 113, 0.15);
-  color: #E4C071;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
   transform: translateX(3px);
 }
 .dropdown-item.danger { color: #f87171; }
+[data-theme="light"] .dropdown-item.danger { color: #dc2626; }
 .dropdown-item.danger:hover {
   background-color: rgba(220, 38, 38, 0.15);
   color: #ef4444;
 }
 .dropdown-divider {
   height: 1px;
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: var(--color-border);
   margin: 6px 0;
+}
+
+/* ── Theme Toggle Button & Symmetrical Icon Morph Animations ──── */
+.theme-toggle-btn {
+  background: rgba(228, 192, 113, 0.12);
+  border: 1.5px solid rgba(228, 192, 113, 0.4);
+  border-radius: var(--radius-full);
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffdd93;
+  transition: background-color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+              border-color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+              color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-left: 6px;
+  flex-shrink: 0;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle-btn svg {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.35s ease,
+              color 0.35s ease;
+  pointer-events: none;
+}
+
+/* In Dark Mode (default): Sun icon is active and visible; Moon icon is rotated out */
+.theme-toggle-btn .icon-sun {
+  color: #ffdd93;
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+}
+
+.theme-toggle-btn .icon-moon {
+  color: #B8860B;
+  transform: rotate(90deg) scale(0.15);
+  opacity: 0;
+}
+
+/* In Light Mode: Moon icon is active and visible; Sun icon is rotated out */
+[data-theme="light"] .theme-toggle-btn .icon-sun {
+  transform: rotate(-90deg) scale(0.15);
+  opacity: 0;
+}
+
+[data-theme="light"] .theme-toggle-btn .icon-moon {
+  color: #B8860B;
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(228, 192, 113, 0.25);
+  border-color: #ffdd93;
+  color: #ffeed0;
+  transform: translateY(-1px) scale(1.06);
+  box-shadow: 0 0 16px rgba(255, 221, 147, 0.4);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.92);
+}
+
+/* Light mode theme toggle button */
+[data-theme="light"] .theme-toggle-btn {
+  background: #FFFFFF;
+  border: 1.5px solid #D4A017;
+  color: #B8860B;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(184, 134, 11, 0.15);
+}
+
+[data-theme="light"] .theme-toggle-btn:hover {
+  background: #FFF9E8;
+  border-color: #A07800;
+  color: #8C6800;
+  transform: translateY(-1px) scale(1.06);
+  box-shadow: 0 4px 14px rgba(184, 134, 11, 0.25);
 }
 
 /* Mobile hamburger */
@@ -263,6 +377,14 @@
   transition: all var(--transition-base);
 }
 
+[data-theme="light"] .navbar-toggle {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+[data-theme="light"] .navbar-toggle span {
+  background-color: #1A1916;
+}
+
 /* Mobile nav */
 .mobile-nav {
   display: none;
@@ -282,6 +404,12 @@
   border-radius: var(--radius-lg);
 }
 
+[data-theme="light"] .mobile-nav {
+  background-color: rgba(248, 247, 244, 0.98);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.1);
+}
+
 /* ── Footer ────────────────────────────────────────────────────── */
 .footer {
   background: linear-gradient(180deg, #181714 0%, #100F0D 100%);
@@ -291,6 +419,35 @@
   border-top: 1px solid rgba(228, 192, 113, 0.22);
   position: relative;
   overflow: hidden;
+}
+
+[data-theme="light"] .footer {
+  background: #EFECE6 !important;
+  color: #4A473F !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .footer-brand-text {
+  color: #787366 !important;
+}
+
+[data-theme="light"] .footer-link {
+  color: #4A473F !important;
+}
+
+[data-theme="light"] .footer-link:hover {
+  color: #B8860B !important;
+}
+
+[data-theme="light"] .footer-trust-badge {
+  background: rgba(184, 134, 11, 0.08) !important;
+  border-color: rgba(184, 134, 11, 0.25) !important;
+  color: #B8860B !important;
+}
+
+[data-theme="light"] .footer-bottom {
+  border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+  color: #787366 !important;
 }
 
 /* Decorative top accent glow */

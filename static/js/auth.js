@@ -39,7 +39,47 @@ document.addEventListener('DOMContentLoaded', function () {
         avatarPreview.src = e.target.result;
       };
       reader.readAsDataURL(file);
+
+      // Reset clear input if a new file is chosen and update button text
+      const clearInput = document.getElementById('clear_avatar_input');
+      if (clearInput) {
+        clearInput.value = '0';
+      }
+      const changeBtn = document.getElementById('btn-change-avatar');
+      if (changeBtn) {
+        changeBtn.innerText = 'Change Photo';
+      }
+      const clearBtn = document.getElementById('btn-clear-avatar');
+      if (clearBtn) {
+        clearBtn.style.display = 'inline-block';
+        clearBtn.disabled = false;
+        clearBtn.style.opacity = '1';
+        clearBtn.innerText = 'Clear Photo';
+      }
     });
+
+    // Click on Change Photo button triggers file chooser
+    const changeBtn = document.getElementById('btn-change-avatar');
+    if (changeBtn) {
+      changeBtn.addEventListener('click', function () {
+        avatarInput.click();
+      });
+    }
+
+    // Click on Clear Photo button clears selection and resets preview
+    const clearBtn = document.getElementById('btn-clear-avatar');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function () {
+        avatarInput.value = '';
+        const defaultSrc = avatarPreview.getAttribute('data-default-src') || '/static/images/default-avatar.svg';
+        avatarPreview.src = defaultSrc;
+        const clearInput = document.getElementById('clear_avatar_input');
+        if (clearInput) {
+          clearInput.value = '1';
+        }
+        clearBtn.style.display = 'none';
+      });
+    }
 
     // Click on the upload area triggers the hidden file input
     const uploadArea = document.getElementById('avatar-upload-area');
