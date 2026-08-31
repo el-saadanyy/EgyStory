@@ -13,8 +13,7 @@ build/
 .env.local
 *.env
 
-# Django Database & Media
-db.sqlite3
+# Django Media & Journals
 db.sqlite3-journal
 media/
 
