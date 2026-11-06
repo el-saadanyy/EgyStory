@@ -255,30 +255,137 @@ Navigate to `http://127.0.0.1:8000/` in your browser.
 
 ## Environment Variables
 
-| Variable | Description | Example / Default (Placeholders) |
+| Variable | Description | Example / Default |
 |---|---|---|
-| `SECRET_KEY` | Django cryptographic secret key | `your-secret-key` |
-| `DEBUG` | Django debug mode toggle | `True` / `False` |
-| `DB_NAME` | PostgreSQL database name (if using Postgres) | `egystory` |
-| `DB_USER` | PostgreSQL database username | `your-database-username` |
-| `DB_PASSWORD` | PostgreSQL database password | `your-database-password` |
-| `DB_HOST` | PostgreSQL host address | `localhost` |
-| `DB_PORT` | PostgreSQL port | `5432` |
-| `GEMINI_API_KEY` | Google Gemini API key for Chatbot Assistant | `your-gemini-api-key` |
-| `EMAIL_HOST` | SMTP server host address | `smtp.gmail.com` |
-| `EMAIL_PORT` | SMTP server port | `587` |
-| `EMAIL_HOST_USER` | SMTP authentication email username | `your-email@example.com` |
-| `EMAIL_HOST_PASSWORD` | SMTP authentication password / App password | `your-email-app-password` |
+| `SECRET_KEY` | Cryptographic signing key (must be long and random in production) | `replace-with-a-secure-random-secret-key` |
+| `DEBUG` | Django debug mode toggle (must be `False` in production) | `False` |
+| `ALLOWED_HOSTS` | Comma-separated list of permitted hostnames | `localhost,127.0.0.1,0.0.0.0,.onrender.com` |
+| `CSRF_TRUSTED_ORIGINS` | Comma-separated list of trusted origins for CSRF | `http://localhost:8000,https://*.onrender.com` |
+| `PORT` | Web server listening port (dynamically set by Render) | `8000` (defaults to 8000 if unset) |
+| `GUNICORN_WORKERS` | Gunicorn worker process count (optimized for 512 MB RAM) | `2` |
+| `GUNICORN_THREADS` | Gunicorn threads per worker | `2` |
+| `DATABASE_URL` | PostgreSQL connection URL with optional SSL mode | `postgresql://user:pass@host:5432/db?sslmode=require` |
+| `DB_CONN_MAX_AGE` | Persistent database connection lifetime in seconds | `60` |
+| `DB_SSL_REQUIRE` | Enforce SSL for PostgreSQL connection | `True` |
+| `USE_S3` | Enable Cloud Object Storage (S3 / Cloudflare R2 / MinIO) | `False` / `True` |
+| `AWS_STORAGE_BUCKET_NAME` | S3 / R2 bucket name | `egystory-media` |
+| `AWS_ACCESS_KEY_ID` | Storage access key ID | `your-access-key-id` |
+| `AWS_SECRET_ACCESS_KEY` | Storage secret access key | `your-secret-access-key` |
+| `AWS_S3_REGION_NAME` | Cloud storage region name | `auto` / `us-east-1` |
+| `AWS_S3_ENDPOINT_URL` | S3 API endpoint URL (for Cloudflare R2 or MinIO) | `https://<account-id>.r2.cloudflarestorage.com` |
+| `AWS_S3_CUSTOM_DOMAIN` | Custom CDN domain for media files (optional) | `cdn.example.com` |
+| `RESEND_API_KEY` | API Key for Resend HTTP Email API (Bypasses Render Free SMTP block) | `re_123456...` |
+| `BREVO_API_KEY` | API Key for Brevo HTTP Email API (Alternative HTTP email API) | `xkeysib-...` |
+| `EMAIL_HOST` | Traditional SMTP server host (local / unrestricted servers only) | `smtp.gmail.com` |
+| `EMAIL_PORT` | SMTP port | `587` |
+| `EMAIL_HOST_USER` | SMTP username | `your-email@example.com` |
+| `EMAIL_HOST_PASSWORD` | SMTP password / App password | `your-app-password` |
 | `EMAIL_USE_TLS` | SMTP TLS encryption toggle | `True` |
-| `DEFAULT_FROM_EMAIL` | Default sender email address | `noreply@egystory.com` |
+| `DEFAULT_FROM_EMAIL` | Default sender email address (temporary Resend testing sender) | `onboarding@resend.dev` |
+| `INIT_DEMO_ACCOUNTS` | Automatically initialize Demo User & Reviewer on container start | `true` |
+| `DEMO_USER_EMAIL` | Email for portfolio demo visitor account | `demo@egystory.com` |
+| `DEMO_USER_PASSWORD` | Password for demo visitor account (required via environment) | `<set-via-environment>` |
+| `DEMO_REVIEWER_EMAIL` | Email for restricted portfolio reviewer account | `reviewer@egystory.com` |
+| `DEMO_REVIEWER_PASSWORD` | Password for demo reviewer account (required via environment) | `<set-via-environment>` |
+| `GEMINI_API_KEY` | Google Gemini API key for Chatbot Assistant | `your-gemini-api-key` |
+
+---
+
+## Production & Portfolio Demo Deployment
+
+EgyStory is architected to deploy smoothly on **Render Free Web Service** using **Docker**, with external PostgreSQL and Cloud Object Storage.
+
+### Target Architecture
+
+```mermaid
+flowchart LR
+    Browser["Client Browser"] -->|HTTPS / 443| RenderEdge["Render Reverse Proxy / Edge"]
+    RenderEdge -->|Dynamic $PORT| Gunicorn["Gunicorn (2 Workers, 2 Threads)<br/>512 MB RAM Safe"]
+    Gunicorn --> Django["Django 5 Backend<br/>(WhiteNoise Static)"]
+    
+    Django -->|SSL / Pooler| ExtPostgres[("External PostgreSQL<br/>(Neon / Supabase / Render)")]
+    Django -->|Permanent Assets| SeedMedia["demo_media/<br/>Permanent Campaign Assets"]
+    Django -->|New Uploads| CloudStorage[("Cloud Object Storage<br/>(Cloudflare R2 / AWS S3)")]
+    Django -->|HTTPS REST / Port 443| EmailAPI["Resend / Brevo HTTP API<br/>(Bypasses SMTP Block)"]
+```
+
+### 1. Render Free Resource & Network Constraints
+- **Memory Limit (512 MB RAM):** Gunicorn is configured with `--workers 2 --threads 2 --max-requests 500 --max-requests-jitter 50`. This prevents memory leaks and ensures low memory footprint under concurrency.
+- **Dynamic Port Assignment:** Render assigns an ephemeral port via `$PORT`. The `entrypoint.sh` and Dockerfile dynamically bind Gunicorn to `0.0.0.0:${PORT:-8000}`.
+- **Outbound SMTP Blocking:** Render Free tier blocks outbound traffic on SMTP ports 25, 465, and 587. EgyStory integrates **Resend** via HTTPS REST calls (port 443) using `onboarding@resend.dev` as the default sender. No custom domain or DNS configuration is required. Note: in Resend's free testing mode, emails are delivered exclusively to the verified account owner's email address.
+- **Media Persistence:** Permanent demo campaign assets are housed in `demo_media/` and automatically seeded on container startup via `python manage.py sync_demo_media`. New user uploads in the container are temporary until persistent external object storage is configured. Cloud storage (AWS S3 / Cloudflare R2) is fully prepared in code and can be connected by setting `USE_S3=True` and bucket credentials without rebuilding.
+
+### 2. Step-by-Step Render Deployment
+1. **Push Code to GitHub:**
+   Ensure repository contains all code and `demo_media/`.
+2. **Create Web Service on Render:**
+   - Go to [dashboard.render.com](https://dashboard.render.com).
+   - Click **New +** -> **Web Service**.
+   - Select your GitHub repository (`EgyStory`).
+   - Choose **Docker** as the Runtime.
+   - Select the **Free** instance type.
+3. **Configure Environment Variables in Render Dashboard:**
+   Add the following in the Environment tab:
+   - `DEBUG`: `False`
+   - `SECRET_KEY`: `<generate-a-strong-random-key>`
+   - `ALLOWED_HOSTS`: `localhost,127.0.0.1,0.0.0.0,.onrender.com`
+   - `CSRF_TRUSTED_ORIGINS`: `https://*.onrender.com`
+   - `DATABASE_URL`: `<your-external-postgresql-url-with-sslmode=require>`
+   - `INIT_DEMO_ACCOUNTS`: `true`
+   - `DEMO_USER_PASSWORD`: `<your-secure-demo-password>`
+   - `DEMO_REVIEWER_PASSWORD`: `<your-secure-reviewer-password>`
+   - `RESEND_API_KEY`: `<your-resend-api-key>` (or `BREVO_API_KEY`)
+   - `DEFAULT_FROM_EMAIL`: `onboarding@resend.dev` (or your verified domain sender)
+   - `GEMINI_API_KEY`: `<your-google-gemini-api-key>`
+   - *(Optional S3/R2)*: `USE_S3=True`, `AWS_STORAGE_BUCKET_NAME=...`, `AWS_ACCESS_KEY_ID=...`, `AWS_SECRET_ACCESS_KEY=...`, `AWS_S3_ENDPOINT_URL=...`
+4. **Deploy Service:**
+   Render triggers the Docker build. On container startup, `entrypoint.sh` automatically:
+   - Runs database migrations (`migrate --noinput`).
+   - Synchronizes permanent demo media (`sync_demo_media`).
+   - Collects compressed and hashed static files (`collectstatic --noinput`).
+   - Idempotently creates demo visitor and reviewer accounts (`setup_demo_accounts`).
+   - Launches Gunicorn listening on `$PORT`.
+
+### 3. Demo Accounts & Recruiter Access
+EgyStory includes a dedicated idempotent management command `setup_demo_accounts`:
+```bash
+python manage.py setup_demo_accounts --user-password="YourUserPassword" --reviewer-password="YourReviewerPassword"
+```
+- **Environment Driven:** `DEMO_USER_PASSWORD` and `DEMO_REVIEWER_PASSWORD` must be supplied via environment variables. If passwords are not set, account creation is safely skipped with a console warning.
+- **Demo User (`demo@egystory.com`):** Standard active user (`is_staff=False`, `is_superuser=False`). Recruiters can explore campaign creation, simulated donations, comment threads, ratings, and profile settings without administrative permissions.
+- **Demo Reviewer (`reviewer@egystory.com`):** Staff account (`is_staff=True`, `is_superuser=False`). Recruiters can access the custom Admin Panel (`/admin-panel/`) to review pending campaigns, view platform analytics, inspect user lists, and explore moderation features.
+- **Administrative Safety:** Superuser rights (`is_superuser=True`) are **never** granted to demo accounts. Destructive actions (`@superuser_required`: admin account creation, staff status toggling, staff deletion, force password resets) are strictly forbidden and return HTTP 403.
+
+### 4. Media Storage & Asset Seeding
+- **Permanent Demo Media:** Housed in `demo_media/` and tracked in Git. Contains the original demo campaign cover images and sample profile pictures.
+- **Sync Command (`sync_demo_media`):** Storage-agnostic Django management command that reads `demo_media/` and writes missing files to `default_storage`. Works identically whether using local storage or S3/Cloudflare R2.
+- **Upload Lifecycle:** User uploads created during demo testing are temporary on the container filesystem. When persistent cloud object storage is ready, configure `USE_S3=True` and bucket credentials.
+
+### 5. Running with Docker Locally
+To build and test the production Docker container locally:
+```bash
+# Build the Docker image
+docker build -t egystory:demo .
+
+# Run the container locally on port 8000 with local SQLite fallback
+docker run -p 8000:8000 \
+  -e PORT=8000 \
+  -e DEBUG=True \
+  -e SECRET_KEY="local-demo-secret-key" \
+  -e INIT_DEMO_ACCOUNTS=true \
+  -e DEMO_USER_PASSWORD="YourDemoPassword" \
+  -e DEMO_REVIEWER_PASSWORD="YourReviewerPassword" \
+  egystory:demo
+```
+Navigate to `http://localhost:8000/`.
 
 ---
 
 ## Database & Demo Data
 
-- **SQLite Database (`db.sqlite3`):** The repository includes a populated SQLite database file tracked in version control for immediate demonstration and portfolio review.
-- **Fixture Dataset (`fixtures/dev_data.json`):** A standalone JSON fixture containing categories, tags, demo users, sample campaigns across different lifecycle states, ratings, and donation records.
-- **Note on Production:** The tracked SQLite database is intended for local demonstration. For production environments, configure PostgreSQL via the environment variables listed above.
+- **SQLite Database (`db.sqlite3`):** The repository includes a populated SQLite database file for local demonstration.
+- **Fixture Dataset (`fixtures/dev_data.json`):** Standalone JSON fixture containing sample categories, tags, demo campaigns across all lifecycle states, ratings, and simulated donations.
+- **PostgreSQL Compatibility:** Migrations, model field types, connection persistence (`DB_CONN_MAX_AGE`), and health checks (`CONN_HEALTH_CHECKS`) are fully compatible with PostgreSQL. Connection URLs support URI-encoded credentials and `?sslmode=require`.
 
 ---
 
@@ -305,7 +412,7 @@ python manage.py import_campaign handoff/campaign_<ID>_handoff.zip
 
 ## Testing
 
-The project includes an automated test suite covering authentication, campaign logic, administrative permissions, and the AI chatbot service.
+The project includes an automated test suite covering authentication, campaign logic, administrative permissions, demo initialization, and the AI chatbot service.
 
 ```bash
 # Run the entire test suite
@@ -313,9 +420,11 @@ python manage.py test
 ```
 
 ### Verified Test Scope
-- **30 Total Test Classes** across the project:
+- **184 Total Unit Tests** across 33 test classes:
   - `accounts/tests.py` (3 test classes): Registration flow, OTP validation, token expiration, profile field validation (birthdate/Facebook URL), password-confirmed deletion.
+  - `accounts/test_deployment_demo.py` (2 test classes): Idempotent demo account initialization, non-superuser role enforcement, Resend HTTP API email backend, Brevo HTTP API email backend.
   - `campaigns/tests.py` & `campaigns/test_bug.py` (19 test classes): Multi-factor urgency calculations, donation balance triggers, category/tag assignments, multi-image galleries, star ratings, similar campaign matcher, creator cancellation rules (<25%), search autocomplete, nested comments, and owner story management.
+  - `campaigns/test_demo_media.py` (1 test class): Permanent demo media synchronization to target storage backend.
   - `administration/tests.py` (7 test classes): Staff user management, superuser admin CRUD, moderation queue actions, manual Critical overrides, tag management, and completed campaign deletion.
   - `chatbot/tests.py` (1 test class): Context search grounding, recommendations, character length enforcement, session history persistence, and API error handling.
 
@@ -323,12 +432,11 @@ python manage.py test
 
 ## Security Highlights
 
-- **Decoupled Secrets:** Sensitive keys, database passwords, and SMTP credentials are read from `.env` via `python-decouple`.
-- **CSRF Protection:** Django CSRF middleware is active across all standard forms and AJAX Fetch requests.
-- **Password Security:** Password hashing using Django's default PBKDF2 implementation; account deletion requires active password re-verification.
-- **OTP Account Verification:** Inactive accounts cannot log in until verified via a 6-digit email OTP.
-- **Ownership Verification:** Server-side checks verify that only the campaign owner can edit the campaign story, publish milestone updates, or cancel eligible campaigns.
-- **Role-Based Admin Protection:** Custom `@admin_required` (staff) and `@superuser_required` (superuser) view decorators protect all administration routes.
+- **Decoupled Secrets:** Sensitive keys, database passwords, and API credentials are read from environment variables via `python-decouple`.
+- **Production Headers & SSL:** When `DEBUG=False`, `SESSION_COOKIE_SECURE`, `CSRF_COOKIE_SECURE`, and `SECURE_PROXY_SSL_HEADER` are automatically enforced.
+- **CSRF Protection:** Django CSRF middleware is active across all standard forms and AJAX Fetch requests with configurable `CSRF_TRUSTED_ORIGINS`.
+- **Safe Administrative RBAC:** Clear privilege tiering between normal users, staff (`is_staff=True`), and superusers (`is_superuser=True`). Demo reviewer accounts are prevented from executing destructive operations.
+- **OTP Account Verification:** Inactive accounts cannot log in until verified via a 6-digit email OTP; OTP tokens are never leaked to public JSON or UI responses.
 - **File Upload Restrictions:** Image uploads enforce size limits (<= 5MB) and MIME type checks.
 - **Archive Extraction Security:** The campaign import tool validates ZIP paths against directory traversal sequences (`..`).
 
