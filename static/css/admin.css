@@ -328,17 +328,29 @@
   width: 100%;
   box-sizing: border-box;
   overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(228, 192, 113, 0.4) transparent;
   -webkit-overflow-scrolling: touch;
 }
 
 .admin-users-table-wrapper::-webkit-scrollbar,
 .table-wrap::-webkit-scrollbar,
 .admin-card > div[style*="overflow-x"]::-webkit-scrollbar {
-  display: none;
-  height: 0;
-  width: 0;
+  height: 5px;
+  width: 5px;
+}
+
+.admin-users-table-wrapper::-webkit-scrollbar-track,
+.table-wrap::-webkit-scrollbar-track,
+.admin-card > div[style*="overflow-x"]::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-users-table-wrapper::-webkit-scrollbar-thumb,
+.table-wrap::-webkit-scrollbar-thumb,
+.admin-card > div[style*="overflow-x"]::-webkit-scrollbar-thumb {
+  background: rgba(228, 192, 113, 0.35);
+  border-radius: 4px;
 }
 
 .admin-users-table,

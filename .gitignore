@@ -13,9 +13,15 @@ build/
 .env.local
 *.env
 
-# Django Media & Journals
+# Django Media, Static & Journals
 db.sqlite3-journal
 media/
+staticfiles/
+
+# Database Backups & Local Scratch Files
+*.backup
+*.bak
+test_form.py
 
 # IDEs & Editors
 .vscode/

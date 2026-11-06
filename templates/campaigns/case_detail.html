@@ -82,10 +82,10 @@
 
   <!-- ── Main Content ─────────────────────────────────────────── -->
   <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 24px 20px 0;">
-    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px; align-items: start;">
+    <div class="case-detail-layout-grid">
       
       <!-- Main Content Column -->
-      <div style="grid-column: span 1;">
+      <div style="min-width: 0;">
         
         <!-- Media Gallery Slider Container (Feature #10) -->
         <div class="slider-container" style="position: relative; width: 100%; height: 420px; background: #000; border-radius: var(--radius-xl); overflow: hidden; margin-bottom: 32px; border: 1px solid var(--color-border); box-shadow: var(--shadow-md);">
@@ -352,8 +352,8 @@
       </div>
 
       <!-- Sidebar / Action Card -->
-      <div>
-        <div style="background: linear-gradient(135deg, rgba(38,36,30,0.95) 0%, rgba(24,23,20,0.99) 100%); padding: 32px; border-radius: var(--radius-xl); border: 1px solid rgba(228,192,113,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(228,192,113,0.2); position: sticky; top: calc(var(--navbar-height) + 24px); overflow: hidden;">
+      <div style="min-width: 0;">
+        <div class="case-detail-sidebar-card" style="background: linear-gradient(135deg, rgba(38,36,30,0.95) 0%, rgba(24,23,20,0.99) 100%); padding: 32px; border-radius: var(--radius-xl); border: 1px solid rgba(228,192,113,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(228,192,113,0.2); position: sticky; top: calc(var(--navbar-height) + 24px); overflow: hidden;">
           <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071 50%, transparent);" aria-hidden="true"></div>
           
           <!-- Amount Raised -->
@@ -607,6 +607,29 @@
 </script>
 
 <style>
+  /* ── Responsive Layout Grid for Case Detail ────────────────────── */
+  .case-detail-layout-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    align-items: start;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  @media (max-width: 860px) {
+    .case-detail-layout-grid {
+      grid-template-columns: 1fr !important;
+      gap: 28px !important;
+    }
+    .case-detail-sidebar-card {
+      position: static !important;
+      padding: 24px 18px !important;
+    }
+    .slider-container {
+      height: clamp(240px, 52vw, 360px) !important;
+    }
+  }
+
   /* ── Light Mode Specific Overrides for Case Detail ────────────── */
   [data-theme="light"] div[style*="linear-gradient(160deg, #111009"] {
     background: linear-gradient(145deg, #FAF7EE 0%, #F5EBD4 60%, #EADBBA 100%) !important;

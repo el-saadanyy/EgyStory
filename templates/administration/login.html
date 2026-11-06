@@ -14,14 +14,31 @@
   <link rel="stylesheet" href="{% static 'css/components.css' %}?v=131.0">
   <link rel="stylesheet" href="{% static 'css/admin.css' %}?v=235.0">
   <link rel="stylesheet" href="{% static 'css/auth.css' %}?v=131.0">
+  <style>
+    .admin-login-glow {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 600px;
+      height: 350px;
+      background: radial-gradient(ellipse at center, rgba(228, 192, 113, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    @media (max-width: 480px) {
+      .admin-login-page { padding: 16px 12px !important; }
+      .admin-login-card { padding: 32px 20px !important; border-radius: 20px !important; }
+    }
+  </style>
 </head>
 <body style="background-color: #11100E; min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow-x: hidden; font-family: var(--font-sans);">
 
 <!-- Ambient gold glow -->
-<div style="position: absolute; top: 10%; left: 50%; transform: translateX(-50%); width: 600px; height: 350px; background: radial-gradient(ellipse at center, rgba(228, 192, 113, 0.12) 0%, transparent 70%); pointer-events: none;" aria-hidden="true"></div>
+<div class="admin-login-glow" aria-hidden="true"></div>
 
 <div class="admin-login-page" style="width: 100%; max-width: 460px; padding: 24px; position: relative; z-index: 10;">
-  <div class="admin-card" style="padding: 40px 36px; border-radius: 28px !important; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(228, 192, 113, 0.2);">
+  <div class="admin-card admin-login-card" style="padding: 40px 36px; border-radius: 28px !important; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(228, 192, 113, 0.2);">
 
     <div style="text-align: center; margin-bottom: 32px;">
       <a href="{% url 'home' %}" style="display: inline-block; margin-bottom: 16px;">

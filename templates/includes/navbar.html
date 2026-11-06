@@ -12,16 +12,16 @@
       <!-- Desktop nav links -->
       <ul class="navbar-nav" role="list">
         <li><a href="{% url 'home' %}" class="nav-link nav-link-home {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
-        <li><a href="{% url 'campaigns:case_list' %}" class="nav-link {% if 'cases' in request.path and 'donate' not in request.path %}active{% endif %}">Cases</a></li>
+        <li><a href="{% url 'campaigns:case_list' %}" class="nav-link nav-link-cases {% if request.resolver_match.app_name == 'campaigns' and request.resolver_match.url_name != 'donate_general' and request.resolver_match.url_name != 'donate' and request.resolver_match.url_name != 'case_create' and request.GET.q is None %}active{% endif %}">Cases</a></li>
         <li><a href="{% if request.resolver_match.url_name == 'home' %}#about{% else %}{% url 'home' %}#about{% endif %}" class="nav-link nav-link-about">About</a></li>
-        <li><a href="{% url 'campaigns:case_list' %}?q=" class="nav-link" aria-label="Search">Search</a></li>
+        <li><a href="{% url 'campaigns:case_list' %}?q=" class="nav-link nav-link-search {% if request.resolver_match.url_name == 'case_list' and request.GET.q is not None %}active{% endif %}" aria-label="Search">Search</a></li>
       </ul>
 
       <!-- Desktop actions -->
       <div class="navbar-actions">
         {% if user.is_authenticated %}
-          <a href="{% url 'campaigns:donate_general' %}" class="btn btn-outline btn-sm" style="margin-right: var(--space-3);">Donate</a>
-          <a href="{% url 'campaigns:case_create' %}" class="btn btn-primary btn-sm" style="margin-right: var(--space-4);">Start a Story</a>
+          <a href="{% url 'campaigns:donate_general' %}" class="btn btn-outline btn-sm nav-action-donate {% if request.resolver_match.url_name == 'donate_general' or request.resolver_match.url_name == 'donate' %}active{% endif %}" style="margin-right: var(--space-3);">Donate</a>
+          <a href="{% url 'campaigns:case_create' %}" class="btn btn-primary btn-sm nav-action-story {% if request.resolver_match.url_name == 'case_create' %}active{% endif %}" style="margin-right: var(--space-4);">Start a Story</a>
           <div class="user-menu" id="user-menu">
             <button class="user-menu-trigger" id="user-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="user-menu-dropdown">
               {% if user.profile_picture %}
@@ -60,9 +60,9 @@
             </div>
           </div>
         {% else %}
-          <a href="{% url 'campaigns:donate_general' %}" class="btn btn-outline btn-sm" style="margin-right: var(--space-3);">Donate</a>
-          <a href="{% url 'login' %}" class="btn btn-ghost btn-sm" style="margin-right: var(--space-2);">Login</a>
-          <a href="{% url 'register' %}?next={% url 'campaigns:case_create' %}" class="btn btn-primary btn-sm">Start a Story</a>
+          <a href="{% url 'campaigns:donate_general' %}" class="btn btn-outline btn-sm nav-action-donate {% if request.resolver_match.url_name == 'donate_general' or request.resolver_match.url_name == 'donate' %}active{% endif %}" style="margin-right: var(--space-3);">Donate</a>
+          <a href="{% url 'login' %}" class="btn btn-ghost btn-sm nav-action-login {% if request.resolver_match.url_name == 'login' and not request.GET.next %}active{% elif request.resolver_match.url_name == 'login' and 'new' not in request.GET.next %}active{% endif %}" style="margin-right: var(--space-2);">Login</a>
+          <a href="{% url 'register' %}?next={% url 'campaigns:case_create' %}" class="btn btn-primary btn-sm nav-action-story {% if request.resolver_match.url_name == 'case_create' or 'new' in request.GET.next %}active{% endif %}">Start a Story</a>
         {% endif %}
         <!-- Theme Toggle Button -->
         <button type="button" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle theme">
@@ -87,20 +87,24 @@
   <!-- Mobile nav -->
   <div class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Mobile navigation">
     <a href="{% url 'home' %}" class="nav-link nav-link-home {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
-    <a href="{% url 'campaigns:case_list' %}" class="nav-link {% if 'cases' in request.path and 'donate' not in request.path %}active{% endif %}">Cases</a>
+    <a href="{% url 'campaigns:case_list' %}" class="nav-link nav-link-cases {% if request.resolver_match.app_name == 'campaigns' and request.resolver_match.url_name != 'donate_general' and request.resolver_match.url_name != 'donate' and request.resolver_match.url_name != 'case_create' and request.GET.q is None %}active{% endif %}">Cases</a>
     <a href="{% if request.resolver_match.url_name == 'home' %}#about{% else %}{% url 'home' %}#about{% endif %}" class="nav-link nav-link-about">About</a>
+    <a href="{% url 'campaigns:case_list' %}?q=" class="nav-link nav-link-search {% if request.resolver_match.url_name == 'case_list' and request.GET.q is not None %}active{% endif %}">Search</a>
     {% if user.is_authenticated %}
-      <a href="{% url 'campaigns:donate_general' %}" class="nav-link" style="font-weight: bold;">Donate</a>
-      <a href="{% url 'campaigns:case_create' %}" class="nav-link" style="font-weight: bold;">Start a Story</a>
-      <a href="{% url 'profile' %}" class="nav-link">My Profile</a>
+      <a href="{% url 'campaigns:donate_general' %}" class="nav-link nav-link-donate {% if request.resolver_match.url_name == 'donate_general' or request.resolver_match.url_name == 'donate' %}active{% endif %}" style="font-weight: bold;">Donate</a>
+      <a href="{% url 'campaigns:case_create' %}" class="nav-link nav-link-story {% if request.resolver_match.url_name == 'case_create' %}active{% endif %}" style="font-weight: bold;">Start a Story</a>
+      <a href="{% url 'profile' %}" class="nav-link nav-link-profile {% if request.resolver_match.url_name == 'profile' or request.resolver_match.url_name == 'profile_edit' %}active{% endif %}">My Profile</a>
+      {% if user.is_staff %}
+        <a href="{% url 'admin_dashboard' %}" class="nav-link nav-link-admin {% if request.resolver_match.app_name == 'administration' or 'admin' in request.resolver_match.url_name %}active{% endif %}" style="color: var(--color-primary); font-weight: 700;">Admin Dashboard</a>
+      {% endif %}
       <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-ghost btn-sm" style="width:100%; justify-content:flex-start; color: var(--color-danger); padding-left: 20px;">Sign Out</button>
       </form>
     {% else %}
-      <a href="{% url 'campaigns:donate_general' %}" class="nav-link" style="font-weight: bold;">Donate</a>
-      <a href="{% url 'login' %}" class="nav-link">Login</a>
-      <a href="{% url 'register' %}?next={% url 'campaigns:case_create' %}" class="nav-link" style="font-weight: bold;">Start a Story</a>
+      <a href="{% url 'campaigns:donate_general' %}" class="nav-link nav-link-donate {% if request.resolver_match.url_name == 'donate_general' or request.resolver_match.url_name == 'donate' %}active{% endif %}" style="font-weight: bold;">Donate</a>
+      <a href="{% url 'login' %}" class="nav-link nav-link-login {% if request.resolver_match.url_name == 'login' and not request.GET.next %}active{% elif request.resolver_match.url_name == 'login' and 'new' not in request.GET.next %}active{% endif %}">Login</a>
+      <a href="{% url 'register' %}?next={% url 'campaigns:case_create' %}" class="nav-link nav-link-story {% if request.resolver_match.url_name == 'case_create' or 'new' in request.GET.next %}active{% endif %}" style="font-weight: bold;">Start a Story</a>
     {% endif %}
     
     <div style="padding: 12px 20px; border-top: 1px solid var(--color-border); margin-top: 8px; display: flex; align-items: center; justify-content: space-between;">

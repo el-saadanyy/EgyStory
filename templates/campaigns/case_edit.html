@@ -77,6 +77,23 @@
   box-shadow: 0 0 0 3.5px rgba(228, 192, 113, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.04) !important;
   outline: none !important;
 }
+
+/* ── Responsive Rules for Case Edit ────────────────────────── */
+.case-edit-image-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 640px) {
+  .case-edit-card {
+    padding: 20px 16px !important;
+  }
+  .case-edit-image-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
 </style>
 
 <main style="background-color: var(--color-bg); min-height: calc(100vh - var(--navbar-height)); padding-top: 40px; padding-bottom: 80px; position: relative;">
@@ -167,7 +184,7 @@
           <span class="badge" style="background: rgba(228, 192, 113, 0.12); color: var(--color-primary); border: 1px solid rgba(228, 192, 113, 0.25); font-size: 11.5px; padding: 4px 10px; border-radius: var(--radius-full);">Image Replacement</span>
         </div>
 
-        <div style="display: grid; grid-template-columns: 240px 1fr; gap: 24px; align-items: start;">
+        <div class="case-edit-image-grid">
           <!-- Current Image Preview -->
           <div>
             <div style="font-size: 12.5px; font-weight: 700; color: var(--color-text-muted); margin-bottom: 8px; text-transform: uppercase;">Current Cover</div>

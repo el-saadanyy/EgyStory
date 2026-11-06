@@ -232,6 +232,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
   transition:
     background-color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
     color 0.45s cubic-bezier(0.25, 1, 0.5, 1),
@@ -399,17 +400,17 @@ body,
 [data-theme="light"] h2[style*="color: white"],
 [data-theme="light"] h3[style*="color: #FFFFFF"],
 [data-theme="light"] h3[style*="color: white"],
-[data-theme="light"] strong[style*="color: #FFFFFF"],
-[data-theme="light"] strong[style*="color: white"],
-[data-theme="light"] div[style*="color: #FFFFFF"],
-[data-theme="light"] div[style*="color: white"],
+[data-theme="light"] h4[style*="color: #FFFFFF"],
+[data-theme="light"] h4[style*="color: white"] {
+  color: var(--color-text-primary) !important;
+  text-shadow: none !important;
+}
+
 [data-theme="light"] h1,
 [data-theme="light"] h2,
 [data-theme="light"] h3,
 [data-theme="light"] h4,
-[data-theme="light"] p,
-[data-theme="light"] span,
-[data-theme="light"] [style*="text-shadow"] {
+[data-theme="light"] [style*="text-shadow"]:not(.btn):not(.badge) {
   text-shadow: none !important;
 }
 
