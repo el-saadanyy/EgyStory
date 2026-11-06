@@ -21,6 +21,8 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
     SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=0, cast=int)
+    # Required for Render / reverse proxy HTTPS termination
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 def _parse_list(val):
     if isinstance(val, (list, tuple)):
@@ -29,7 +31,7 @@ def _parse_list(val):
 
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS',
-    default='localhost,127.0.0.1,0.0.0.0,testserver,*.onrender.com,ranting-gliding-saffron.ngrok-free.dev',
+    default='localhost,127.0.0.1,0.0.0.0,testserver,.onrender.com,*.onrender.com,ranting-gliding-saffron.ngrok-free.dev',
     cast=_parse_list
 )
 
@@ -88,23 +90,39 @@ WSGI_APPLICATION = 'egystory.wsgi.application'
 
 # Database Configuration
 # Default: SQLite (preserves existing SQLite database and records)
-# PostgreSQL is enabled when DB_ENGINE=postgres or DATABASE_URL is configured
+# PostgreSQL is enabled when DATABASE_URL or DB_ENGINE=postgres is configured
 database_url = config('DATABASE_URL', default='').strip()
 db_engine = config('DB_ENGINE', default='').strip().lower()
+conn_max_age = config('DB_CONN_MAX_AGE', default=60, cast=int)
 
 if database_url:
     url = urllib.parse.urlparse(database_url)
+    qs = urllib.parse.parse_qs(url.query)
+    
+    db_options = {}
+    if 'sslmode' in qs:
+        db_options['sslmode'] = qs['sslmode'][0]
+    elif config('DB_SSL_REQUIRE', default=False, cast=bool):
+        db_options['sslmode'] = 'require'
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': url.path[1:],
-            'USER': url.username or '',
-            'PASSWORD': url.password or '',
+            'NAME': urllib.parse.unquote(url.path.lstrip('/')),
+            'USER': urllib.parse.unquote(url.username or ''),
+            'PASSWORD': urllib.parse.unquote(url.password or ''),
             'HOST': url.hostname or '',
             'PORT': url.port or 5432,
+            'CONN_MAX_AGE': conn_max_age,
+            'CONN_HEALTH_CHECKS': True,
+            'OPTIONS': db_options,
         }
     }
 elif db_engine in ('postgres', 'postgresql'):
+    db_options = {}
+    if config('DB_SSL_REQUIRE', default=False, cast=bool):
+        db_options['sslmode'] = 'require'
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -113,6 +131,9 @@ elif db_engine in ('postgres', 'postgresql'):
             'PASSWORD': config('DB_PASSWORD', default=''),
             'HOST': config('DB_HOST', default='localhost'),
             'PORT': config('DB_PORT', default='5432'),
+            'CONN_MAX_AGE': conn_max_age,
+            'CONN_HEALTH_CHECKS': True,
+            'OPTIONS': db_options,
         }
     }
 else:
@@ -146,15 +167,50 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files (user avatars, campaign covers, documents)
 MEDIA_URL = '/media/'
 media_custom_path = config('MEDIA_ROOT_PATH', default='').strip()
 MEDIA_ROOT = Path(media_custom_path) if media_custom_path else BASE_DIR / 'media'
+DEMO_MEDIA_ROOT = BASE_DIR / 'demo_media'
+
+# Storage Configuration (Django 4.2+ / 5.0+ standard STORAGES setting)
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME', default='').strip()
+USE_S3 = config('USE_S3', default=False, cast=bool) or bool(AWS_STORAGE_BUCKET_NAME)
+
+if USE_S3 and AWS_STORAGE_BUCKET_NAME:
+    AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default='').strip()
+    AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', default='').strip()
+    AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME', default='').strip()
+    AWS_S3_ENDPOINT_URL = config('AWS_S3_ENDPOINT_URL', default='').strip() or None
+    AWS_S3_CUSTOM_DOMAIN = config('AWS_S3_CUSTOM_DOMAIN', default='').strip() or None
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = False
+
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+
+# WhiteNoise: Prevent unmanifested static files from throwing 500 errors in production
+WHITENOISE_MANIFEST_STRICT = config('WHITENOISE_MANIFEST_STRICT', default=False, cast=bool)
+
 
 # Email settings
-# Configurable: real SMTP when credentials are provided, or console backend fallback
+# Configurable: HTTP email API (Resend/Brevo) for Render Free, real SMTP, or console backend fallback
 EMAIL_BACKEND_CONF = config('EMAIL_BACKEND', default='').strip()
 EMAIL_HOST = config('EMAIL_HOST', default='').strip()
 EMAIL_PORT = config('EMAIL_PORT', cast=int, default=587)
@@ -162,8 +218,15 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='').strip()
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='').strip()
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool, default=True)
 
+RESEND_API_KEY = config('RESEND_API_KEY', default='').strip()
+BREVO_API_KEY = config('BREVO_API_KEY', default='').strip()
+
 if EMAIL_BACKEND_CONF:
     EMAIL_BACKEND = EMAIL_BACKEND_CONF
+elif RESEND_API_KEY:
+    EMAIL_BACKEND = 'egystory.email_backends.ResendEmailBackend'
+elif BREVO_API_KEY:
+    EMAIL_BACKEND = 'egystory.email_backends.BrevoEmailBackend'
 elif EMAIL_HOST and EMAIL_HOST_PASSWORD:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 else:

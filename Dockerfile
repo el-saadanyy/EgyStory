@@ -20,11 +20,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files
 COPY . /app/
 
-# Create persistent storage and static directories
-RUN mkdir -p /data/media /app/staticfiles && chmod +x /app/entrypoint.sh
+# Create persistent storage, media, and static directories
+RUN mkdir -p /data/media /app/media /app/staticfiles && chmod +x /app/entrypoint.sh
 
 EXPOSE 8000
 
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["gunicorn", "egystory.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120"]
-
+CMD ["gunicorn"]
