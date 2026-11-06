@@ -5,23 +5,23 @@
 {% block meta_description %}Discover real stories from real people across Egypt. Find a campaign that touches your heart and help them reach their goal.{% endblock %}
 
 {% block content %}
-<main style="background-color: var(--color-bg); padding-bottom: 80px; min-height: calc(100vh - var(--navbar-height)); position: relative;">
+<main style="background-color: var(--color-bg); padding-bottom: 80px; min-height: calc(100vh - var(--navbar-height)); position: relative; overflow: hidden;">
 
   <!-- ── Hero Banner ────────────────────────────────────────────── -->
-  <div style="background: linear-gradient(135deg, #161512 0%, #2A2823 50%, #1C1B18 100%); border-bottom: 1px solid rgba(228, 192, 113, 0.22); padding: 56px 0 48px; margin-bottom: 40px; text-align: center; position: relative; overflow: hidden;">
+  <div class="cases-hero" style="background: linear-gradient(135deg, #161512 0%, #2A2823 50%, #1C1B18 100%); border-bottom: 1px solid rgba(228, 192, 113, 0.22); padding: 56px 0 48px; margin-bottom: 40px; text-align: center; position: relative; overflow: hidden;">
     <!-- Ambient Radial Glow -->
-    <div style="position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 700px; height: 350px; background: radial-gradient(ellipse at center, rgba(228, 192, 113, 0.12) 0%, transparent 70%); pointer-events: none;" aria-hidden="true"></div>
+    <div class="cases-hero-glow" style="position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 700px; height: 350px; background: radial-gradient(ellipse at center, rgba(228, 192, 113, 0.12) 0%, transparent 70%); pointer-events: none;" aria-hidden="true"></div>
 
     <div class="container" style="position: relative; z-index: 1;">
-      <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: var(--radius-full); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; background: rgba(228, 192, 113, 0.12); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.3); backdrop-filter: blur(6px);">
+      <div class="cases-hero-badge" style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: var(--radius-full); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; background: rgba(228, 192, 113, 0.12); color: #E4C071; border: 1px solid rgba(228, 192, 113, 0.3); backdrop-filter: blur(6px);">
         Verified Egyptian Campaigns • 100% Secure
       </div>
 
-      <h1 style="font-size: 42px; font-weight: 900; color: #FFFFFF; margin-bottom: 14px; letter-spacing: -0.8px; line-height: 1.15; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);">
-        Browse <span style="color: #E4C071;">Campaigns</span>
+      <h1 class="cases-hero-title" style="font-size: 42px; font-weight: 900; color: #FFFFFF; margin-bottom: 14px; letter-spacing: -0.8px; line-height: 1.15; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);">
+        Browse <span class="cases-hero-accent" style="color: #E4C071;">Campaigns</span>
       </h1>
 
-      <p style="color: #F5EDD5; font-size: 17px; max-width: 640px; margin: 0 auto; line-height: 1.65; opacity: 0.92; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);">
+      <p class="cases-hero-desc" style="color: #F5EDD5; font-size: 17px; max-width: 640px; margin: 0 auto; line-height: 1.65; opacity: 0.92; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);">
         Discover real stories from real people across Egypt. Find a campaign that touches your heart and help them reach their goal.
       </p>
     </div>
@@ -32,7 +32,7 @@
     <!-- ── Filter & Search Control Panel ───────────────────────── -->
     <div id="cases-control-panel" style="background: var(--color-surface); padding: 28px; border-radius: var(--radius-xl); box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35); border: 1px solid rgba(228, 192, 113, 0.2); margin-bottom: 36px; position: relative; backdrop-filter: blur(8px);">
       <!-- Subtle top decorative gold line -->
-      <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071, transparent); border-top-left-radius: var(--radius-xl); border-top-right-radius: var(--radius-xl);" aria-hidden="true"></div>
+      <div class="cases-control-panel-line" style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071, transparent); border-top-left-radius: var(--radius-xl); border-top-right-radius: var(--radius-xl);" aria-hidden="true"></div>
 
       <!-- Top Row: Search & Sort -->
       <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; margin-bottom: 24px;">
@@ -57,7 +57,7 @@
           <input type="hidden" name="q" value="{{ query|default:'' }}">
           {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
           {% if selected_tag %}<input type="hidden" name="tag" value="{{ selected_tag }}">{% endif %}
-          <label style="font-size: 14px; font-weight: 700; color: #E4C071; white-space: nowrap;">Sort by:</label>
+          <label class="cases-sort-label" style="font-size: 14px; font-weight: 700; color: #E4C071; white-space: nowrap;">Sort by:</label>
           <div style="position: relative; min-width: 190px;">
             <select name="sort" id="case-sort-select">
               <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Newest First</option>
@@ -71,9 +71,9 @@
       </div>
 
       <!-- Bottom Row: Filter Pills -->
-      <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 20px;">
+      <div class="cases-filter-row" style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 20px;">
         <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
-          <span style="font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px;">Status:</span>
+          <span class="cases-filter-label" style="font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px;">Status:</span>
 
           <!-- All -->
           <a href="?filter=all&sort={{ current_sort }}&q={{ query|default:'' }}" class="filter-pill {% if current_filter == 'all' and not selected_category and not selected_tag %}filter-pill--active-gold{% endif %}">
@@ -108,8 +108,8 @@
 
         <!-- Categories & Tags Row -->
         {% if categories or tags %}
-        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(255, 255, 255, 0.08);">
-          <span style="font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px;">Explore:</span>
+        <div class="cases-explore-row" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(255, 255, 255, 0.08);">
+          <span class="cases-filter-label" style="font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px;">Explore:</span>
           
           {% for cat in categories %}
             <a href="?filter={{ current_filter }}&sort={{ current_sort }}&q={{ query|default:'' }}&category={{ cat.slug }}" class="tag-chip {% if selected_category == cat.slug %}tag-chip--active{% endif %}">
@@ -260,15 +260,57 @@
   }
 
   /* ── Light Mode Specific Overrides ────────────────────────────── */
+  [data-theme="light"] .cases-hero {
+    background: radial-gradient(ellipse 75% 65% at 50% 10%, rgba(212, 168, 67, 0.18) 0%, rgba(250, 246, 238, 0.6) 50%, transparent 80%),
+                radial-gradient(circle at 85% 85%, rgba(228, 192, 113, 0.12) 0%, transparent 50%),
+                linear-gradient(145deg, #FCFAF6 0%, #F6EFE0 50%, #EFE5CD 100%) !important;
+    border-bottom: 1px solid rgba(184, 134, 11, 0.22) !important;
+  }
+  [data-theme="light"] .cases-hero-glow {
+    background: radial-gradient(ellipse at center, rgba(184, 134, 11, 0.15) 0%, transparent 70%) !important;
+  }
+  [data-theme="light"] .cases-hero-badge {
+    background: rgba(184, 134, 11, 0.12) !important;
+    color: #8C6200 !important;
+    border: 1.5px solid rgba(184, 134, 11, 0.35) !important;
+    box-shadow: 0 2px 8px rgba(184, 134, 11, 0.1) !important;
+  }
+  [data-theme="light"] .cases-hero-title {
+    color: #1A1916 !important;
+    text-shadow: none !important;
+  }
+  [data-theme="light"] .cases-hero-accent {
+    color: #B8860B !important;
+  }
+  [data-theme="light"] .cases-hero-desc {
+    color: #4A473F !important;
+    text-shadow: none !important;
+  }
   [data-theme="light"] #cases-control-panel {
-    background: linear-gradient(145deg, #FFFFFF 0%, #FAF8F2 100%) !important;
-    border: 1px solid rgba(184, 134, 11, 0.25) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+    background: linear-gradient(145deg, #FFFFFF 0%, #FAF6EE 50%, #F5EEDB 100%) !important;
+    border: 1.5px solid rgba(184, 134, 11, 0.28) !important;
+    box-shadow: 0 16px 40px rgba(184, 134, 11, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03), inset 0 1px 0 #FFFFFF !important;
+  }
+  [data-theme="light"] .cases-control-panel-line {
+    background: linear-gradient(90deg, transparent, #B8860B, transparent) !important;
+  }
+  [data-theme="light"] .cases-sort-label {
+    color: #8C6200 !important;
+  }
+  [data-theme="light"] .cases-filter-label {
+    color: #6B6555 !important;
+  }
+  [data-theme="light"] .cases-filter-row {
+    border-top: 1px solid rgba(184, 134, 11, 0.15) !important;
+  }
+  [data-theme="light"] .cases-explore-row {
+    border-top: 1px dashed rgba(184, 134, 11, 0.2) !important;
   }
   [data-theme="light"] #case-search-form input {
     background: #FFFFFF !important;
     color: #1A1916 !important;
-    border: 1.5px solid rgba(0, 0, 0, 0.12) !important;
+    border: 1.5px solid rgba(184, 134, 11, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
   }
   [data-theme="light"] #case-search-form input:focus {
     border-color: #B8860B !important;
@@ -277,41 +319,59 @@
   [data-theme="light"] .filter-pill {
     background: #FFFFFF;
     color: #4A473F;
-    border-color: rgba(0, 0, 0, 0.12);
+    border: 1.5px solid rgba(184, 134, 11, 0.22);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
   }
   [data-theme="light"] .filter-pill:hover {
     background: rgba(184, 134, 11, 0.1);
-    color: #B8860B;
+    color: #8C6200;
     border-color: #B8860B;
+    transform: translateY(-1px);
   }
   [data-theme="light"] .filter-pill--active-gold {
-    background: #B8860B !important;
+    background: linear-gradient(135deg, #D4A843 0%, #B8860B 100%) !important;
     color: #FFFFFF !important;
     border-color: #B8860B !important;
-    box-shadow: 0 4px 14px rgba(184, 134, 11, 0.3) !important;
+    box-shadow: 0 4px 14px rgba(184, 134, 11, 0.35) !important;
   }
   [data-theme="light"] .tag-chip {
     background: #FFFFFF;
     color: #4A473F;
-    border-color: rgba(184, 134, 11, 0.25);
+    border: 1.5px solid rgba(184, 134, 11, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
   }
   [data-theme="light"] .tag-chip:hover {
     background: rgba(184, 134, 11, 0.12);
-    color: #B8860B;
+    color: #8C6200;
+    border-color: #B8860B;
+    transform: translateY(-1px);
   }
   [data-theme="light"] .tag-chip--active {
-    background: #B8860B !important;
+    background: linear-gradient(135deg, #D4A843 0%, #B8860B 100%) !important;
     color: #FFFFFF !important;
+    border-color: #B8860B !important;
+    box-shadow: 0 4px 14px rgba(184, 134, 11, 0.35) !important;
   }
   [data-theme="light"] .empty-state {
     background: #FFFFFF !important;
-    border-color: rgba(184, 134, 11, 0.3) !important;
+    border: 1.5px solid rgba(184, 134, 11, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(184, 134, 11, 0.08) !important;
   }
   [data-theme="light"] .empty-state h2 {
     color: #1A1916 !important;
   }
   [data-theme="light"] .empty-state p {
     color: #4A473F !important;
+  }
+
+  @media (max-width: 640px) {
+    #cases-control-panel {
+      padding: 20px 14px !important;
+    }
+    #campaigns-grid-container {
+      grid-template-columns: 1fr !important;
+      gap: 20px !important;
+    }
   }
 </style>
 

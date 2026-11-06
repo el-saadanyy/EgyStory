@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: egystory_web
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=egystory-demo-docker-compose-secret-key-2026
+      - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,web
+      - CSRF_TRUSTED_ORIGINS=http://localhost:8000,http://127.0.0.1:8000
+      - DATABASE_PATH=/data/db.sqlite3
+      - MEDIA_ROOT_PATH=/data/media
+      - EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+    volumes:
+      - egystory_data:/data
+
+volumes:
+  egystory_data:
+    name: egystory_persistent_data
+

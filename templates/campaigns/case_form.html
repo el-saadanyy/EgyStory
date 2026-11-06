@@ -13,7 +13,7 @@
     <div style="background: linear-gradient(135deg, rgba(38, 36, 30, 0.90) 0%, rgba(24, 23, 20, 0.98) 100%); border-radius: 36px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(228, 192, 113, 0.25); overflow: hidden; border: 1px solid rgba(228, 192, 113, 0.32); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
       
       <!-- ── Header Area ─────────────────────────────────────────── -->
-      <div style="background: radial-gradient(ellipse 75% 65% at 85% 15%, rgba(228, 192, 113, 0.28) 0%, transparent 65%), radial-gradient(circle at 12% 85%, rgba(228, 192, 113, 0.14) 0%, transparent 50%), linear-gradient(135deg, #000000 0%, #181612 45%, rgba(228, 192, 113, 0.18) 78%, rgba(228, 192, 113, 0.38) 100%); border-bottom: 1px solid rgba(228, 192, 113, 0.28); color: white; padding: 52px 40px 44px; text-align: center; position: relative;">
+      <div class="case-form-header" style="background: radial-gradient(ellipse 75% 65% at 85% 15%, rgba(228, 192, 113, 0.28) 0%, transparent 65%), radial-gradient(circle at 12% 85%, rgba(228, 192, 113, 0.14) 0%, transparent 50%), linear-gradient(135deg, #000000 0%, #181612 45%, rgba(228, 192, 113, 0.18) 78%, rgba(228, 192, 113, 0.38) 100%); border-bottom: 1px solid rgba(228, 192, 113, 0.28); color: white; padding: 52px 40px 44px; text-align: center; position: relative;">
         <!-- Top glowing accent -->
         <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #E4C071 50%, transparent);" aria-hidden="true"></div>
 
@@ -21,16 +21,16 @@
           Community Crowdfunding
         </div>
 
-        <h1 style="font-size: 40px; font-weight: 900; margin-bottom: 14px; line-height: 1.15; text-shadow: 0 2px 12px rgba(0,0,0,0.7);">
+        <h1 style="font-size: clamp(26px, 5vw, 40px); font-weight: 900; margin-bottom: 14px; line-height: 1.15; text-shadow: 0 2px 12px rgba(0,0,0,0.7);">
           Start Your <span style="color: #E4C071;">Story</span>
         </h1>
-        <p style="color: #F5EDD5; font-size: 17px; max-width: 580px; margin: 0 auto; line-height: 1.65; opacity: 0.92; text-shadow: 0 1px 4px rgba(0,0,0,0.6);">
+        <p style="color: #F5EDD5; font-size: 16px; max-width: 580px; margin: 0 auto; line-height: 1.65; opacity: 0.92; text-shadow: 0 1px 4px rgba(0,0,0,0.6);">
           Create a campaign to get support. All campaigns are reviewed by our team to ensure trust and transparency before going live.
         </p>
       </div>
 
       <!-- ── Form Area ───────────────────────────────────────────── -->
-      <div style="padding: 48px 44px;">
+      <div class="case-form-body" style="padding: 48px 44px;">
         <form method="post" enctype="multipart/form-data" id="campaign-form">
           {% csrf_token %}
           
@@ -70,7 +70,7 @@
             <h3 style="font-size: 21px; font-weight: 800; color: #FFFFFF; margin: 0;">Funding &amp; Categorization</h3>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 28px;">
+          <div class="case-form-row-2col">
             <div class="form-group">
               <label class="form-label" for="{{ form.target_amount.id_for_label }}" style="font-size: 15px; font-weight: 700; color: #D9CFB8; margin-bottom: 8px; display: block;">Target Goal (EGP) <span style="color: #f87171;">*</span></label>
               {{ form.target_amount }}
@@ -287,6 +287,26 @@
     padding: 8px;
     color: #D9CFB8;
     cursor: pointer;
+  }
+
+  /* ── Responsive Rules for Campaign Form ───────────────────── */
+  .case-form-row-2col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 640px) {
+    .case-form-header {
+      padding: 32px 20px 28px !important;
+    }
+    .case-form-body {
+      padding: 28px 18px !important;
+    }
+    .case-form-row-2col {
+      grid-template-columns: 1fr !important;
+      gap: 16px !important;
+    }
   }
 
   /* ── Light Mode Form Overrides ────────────────────────────────── */

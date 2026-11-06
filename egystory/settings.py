@@ -3,15 +3,41 @@ Django settings for EgyStory project.
 """
 
 from pathlib import Path
+import os
+import urllib.parse
 from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-egystory-demo-default-key-2026')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# Production security headers when DEBUG is False
+if not DEBUG:
+    SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=True, cast=bool)
+    CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=True, cast=bool)
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
+    SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=0, cast=int)
+
+def _parse_list(val):
+    if isinstance(val, (list, tuple)):
+        return list(val)
+    return [x.strip() for x in str(val).split(',') if x.strip()]
+
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='localhost,127.0.0.1,0.0.0.0,testserver,*.onrender.com,ranting-gliding-saffron.ngrok-free.dev',
+    cast=_parse_list
+)
+
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS',
+    default='http://localhost:8000,http://127.0.0.1:8000,http://0.0.0.0:8000,https://*.onrender.com,https://ranting-gliding-saffron.ngrok-free.dev',
+    cast=_parse_list
+)
 
 # Application definition
 INSTALLED_APPS = [
@@ -31,6 +57,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -59,13 +86,44 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'egystory.wsgi.application'
 
-# Database — SQLite (local development)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Database Configuration
+# Default: SQLite (preserves existing SQLite database and records)
+# PostgreSQL is enabled when DB_ENGINE=postgres or DATABASE_URL is configured
+database_url = config('DATABASE_URL', default='').strip()
+db_engine = config('DB_ENGINE', default='').strip().lower()
+
+if database_url:
+    url = urllib.parse.urlparse(database_url)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': url.path[1:],
+            'USER': url.username or '',
+            'PASSWORD': url.password or '',
+            'HOST': url.hostname or '',
+            'PORT': url.port or 5432,
+        }
     }
-}
+elif db_engine in ('postgres', 'postgresql'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME', default='egystory'),
+            'USER': config('DB_USER', default='postgres'),
+            'PASSWORD': config('DB_PASSWORD', default=''),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='5432'),
+        }
+    }
+else:
+    db_custom_path = config('DATABASE_PATH', default='').strip()
+    sqlite_file = Path(db_custom_path) if db_custom_path else BASE_DIR / 'db.sqlite3'
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': sqlite_file,
+        }
+    }
 
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
@@ -84,25 +142,32 @@ TIME_ZONE = 'Africa/Cairo'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files (profile pictures)
+# Media files (user avatars, campaign covers, documents)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+media_custom_path = config('MEDIA_ROOT_PATH', default='').strip()
+MEDIA_ROOT = Path(media_custom_path) if media_custom_path else BASE_DIR / 'media'
 
 # Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = config('EMAIL_HOST', default='')
+# Configurable: real SMTP when credentials are provided, or console backend fallback
+EMAIL_BACKEND_CONF = config('EMAIL_BACKEND', default='').strip()
+EMAIL_HOST = config('EMAIL_HOST', default='').strip()
 EMAIL_PORT = config('EMAIL_PORT', cast=int, default=587)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='').strip()
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='').strip()
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool, default=True)
 
-if not EMAIL_HOST or not EMAIL_HOST_PASSWORD:
-    from django.core.exceptions import ImproperlyConfigured
-    raise ImproperlyConfigured("SMTP settings EMAIL_HOST and EMAIL_HOST_PASSWORD must be configured in .env for sending real emails.")
+if EMAIL_BACKEND_CONF:
+    EMAIL_BACKEND = EMAIL_BACKEND_CONF
+elif EMAIL_HOST and EMAIL_HOST_PASSWORD:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@egystory.com')
 

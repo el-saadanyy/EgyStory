@@ -134,11 +134,23 @@
   50% { opacity: 1; }
 }
 
-/* ── Hero Slider Stability & Transitions ───────────────────────── */
+/* ── Hero Slider Stability & Transitions (Content-Driven Grid) ──── */
+.hero-slider {
+  display: grid;
+  grid-template-areas: "slide";
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+}
+
+.hero-slider > div:not(.slider-item) {
+  display: none;
+}
+
 .slider-item {
-  position: absolute;
-  top: 0;
-  left: 0;
+  grid-area: slide;
+  position: relative;
   width: 100%;
   height: 100%;
   background: var(--color-surface, #2A2823);
@@ -207,6 +219,10 @@
   flex-direction: column;
   flex-grow: 1;
   justify-content: space-between;
+}
+
+.slider-content-area > div:last-child {
+  flex-shrink: 0 !important;
 }
 
 .slider-title {
@@ -374,13 +390,49 @@
 }
 
 @media (max-width: 900px) {
-  .hero-inner { grid-template-columns: 1fr; }
-  .hero-visual { display: none; }
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .hero-slider {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+  }
   .hero-title { font-size: 36px; }
   .trust-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 480px) {
   .hero { padding: calc(var(--space-12) + var(--navbar-height)) 0 var(--space-12); }
+  .hero-title { font-size: 28px; line-height: 1.2; }
+  .hero-visual {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin-top: 24px !important;
+  }
+  .hero-slider {
+    height: auto !important;
+  }
+  .slider-image-area {
+    height: 200px !important;
+  }
+  .slider-content-area {
+    padding: 16px !important;
+  }
+  .slider-title {
+    font-size: 20px !important;
+  }
+  .slider-desc {
+    font-size: 13.5px !important;
+    margin-bottom: 16px !important;
+  }
   .trust-grid { grid-template-columns: 1fr; }
 }
 
@@ -1014,8 +1066,11 @@
 }
 
 [data-theme="light"] .section-panel--critical {
-  border: 1px solid rgba(220, 38, 38, 0.25) !important;
-  box-shadow: 0 24px 56px -12px rgba(220, 38, 38, 0.12), 0 4px 16px rgba(0, 0, 0, 0.02), inset 0 1px 0 #FFFFFF !important;
+  background: radial-gradient(circle at 100% 0%, rgba(220, 38, 38, 0.06) 0%, transparent 60%),
+              radial-gradient(circle at 0% 100%, rgba(212, 168, 67, 0.05) 0%, transparent 60%),
+              linear-gradient(145deg, #FFFFFF 0%, #FDF9F7 45%, #FBF2EF 100%) !important;
+  border: 1.5px solid rgba(220, 38, 38, 0.3) !important;
+  box-shadow: 0 24px 56px -10px rgba(180, 40, 40, 0.12), 0 4px 16px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
 }
 
 [data-theme="light"] .section-panel--critical::before {
@@ -1066,8 +1121,11 @@
 }
 
 [data-theme="light"] .section-panel--rare {
-  border: 1px solid rgba(147, 51, 234, 0.25) !important;
-  box-shadow: 0 24px 56px -12px rgba(147, 51, 234, 0.12), 0 4px 16px rgba(0, 0, 0, 0.02), inset 0 1px 0 #FFFFFF !important;
+  background: radial-gradient(circle at 100% 0%, rgba(147, 51, 234, 0.05) 0%, transparent 60%),
+              radial-gradient(circle at 0% 100%, rgba(212, 168, 67, 0.05) 0%, transparent 60%),
+              linear-gradient(145deg, #FFFFFF 0%, #FCF9FE 45%, #F7F0FC 100%) !important;
+  border: 1.5px solid rgba(147, 51, 234, 0.28) !important;
+  box-shadow: 0 24px 56px -10px rgba(126, 34, 206, 0.12), 0 4px 16px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
 }
 
 [data-theme="light"] .section-panel--rare::before {
@@ -1118,8 +1176,11 @@
 }
 
 [data-theme="light"] .section-panel--normal {
-  border: 1px solid rgba(200, 155, 45, 0.3) !important;
-  box-shadow: 0 24px 56px -12px rgba(184, 134, 11, 0.14), 0 4px 16px rgba(0, 0, 0, 0.02), inset 0 1px 0 #FFFFFF !important;
+  background: radial-gradient(circle at 100% 0%, rgba(184, 134, 11, 0.06) 0%, transparent 60%),
+              radial-gradient(circle at 0% 100%, rgba(212, 168, 67, 0.06) 0%, transparent 60%),
+              linear-gradient(145deg, #FFFFFF 0%, #FDFBF7 45%, #F8F2E4 100%) !important;
+  border: 1.5px solid rgba(184, 134, 11, 0.32) !important;
+  box-shadow: 0 24px 56px -10px rgba(184, 134, 11, 0.12), 0 4px 16px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
 }
 
 [data-theme="light"] .section-panel--normal::before {
@@ -1170,8 +1231,11 @@
 }
 
 [data-theme="light"] .section-panel--success {
-  border: 1px solid rgba(22, 163, 74, 0.25) !important;
-  box-shadow: 0 24px 56px -12px rgba(22, 163, 74, 0.12), 0 4px 16px rgba(0, 0, 0, 0.02), inset 0 1px 0 #FFFFFF !important;
+  background: radial-gradient(circle at 100% 0%, rgba(22, 163, 74, 0.05) 0%, transparent 60%),
+              radial-gradient(circle at 0% 100%, rgba(212, 168, 67, 0.05) 0%, transparent 60%),
+              linear-gradient(145deg, #FFFFFF 0%, #F8FCF9 45%, #EFF8F2 100%) !important;
+  border: 1.5px solid rgba(22, 163, 74, 0.28) !important;
+  box-shadow: 0 24px 56px -10px rgba(21, 128, 61, 0.12), 0 4px 16px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
 }
 
 [data-theme="light"] .section-panel--success::before {
@@ -1304,4 +1368,262 @@
 
   .section-banner  { padding: 0 0 20px 0 !important; margin-bottom: 20px !important; }
   .section-title   { font-size: 22px !important; }
+}
+
+/* ================================================================
+   TABLET-ONLY SCOPED REFINEMENTS (768px to 1024px)
+   Applied strictly to:
+   1. Hero Section (.hero)
+   2. Critical Campaigns Section (.section-critical)
+   Mobile (<768px), Laptop, and Desktop (>1024px) remain unchanged.
+   ================================================================ */
+@media (min-width: 768px) and (max-width: 1024px) {
+
+  /* ── 1. Hero Section Tablet Refinements ─────────────────────── */
+  .hero {
+    padding: calc(var(--navbar-height, 72px) + 38px) 0 68px 0 !important;
+  }
+
+  .hero-inner {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    margin-bottom: 16px !important;
+    font-size: 12px !important;
+    padding: 6px 15px !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  .hero-title {
+    font-size: clamp(38px, 4.8vw, 46px) !important;
+    line-height: 1.16 !important;
+    letter-spacing: -0.025em !important;
+    margin-bottom: 18px !important;
+  }
+
+  .hero-description {
+    font-size: 16.5px !important;
+    line-height: 1.72 !important;
+    max-width: 620px !important;
+    margin-bottom: 26px !important;
+    color: rgba(255, 255, 255, 0.72) !important;
+  }
+
+  .hero-actions {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 14px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  .hero-actions .btn-lg {
+    padding: 13px 28px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    border-radius: var(--radius-full) !important;
+  }
+
+  .hero form {
+    margin: 26px auto 0 auto !important;
+    max-width: 580px !important;
+    width: 100% !important;
+    display: flex !important;
+    gap: 8px !important;
+    justify-content: center !important;
+  }
+
+  .hero form input.form-control {
+    padding: 13px 22px !important;
+    font-size: 15px !important;
+    border-radius: var(--radius-full) !important;
+  }
+
+  .hero form button[type="submit"] {
+    padding: 0 26px !important;
+    font-size: 14.5px !important;
+    font-weight: 700 !important;
+    border-radius: var(--radius-full) !important;
+  }
+
+  .hero-tag-chips {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    margin: 18px auto 0 auto !important;
+    gap: 8px 10px !important;
+    max-width: 620px !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .hero-tag-chips span {
+    text-align: center !important;
+  }
+
+  .hero-tag-badge {
+    padding: 6px 15px !important;
+    font-size: 13px !important;
+    border-radius: var(--radius-full) !important;
+  }
+
+  .hero-stats {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: clamp(24px, 4.5vw, 48px) !important;
+    margin: 32px auto 0 auto !important;
+    padding-top: 24px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+    max-width: 620px !important;
+    width: 100% !important;
+  }
+
+  .hero-stats > div {
+    text-align: center !important;
+  }
+
+  .hero-stat-value {
+    font-size: 24px !important;
+  }
+
+  .hero-stat-label {
+    font-size: 12px !important;
+  }
+
+  .hero-visual {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .hero-slider {
+    max-width: 540px !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  /* ── 2. Critical Campaigns Section Tablet Refinements ───────── */
+  .section-critical {
+    padding: 48px 0 !important;
+  }
+
+  .section-panel--critical {
+    padding: 32px 28px !important;
+    border-radius: 24px !important;
+  }
+
+  .section-panel--critical .section-banner {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    gap: 20px !important;
+    padding-bottom: 22px !important;
+    margin-bottom: 26px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .section-panel--critical .section-banner__body {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .section-panel--critical .section-eyebrow--critical {
+    margin-bottom: 10px !important;
+    font-size: 11.5px !important;
+    padding: 5px 13px !important;
+    display: inline-flex !important;
+  }
+
+  .section-panel--critical .section-title {
+    font-size: 28px !important;
+    font-weight: 900 !important;
+    line-height: 1.22 !important;
+    letter-spacing: -0.02em !important;
+    margin: 0 0 6px 0 !important;
+  }
+
+  .section-panel--critical .section-desc {
+    font-size: 14.5px !important;
+    line-height: 1.64 !important;
+    max-width: 560px !important;
+    margin: 0 !important;
+    color: var(--color-text-secondary, #D9CFB8) !important;
+  }
+
+  .section-panel--critical .section-cta--critical {
+    width: auto !important;
+    padding: 11px 24px !important;
+    font-size: 13.5px !important;
+    font-weight: 800 !important;
+    border-radius: var(--radius-full) !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    align-self: flex-end !important;
+  }
+
+  /* Tablet grid: 2-column layout to prevent stretched cards */
+  .section-critical .campaigns-grid,
+  .section-panel--critical .campaigns-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 22px !important;
+  }
+
+  /* Critical card tablet optimization */
+  .section-critical .campaign-card,
+  .section-panel--critical .campaign-card {
+    border-radius: 20px !important;
+    overflow: hidden !important;
+  }
+
+  .section-critical .campaign-card > div:first-of-type,
+  .section-panel--critical .campaign-card > div:first-of-type {
+    height: 195px !important;
+  }
+
+  .section-critical .campaign-card__body,
+  .section-panel--critical .campaign-card__body {
+    padding: 18px 20px !important;
+  }
+
+  .section-critical .campaign-card__title,
+  .section-panel--critical .campaign-card__title {
+    font-size: 16.5px !important;
+    line-height: 1.34 !important;
+    margin-bottom: 6px !important;
+  }
+
+  .section-critical .campaign-card__desc,
+  .section-panel--critical .campaign-card__desc {
+    font-size: 13px !important;
+    line-height: 1.58 !important;
+    margin-bottom: 14px !important;
+  }
+
+  .section-critical .campaign-card__stats,
+  .section-panel--critical .campaign-card__stats {
+    margin-bottom: 14px !important;
+  }
+
+  .section-critical .campaign-card__raised,
+  .section-panel--critical .campaign-card__raised {
+    font-size: 15.5px !important;
+  }
+
+  .section-critical .campaign-card__actions .btn,
+  .section-panel--critical .campaign-card__actions .btn {
+    padding: 9px 12px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    border-radius: var(--radius-full) !important;
+  }
 }

@@ -5,7 +5,7 @@
 {% block meta_description %}EgyStory — Egypt's crowdfunding platform. Help real people, fund real stories that matter.{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}?v=305.0">
+<link rel="stylesheet" href="{% static 'css/home.css' %}?v=308.0">
 {% endblock %}
 
 
@@ -72,9 +72,9 @@
     </div>
 
     <!-- Hero Slider -->
-    <div class="hero-visual" aria-hidden="true">
+    <div class="hero-visual" role="region" aria-label="Featured campaigns slider">
       {% if slider_campaigns %}
-        <div class="hero-slider" style="width: 100%; max-width: 500px; position: relative; height: 560px;">
+        <div class="hero-slider">
           {% for campaign in slider_campaigns %}
             <div class="slider-item {% if forloop.first %}active{% endif %}" data-campaign-url="{% url 'campaigns:case_detail' campaign.id %}">
 
@@ -589,7 +589,6 @@
       text-align: center;
     }
     .hero h1 { font-size: 40px !important; }
-    .hero-visual { display: none; }
   }
 </style>
 

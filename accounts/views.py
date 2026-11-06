@@ -88,19 +88,15 @@ def register(request):
             return redirect('verify_otp')
             
         except Exception as e:
-            logger.error(f"SMTP Email Delivery Error during registration: {str(e)}", exc_info=True)
-            
-            # Clean up the token we just made
-            token.delete()
-            # Only delete the user if they were just created in this request
-            if is_new_user:
-                user.delete()
-                
-            messages.error(
+            logger.error(f"Email delivery error during registration: {str(e)}", exc_info=True)
+            # Safe handling: Do NOT delete newly created user or token.
+            # The account remains inactive (is_active=False) until verified.
+            request.session['activation_email'] = user.email
+            messages.warning(
                 request,
-                'Failed to send the activation email. Please ensure your email is correct and try again.'
+                'Account created! We encountered an issue delivering your activation email. Please click "Resend Code" or check your Spam/Junk folder.'
             )
-            return redirect('register')
+            return redirect('verify_otp')
 
     return render(request, 'accounts/register.html', {'form': form})
 
@@ -207,9 +203,7 @@ def resend_otp(request):
                 
             messages.success(request, f'A new verification code has been sent to {email}. (Please check your Spam/Junk folder if not in Inbox).')
         except Exception as e:
-            logger.error(f"SMTP Email Delivery Error during resend OTP: {str(e)}", exc_info=True)
-            # Delete the token we just created because the email failed
-            token.delete()
+            logger.error(f"Email delivery error during resend OTP: {str(e)}", exc_info=True)
             messages.error(request, 'Failed to send the activation email. Please try again later.')
             
     except User.DoesNotExist:

@@ -1747,6 +1747,7 @@ class CampaignOwnerManagementTests(TestCase):
         self.assertTrue(CampaignUpdate.objects.filter(id=update.id).exists())
 
     def test_updates_displayed_on_case_detail_page(self):
+        # pyrefly: ignore [missing-import]
         from django.urls import reverse
         from campaigns.models import CampaignUpdate
         CampaignUpdate.objects.create(
