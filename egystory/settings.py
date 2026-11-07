@@ -175,8 +175,8 @@ MEDIA_ROOT = Path(media_custom_path) if media_custom_path else BASE_DIR / 'media
 DEMO_MEDIA_ROOT = BASE_DIR / 'demo_media'
 
 # Storage Configuration (Django 4.2+ / 5.0+ standard STORAGES setting)
-AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME', default='').strip()
-USE_S3 = config('USE_S3', default=False, cast=bool) or bool(AWS_STORAGE_BUCKET_NAME)
+USE_S3 = config('USE_S3', default=False, cast=bool)
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME', default='').strip() if USE_S3 else ''
 
 if USE_S3 and AWS_STORAGE_BUCKET_NAME:
     AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default='').strip()
