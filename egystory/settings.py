@@ -29,17 +29,30 @@ def _parse_list(val):
         return list(val)
     return [x.strip() for x in str(val).split(',') if x.strip()]
 
+def _parse_hosts(val):
+    raw_list = _parse_list(val)
+    normalized = []
+    for host in raw_list:
+        normalized.append(host)
+        # In Django ALLOWED_HOSTS, leading dot (.example.com) enables subdomain wildcard matching.
+        # If user provides *.example.com (common human shorthand), also include .example.com.
+        if host.startswith('*.'):
+            normalized.append('.' + host[2:])
+    return list(dict.fromkeys(normalized))
+
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS',
-    default='localhost,127.0.0.1,0.0.0.0,testserver,.onrender.com,*.onrender.com,ranting-gliding-saffron.ngrok-free.dev',
-    cast=_parse_list
+    default='localhost,127.0.0.1,0.0.0.0,testserver,.onrender.com,.containers.snapdeploy.app,.snapdeploy.app,ranting-gliding-saffron.ngrok-free.dev',
+    cast=_parse_hosts
 )
 
 CSRF_TRUSTED_ORIGINS = config(
     'CSRF_TRUSTED_ORIGINS',
-    default='http://localhost:8000,http://127.0.0.1:8000,http://0.0.0.0:8000,https://*.onrender.com,https://ranting-gliding-saffron.ngrok-free.dev',
+    default='http://localhost:8000,http://127.0.0.1:8000,http://0.0.0.0:8000,https://*.onrender.com,https://*.containers.snapdeploy.app,https://*.snapdeploy.app,https://ranting-gliding-saffron.ngrok-free.dev',
     cast=_parse_list
 )
+
+USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', default=False, cast=bool)
 
 # Application definition
 INSTALLED_APPS = [

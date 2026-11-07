@@ -123,3 +123,36 @@ class HttpEmailBackendTests(TestCase):
         self.assertTrue(mock_post.called)
         call_kwargs = mock_post.call_args[1]
         self.assertEqual(call_kwargs['json']['to'], [{'email': 'user@example.com'}])
+
+
+class DeploymentHostAndSecurityTests(TestCase):
+    def test_snapdeploy_domain_accepted_by_default_allowed_hosts(self):
+        """Ensure the public SnapDeploy hostname is valid under default ALLOWED_HOSTS."""
+        from django.http.request import validate_host
+        from django.conf import settings
+        host = 'egystory-efcec.containers.snapdeploy.app'
+        self.assertTrue(validate_host(host, settings.ALLOWED_HOSTS))
+
+    def test_wildcard_host_normalization_in_parse_hosts(self):
+        """Ensure *.domain syntax from user env is normalized to .domain for Django ALLOWED_HOSTS."""
+        from django.http.request import validate_host
+        from egystory.settings import _parse_hosts
+        parsed = _parse_hosts('*.containers.snapdeploy.app,example.com')
+        self.assertIn('.containers.snapdeploy.app', parsed)
+        self.assertTrue(validate_host('egystory-efcec.containers.snapdeploy.app', parsed))
+
+    def test_disallowed_host_strictly_rejected(self):
+        """Ensure malicious or untrusted domains are rejected (no '*' wildcard bypass)."""
+        from django.http.request import validate_host
+        from django.conf import settings
+        self.assertFalse(validate_host('evil-attacker.com', settings.ALLOWED_HOSTS))
+        self.assertNotIn('*', settings.ALLOWED_HOSTS)
+
+    def test_snapdeploy_csrf_trusted_origins(self):
+        """Ensure POST requests from SnapDeploy origin pass CSRF origin validation."""
+        from django.test import RequestFactory
+        from django.middleware.csrf import CsrfViewMiddleware
+        rf = RequestFactory()
+        req = rf.post('/', HTTP_ORIGIN='https://egystory-efcec.containers.snapdeploy.app')
+        middleware = CsrfViewMiddleware(lambda r: None)
+        self.assertTrue(middleware._origin_verified(req))

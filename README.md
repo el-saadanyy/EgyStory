@@ -420,9 +420,9 @@ python manage.py test
 ```
 
 ### Verified Test Scope
-- **184 Total Unit Tests** across 33 test classes:
+- **192 Total Unit Tests** across 34 test classes:
   - `accounts/tests.py` (3 test classes): Registration flow, OTP validation, token expiration, profile field validation (birthdate/Facebook URL), password-confirmed deletion.
-  - `accounts/test_deployment_demo.py` (2 test classes): Idempotent demo account initialization, non-superuser role enforcement, Resend HTTP API email backend, Brevo HTTP API email backend.
+  - `accounts/test_deployment_demo.py` (3 test classes): Idempotent demo account initialization, non-superuser role enforcement, Resend/Brevo HTTP email backends, and host validation security (SnapDeploy domain matching, host wildcard normalization, malicious host rejection, and CSRF origin verification).
   - `campaigns/tests.py` & `campaigns/test_bug.py` (19 test classes): Multi-factor urgency calculations, donation balance triggers, category/tag assignments, multi-image galleries, star ratings, similar campaign matcher, creator cancellation rules (<25%), search autocomplete, nested comments, and owner story management.
   - `campaigns/test_demo_media.py` (1 test class): Permanent demo media synchronization to target storage backend.
   - `administration/tests.py` (7 test classes): Staff user management, superuser admin CRUD, moderation queue actions, manual Critical overrides, tag management, and completed campaign deletion.
