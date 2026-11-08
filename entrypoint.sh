@@ -38,6 +38,12 @@ if [ "$INIT_DEMO_ACCOUNTS" = "true" ] || [ "$INIT_DEMO_ACCOUNTS" = "1" ]; then
     python manage.py setup_demo_accounts || true
 fi
 
+# Seed demo campaign data if requested
+if [ "$INIT_DEMO_DATA" = "true" ] || [ "$INIT_DEMO_DATA" = "1" ]; then
+    echo "--> Seeding demo campaign data..."
+    python manage.py seed_demo_campaigns
+fi
+
 # Determine port and worker configuration
 PORT="${PORT:-8000}"
 WORKERS="${GUNICORN_WORKERS:-2}"

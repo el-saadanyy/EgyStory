@@ -1,0 +1,347 @@
+{
+  "version": "1.0",
+  "description": "Curated EgyStory demo portfolio seed data",
+  "tags": [
+    {
+      "name": "Medical",
+      "slug": "medical"
+    },
+    {
+      "name": "Education",
+      "slug": "education"
+    },
+    {
+      "name": "Emergency",
+      "slug": "emergency"
+    },
+    {
+      "name": "Social",
+      "slug": "social"
+    }
+  ],
+  "users": [
+    {
+      "email": "demo@egystory.com",
+      "first_name": "Demo",
+      "last_name": "User",
+      "phone": "01000000001"
+    },
+    {
+      "email": "aynour@egystory.com",
+      "first_name": "Aynour",
+      "last_name": "Hossam",
+      "phone": "01000000010"
+    },
+    {
+      "email": "marwa@egystory.com",
+      "first_name": "Marwa",
+      "last_name": "Elwakel",
+      "phone": "01000000011"
+    },
+    {
+      "email": "shifo@egystory.com",
+      "first_name": "Shifo",
+      "last_name": "Bar",
+      "phone": "01000000012"
+    }
+  ],
+  "campaigns": [
+    {
+      "id": 1,
+      "title": "عمر ويونس — طفلان مصريان مصابان بضمور العضلات دوشين",
+      "story": "عمر ويونس — طفلان مصريان مصابان بضمور العضلات دوشين. ووافقت وزارة التضامن في أغسطس 2026 على فتح حساب لجمع التبرعات لعلاجهما، وتبلغ تكلفة العلاج المذكورة للحالة حوالي 300 مليون جنيه.",
+      "owner_email": "aynour@egystory.com",
+      "target_amount": "300000000.00",
+      "initial_raised_amount": "0.00",
+      "raised_amount": "300000000.00",
+      "campaign_image": "campaigns/6.jpg",
+      "case_type": "Rare / Ultra-Rare & High-Cost",
+      "status": "Completed",
+      "is_featured": false,
+      "is_manual_critical": false,
+      "deadline": "2027-08-23",
+      "created_at": "2026-08-23T02:11:50.756000+00:00",
+      "tags": []
+    },
+    {
+      "id": 10,
+      "title": "جهاز عروسة بالاحتياجات الأساسية",
+      "story": "حملة لدعم عروسة يتيمة تحتاج إلى تجهيزات واحتياجات أساسية للمنزل استعدادًا للزواج. تهدف الحملة إلى توفير الأجهزة والاحتياجات المنزلية الأساسية اللازمة لتجهيز منزلها.",
+      "owner_email": "demo@egystory.com",
+      "target_amount": "18000.00",
+      "initial_raised_amount": "0.00",
+      "raised_amount": "6001.01",
+      "campaign_image": "campaigns/5.jpeg",
+      "case_type": "Normal",
+      "status": "Active",
+      "is_featured": false,
+      "is_manual_critical": false,
+      "deadline": "2026-10-23",
+      "created_at": "2026-08-23T14:32:40.489000+00:00",
+      "tags": [
+        "social"
+      ]
+    },
+    {
+      "id": 192,
+      "title": "ساعدوا جميلة في رحلة علاجها من سرطان الثدي",
+      "story": "جميلة مصرية بتواجه رحلة صعبة مع سرطان الثدي في المرحلة الرابعة، بعد ما انتشر المرض إلى العمود الفقري.\r\n\r\nجميلة بتخضع للعلاج في مصر، وبتحاول بكل قوتها تكمل رحلة العلاج وتتحسن حالتها. ورغم صعوبة الظروف، كان فيه تحسن في حالتها الصحية مع استمرار العلاج، بحسب آخر تحديث في يناير 2026.\r\n\r\nتكلفة العلاج والمتابعة الطبية بتشكل عبئًا كبيرًا عليها وعلى أسرتها، ولذلك تم إطلاق الحملة للمساعدة في توفير تكاليف العلاج واستمرار الرعاية الطبية التي تحتاجها.",
+      "owner_email": "aynour@egystory.com",
+      "target_amount": "760500.00",
+      "initial_raised_amount": "120500.00",
+      "raised_amount": "0.00",
+      "campaign_image": "campaigns/7.jpg",
+      "case_type": "Normal",
+      "status": "Active",
+      "is_featured": false,
+      "is_manual_critical": true,
+      "deadline": "2026-12-30",
+      "created_at": "2026-08-30T12:06:13.265911+00:00",
+      "tags": [
+        "emergency"
+      ]
+    },
+    {
+      "id": 193,
+      "title": "الطفلة سيلين وضمور العضلات المميت",
+      "story": "تم تشخيص سيلين بالضمور العضلي الشوكي في وقت مبكر، وبدأت عائلتها سباقاً مع الزمن للوصول للمبلغ قبل إتمامها عمر العامين وتدهور وظائف التنفس والبلع.",
+      "owner_email": "aynour@egystory.com",
+      "target_amount": "40000000.00",
+      "initial_raised_amount": "10000000.00",
+      "raised_amount": "0.00",
+      "campaign_image": "campaigns/9.png",
+      "case_type": "Rare / Ultra-Rare & High-Cost",
+      "status": "Active",
+      "is_featured": false,
+      "is_manual_critical": false,
+      "deadline": "2026-10-30",
+      "created_at": "2026-08-30T21:29:34.543305+00:00",
+      "tags": [
+        "emergency",
+        "medical"
+      ]
+    },
+    {
+      "id": 194,
+      "title": "دعم وتأهيل الطلاب ذوي الإعاقة (قادرون باختلاف)",
+      "story": "توفير أجهزة تعويضية مساعدة للدراسة (كراسي متحركة كهربائية، حواسب ناطقة وطابعات برايل للمكفوفين، أو سماعات طبية) لتمكين الطلاب ذوي الإعاقة من مواصلة دراستهم الجامعية أو المدرسية.  \r\n\r\n\r\n​تمويل وحدة كاملة لخدمة ودعم الطلاب ذوي الإعاقة داخل إحدى الجامعات الحكومية: 1.5 إلى 4 ملايين جنيه.",
+      "owner_email": "marwa@egystory.com",
+      "target_amount": "4000000.00",
+      "initial_raised_amount": "0.00",
+      "raised_amount": "0.00",
+      "campaign_image": "campaigns/8.png",
+      "case_type": "Normal",
+      "status": "Active",
+      "is_featured": false,
+      "is_manual_critical": false,
+      "deadline": null,
+      "created_at": "2026-08-30T22:04:12.733475+00:00",
+      "tags": [
+        "education"
+      ]
+    },
+    {
+      "id": 195,
+      "title": "شجرة باسمك (تشجير البيئة)",
+      "story": "زراعة أشجار في المساحات العامة لمكافحة التلوث.\r\n\"ازرع شجرة اليوم لتتنفس الأجيال القادمة غداً.\"\r\nالتبرع بقيمة شتلة",
+      "owner_email": "aynour@egystory.com",
+      "target_amount": "6000000.00",
+      "initial_raised_amount": "0.00",
+      "raised_amount": "0.00",
+      "campaign_image": "campaigns/IMG-20260831-WA0029.jpg",
+      "case_type": "Normal",
+      "status": "Active",
+      "is_featured": false,
+      "is_manual_critical": false,
+      "deadline": null,
+      "created_at": "2026-08-31T17:36:09.552064+00:00",
+      "tags": [
+        "social"
+      ]
+    },
+    {
+      "id": 196,
+      "title": "عقول مضيئة ( التمكين الرقمي للتعليم )",
+      "story": "توفير أجهزة حاسوب وإنترنت للطلاب المتفوقين غير القادرين. \r\nالتعليم حق.. لا تدع الظروف تطفئ شغف طالب متميز.",
+      "owner_email": "aynour@egystory.com",
+      "target_amount": "5000000.00",
+      "initial_raised_amount": "0.00",
+      "raised_amount": "0.00",
+      "campaign_image": "campaigns/IMG-20260831-WA0030.jpg",
+      "case_type": "Normal",
+      "status": "Active",
+      "is_featured": false,
+      "is_manual_critical": false,
+      "deadline": null,
+      "created_at": "2026-08-31T17:37:18.253419+00:00",
+      "tags": [
+        "education"
+      ]
+    }
+  ],
+  "donations": [
+    {
+      "id": 1,
+      "campaign_id": 1,
+      "donor_name": "mohamed elsaadany",
+      "donor_email": "demo@egystory.com",
+      "amount": "5000.00",
+      "is_anonymous": true,
+      "created_at": "2026-08-23T02:21:47.598000+00:00"
+    },
+    {
+      "id": 2,
+      "campaign_id": 1,
+      "donor_name": "mohamed elsaadany",
+      "donor_email": "demo@egystory.com",
+      "amount": "95000.00",
+      "is_anonymous": true,
+      "created_at": "2026-08-23T02:22:24.808000+00:00"
+    },
+    {
+      "id": 3,
+      "campaign_id": 1,
+      "donor_name": "mohamed elsaadany",
+      "donor_email": "demo@egystory.com",
+      "amount": "100000.00",
+      "is_anonymous": false,
+      "created_at": "2026-08-23T03:31:46.140000+00:00"
+    },
+    {
+      "id": 4,
+      "campaign_id": 1,
+      "donor_name": "mohamed elsaadany",
+      "donor_email": "demo@egystory.com",
+      "amount": "100000.00",
+      "is_anonymous": false,
+      "created_at": "2026-08-23T03:33:39.607000+00:00"
+    },
+    {
+      "id": 5,
+      "campaign_id": 1,
+      "donor_name": "mohamed elsaadany",
+      "donor_email": "demo@egystory.com",
+      "amount": "1.00",
+      "is_anonymous": false,
+      "created_at": "2026-08-23T03:33:53.504000+00:00"
+    },
+    {
+      "id": 6,
+      "campaign_id": 1,
+      "donor_name": "mohamed elsaadany",
+      "donor_email": "demo@egystory.com",
+      "amount": "399999.00",
+      "is_anonymous": true,
+      "created_at": "2026-08-23T17:53:31.419000+00:00"
+    },
+    {
+      "id": 7,
+      "campaign_id": 1,
+      "donor_name": "mohamed elsaadany",
+      "donor_email": "demo@egystory.com",
+      "amount": "300000.00",
+      "is_anonymous": false,
+      "created_at": "2026-08-23T17:54:13.120000+00:00"
+    },
+    {
+      "id": 8,
+      "campaign_id": 1,
+      "donor_name": "mohamed elsaadany",
+      "donor_email": "demo@egystory.com",
+      "amount": "90000000.00",
+      "is_anonymous": true,
+      "created_at": "2026-08-23T17:54:53.598000+00:00"
+    },
+    {
+      "id": 9,
+      "campaign_id": 1,
+      "donor_name": "mohamed elsaadany",
+      "donor_email": "demo@egystory.com",
+      "amount": "9000000.00",
+      "is_anonymous": true,
+      "created_at": "2026-08-23T17:55:26.422000+00:00"
+    },
+    {
+      "id": 10,
+      "campaign_id": 1,
+      "donor_name": "mohamed elsaadany",
+      "donor_email": "demo@egystory.com",
+      "amount": "100000000.00",
+      "is_anonymous": true,
+      "created_at": "2026-08-23T17:56:14.673000+00:00"
+    },
+    {
+      "id": 11,
+      "campaign_id": 1,
+      "donor_name": "mohamed elsaadany",
+      "donor_email": "demo@egystory.com",
+      "amount": "100000000.00",
+      "is_anonymous": false,
+      "created_at": "2026-08-23T17:56:25.151000+00:00"
+    },
+    {
+      "id": 12,
+      "campaign_id": 10,
+      "donor_name": "mohamed elsaadany",
+      "donor_email": "demo@egystory.com",
+      "amount": "1.01",
+      "is_anonymous": false,
+      "created_at": "2026-08-25T08:16:08.933000+00:00"
+    },
+    {
+      "id": 13,
+      "campaign_id": 10,
+      "donor_name": "Marwa elwakel",
+      "donor_email": "marwa@egystory.com",
+      "amount": "1000.00",
+      "is_anonymous": true,
+      "created_at": "2026-08-30T21:49:40.450497+00:00"
+    },
+    {
+      "id": 14,
+      "campaign_id": 10,
+      "donor_name": "Marwa elwakel",
+      "donor_email": "marwa@egystory.com",
+      "amount": "5000.00",
+      "is_anonymous": false,
+      "created_at": "2026-08-30T21:50:14.308129+00:00"
+    }
+  ],
+  "ratings": [
+    {
+      "id": 1,
+      "campaign_id": 10,
+      "user_email": "demo@egystory.com",
+      "score": 5
+    },
+    {
+      "id": 3,
+      "campaign_id": 1,
+      "user_email": "demo@egystory.com",
+      "score": 5
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "campaign_id": 10,
+      "user_email": "demo@egystory.com",
+      "content": "اتبرعوا يا مصريين",
+      "created_at": "2026-08-29T15:05:04.650187+00:00"
+    },
+    {
+      "id": 3,
+      "campaign_id": 10,
+      "user_email": "demo@egystory.com",
+      "content": "كل الدعم",
+      "created_at": "2026-08-29T15:16:59.948477+00:00"
+    },
+    {
+      "id": 4,
+      "campaign_id": 1,
+      "user_email": "aynour@egystory.com",
+      "content": "خلصت يا شباب",
+      "created_at": "2026-08-30T10:23:42.934116+00:00"
+    }
+  ]
+}
